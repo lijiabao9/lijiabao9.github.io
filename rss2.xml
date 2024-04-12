@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Gabriel`Blog</title>
+    <link>https://lijiabao9.github.io/</link>
+    
+    <image>
+      <url>https://lijiabao9.github.io/icon.png</url>
+      <title>Gabriel`Blog</title>
+      <link>https://lijiabao9.github.io/</link>
+    </image>
+    
+    <atom:link href="https://lijiabao9.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
+    
+    <description>大棚一日同风起，扶摇直上九万里</description>
+    <pubDate>Thu, 11 Apr 2024 14:42:35 GMT</pubDate>
+    <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Hello World</title>
+      <link>https://lijiabao9.github.io/posts/4a17b156.html</link>
+      <guid>https://lijiabao9.github.io/posts/4a17b156.html</guid>
+      <pubDate>Thu, 11 Apr 2024 13:56:06 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</description>
+          
+        
+      
+      
+      
+      
+      
+      
+      <comments>https://lijiabao9.github.io/posts/4a17b156.html#disqus_thread</comments>
+      
+    </item>
+    
+  </channel>
+</rss>
