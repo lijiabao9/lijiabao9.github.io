@@ -15,20 +15,66 @@
     <atom:link href="https://lijiabao9.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>大棚一日同风起，扶摇直上九万里</description>
-    <pubDate>Sat, 13 Apr 2024 02:42:36 GMT</pubDate>
+    <pubDate>Sat, 13 Apr 2024 12:22:03 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
-      <title>Hello World</title>
+      <title>Markdown-Tutorial</title>
+      <link>https://lijiabao9.github.io/posts/d93be394.html</link>
+      <guid>https://lijiabao9.github.io/posts/d93be394.html</guid>
+      <pubDate>Sat, 13 Apr 2024 07:39:03 GMT</pubDate>
+      
+      <description>Markdown 基础语法的使用参考文档</description>
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/Markdown-%E7%9B%B8%E5%85%B3/">Markdown 相关</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Markdown/">Markdown</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/d93be394.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Hexo-Tag-Plugins-Plus-Tutorial</title>
+      <link>https://lijiabao9.github.io/posts/34ab88a3.html</link>
+      <guid>https://lijiabao9.github.io/posts/34ab88a3.html</guid>
+      <pubDate>Sat, 13 Apr 2024 07:22:50 GMT</pubDate>
+      
+      <description>Hexo 外挂标签插件 Tag Plugins Plus 的使用参考文档</description>
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/Hexo-%E7%9B%B8%E5%85%B3/">Hexo 相关</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Hexo/">Hexo</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/34ab88a3.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Hexo-Hello-World</title>
       <link>https://lijiabao9.github.io/posts/4a17b156.html</link>
       <guid>https://lijiabao9.github.io/posts/4a17b156.html</guid>
       <pubDate>Thu, 11 Apr 2024 13:56:06 GMT</pubDate>
       
-      <description>Hexo 快速搭建部署教程</description>
+      <description>快速搭建部署 Hexo 教程</description>
       
       
       
       
+      <category domain="https://lijiabao9.github.io/categories/Hexo-%E7%9B%B8%E5%85%B3/">Hexo 相关</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Hexo/">Hexo</category>
       
       
       <comments>https://lijiabao9.github.io/posts/4a17b156.html#disqus_thread</comments>
