@@ -367,3 +367,12 @@
   #article-container figure.highlight {
     border-radius: 10px;
   }
+
+  
+  /* 主页 顶部 标题和副标题 */
+  #page-header #site-title {
+    color: rgb(243, 114, 9);
+  }
+  #page-header #site-subtitle {
+    color: rgb(39, 238, 228);
+  }
