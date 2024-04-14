@@ -369,10 +369,16 @@
   }
 
   
-  /* 主页 顶部 标题和副标题 */
+  /* 主页 顶部 标题和副标题 字体颜色 */
   #page-header #site-title {
     color: rgb(243, 114, 9);
   }
   #page-header #site-subtitle {
     color: rgb(39, 238, 228);
+  }
+
+  /* 图片，下方的描述性文字居中 */
+  div#post .img-wrap {
+    text-align: center;
+    color: #727374;
   }

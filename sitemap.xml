@@ -4,7 +4,25 @@
   <url>
     <loc>https://lijiabao9.github.io/posts/34ab88a3.html</loc>
     
-    <lastmod>2024-04-13</lastmod>
+    <lastmod>2024-04-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/gallery/index.html</loc>
+    
+    <lastmod>2024-04-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/gallery/Example/index.html</loc>
+    
+    <lastmod>2024-04-14</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -67,7 +85,7 @@
 
   <url>
     <loc>https://lijiabao9.github.io/</loc>
-    <lastmod>2024-04-13</lastmod>
+    <lastmod>2024-04-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -75,14 +93,14 @@
   
   <url>
     <loc>https://lijiabao9.github.io/tags/Hexo/</loc>
-    <lastmod>2024-04-13</lastmod>
+    <lastmod>2024-04-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://lijiabao9.github.io/tags/Markdown/</loc>
-    <lastmod>2024-04-13</lastmod>
+    <lastmod>2024-04-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -91,14 +109,14 @@
   
   <url>
     <loc>https://lijiabao9.github.io/categories/Hexo-%E7%9B%B8%E5%85%B3/</loc>
-    <lastmod>2024-04-13</lastmod>
+    <lastmod>2024-04-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://lijiabao9.github.io/categories/Markdown-%E7%9B%B8%E5%85%B3/</loc>
-    <lastmod>2024-04-13</lastmod>
+    <lastmod>2024-04-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
