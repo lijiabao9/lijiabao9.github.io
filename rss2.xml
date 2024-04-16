@@ -15,42 +15,54 @@
     <atom:link href="https://lijiabao9.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>大棚一日同风起，扶摇直上九万里</description>
-    <pubDate>Mon, 15 Apr 2024 16:54:35 GMT</pubDate>
+    <pubDate>Tue, 16 Apr 2024 14:22:51 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
-      <title>Hexo-Hello-World</title>
-      <link>https://lijiabao9.github.io/posts/4a17b156.html</link>
-      <guid>https://lijiabao9.github.io/posts/4a17b156.html</guid>
-      <pubDate>Mon, 15 Apr 2024 16:54:35 GMT</pubDate>
+      <title>Hexo分类磁贴插件失效修复</title>
+      <link>https://lijiabao9.github.io/posts/32782b15.html</link>
+      <guid>https://lijiabao9.github.io/posts/32782b15.html</guid>
+      <pubDate>Tue, 16 Apr 2024 13:54:25 GMT</pubDate>
       
-      <description>快速搭建部署 Hexo 教程</description>
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;写在最前&quot;&gt;&lt;a href=&quot;#写在最前&quot; class=&quot;headerlink&quot; title=&quot;写在最前&quot;&gt;&lt;/a&gt;写在最前&lt;/h2&gt;&lt;p&gt;此插件在应用页面添加分类磁贴，原教程&lt;a</description>
+          
+        
       
       
       
       
-      <category domain="https://lijiabao9.github.io/categories/Hexo-%E7%9B%B8%E5%85%B3/">Hexo 相关</category>
+      <category domain="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</category>
       
       
       <category domain="https://lijiabao9.github.io/tags/Hexo/">Hexo</category>
       
       
-      <comments>https://lijiabao9.github.io/posts/4a17b156.html#disqus_thread</comments>
+      <comments>https://lijiabao9.github.io/posts/32782b15.html#disqus_thread</comments>
       
     </item>
     
     <item>
-      <title>Markdown-Tutorial</title>
+      <title>Markdown基础语法的使用参考文档</title>
       <link>https://lijiabao9.github.io/posts/d93be394.html</link>
       <guid>https://lijiabao9.github.io/posts/d93be394.html</guid>
       <pubDate>Sat, 13 Apr 2024 07:39:03 GMT</pubDate>
       
-      <description>Markdown 基础语法的使用参考文档</description>
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot;</description>
+          
+        
       
       
       
       
-      <category domain="https://lijiabao9.github.io/categories/Markdown-%E7%9B%B8%E5%85%B3/">Markdown 相关</category>
+      <category domain="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</category>
       
       
       <category domain="https://lijiabao9.github.io/tags/Markdown/">Markdown</category>
@@ -61,23 +73,56 @@
     </item>
     
     <item>
-      <title>Hexo-Tag-Plugins-Plus-Tutorial</title>
+      <title>Hexo外挂标签插件Tag-Plugins-Plus的使用参考文档</title>
       <link>https://lijiabao9.github.io/posts/34ab88a3.html</link>
       <guid>https://lijiabao9.github.io/posts/34ab88a3.html</guid>
       <pubDate>Sat, 13 Apr 2024 07:22:50 GMT</pubDate>
       
-      <description>Hexo 外挂标签插件 Tag Plugins Plus 的使用参考文档</description>
+        
+        
+          
+          
+      <description>&lt;div class=&quot;note blue icon-padding flat&quot;&gt;&lt;i class=&quot;note-icon fas fa-bullhorn&quot;&gt;&lt;/i&gt;&lt;p&gt;&lt;a</description>
+          
+        
       
       
       
       
-      <category domain="https://lijiabao9.github.io/categories/Hexo-%E7%9B%B8%E5%85%B3/">Hexo 相关</category>
+      <category domain="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</category>
       
       
       <category domain="https://lijiabao9.github.io/tags/Hexo/">Hexo</category>
       
       
       <comments>https://lijiabao9.github.io/posts/34ab88a3.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Hexo快速搭建部署教程</title>
+      <link>https://lijiabao9.github.io/posts/4a17b156.html</link>
+      <guid>https://lijiabao9.github.io/posts/4a17b156.html</guid>
+      <pubDate>Thu, 11 Apr 2024 07:39:03 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Hexo/">Hexo</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/4a17b156.html#disqus_thread</comments>
       
     </item>
     

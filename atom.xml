@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2024-04-15T16:54:35.685Z</updated>
+  <updated>2024-04-16T14:22:51.221Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,18 +17,24 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hexo-Hello-World</title>
-    <link href="https://lijiabao9.github.io/posts/4a17b156.html"/>
-    <id>https://lijiabao9.github.io/posts/4a17b156.html</id>
-    <published>2024-04-15T16:54:35.685Z</published>
-    <updated>2024-04-15T16:54:35.685Z</updated>
+    <title>Hexo分类磁贴插件失效修复</title>
+    <link href="https://lijiabao9.github.io/posts/32782b15.html"/>
+    <id>https://lijiabao9.github.io/posts/32782b15.html</id>
+    <published>2024-04-16T13:54:25.000Z</published>
+    <updated>2024-04-16T14:22:51.221Z</updated>
     
     
-    <summary type="html">快速搭建部署 Hexo 教程</summary>
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;写在最前&quot;&gt;&lt;a href=&quot;#写在最前&quot; class=&quot;headerlink&quot; title=&quot;写在最前&quot;&gt;&lt;/a&gt;写在最前&lt;/h2&gt;&lt;p&gt;此插件在应用页面添加分类磁贴，原教程&lt;a</summary>
+        
+      
     
     
     
-    <category term="Hexo 相关" scheme="https://lijiabao9.github.io/categories/Hexo-%E7%9B%B8%E5%85%B3/"/>
+    <category term="前端" scheme="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
@@ -36,18 +42,24 @@
   </entry>
   
   <entry>
-    <title>Markdown-Tutorial</title>
+    <title>Markdown基础语法的使用参考文档</title>
     <link href="https://lijiabao9.github.io/posts/d93be394.html"/>
     <id>https://lijiabao9.github.io/posts/d93be394.html</id>
     <published>2024-04-13T07:39:03.000Z</published>
-    <updated>2024-04-15T16:54:35.685Z</updated>
+    <updated>2024-04-16T14:22:51.221Z</updated>
     
     
-    <summary type="html">Markdown 基础语法的使用参考文档</summary>
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot;</summary>
+        
+      
     
     
     
-    <category term="Markdown 相关" scheme="https://lijiabao9.github.io/categories/Markdown-%E7%9B%B8%E5%85%B3/"/>
+    <category term="前端" scheme="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
     
     
     <category term="Markdown" scheme="https://lijiabao9.github.io/tags/Markdown/"/>
@@ -55,18 +67,49 @@
   </entry>
   
   <entry>
-    <title>Hexo-Tag-Plugins-Plus-Tutorial</title>
+    <title>Hexo外挂标签插件Tag-Plugins-Plus的使用参考文档</title>
     <link href="https://lijiabao9.github.io/posts/34ab88a3.html"/>
     <id>https://lijiabao9.github.io/posts/34ab88a3.html</id>
     <published>2024-04-13T07:22:50.000Z</published>
-    <updated>2024-04-15T16:54:35.685Z</updated>
+    <updated>2024-04-16T14:22:51.221Z</updated>
     
     
-    <summary type="html">Hexo 外挂标签插件 Tag Plugins Plus 的使用参考文档</summary>
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;note blue icon-padding flat&quot;&gt;&lt;i class=&quot;note-icon fas fa-bullhorn&quot;&gt;&lt;/i&gt;&lt;p&gt;&lt;a</summary>
+        
+      
     
     
     
-    <category term="Hexo 相关" scheme="https://lijiabao9.github.io/categories/Hexo-%E7%9B%B8%E5%85%B3/"/>
+    <category term="前端" scheme="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
+    
+    
+    <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo快速搭建部署教程</title>
+    <link href="https://lijiabao9.github.io/posts/4a17b156.html"/>
+    <id>https://lijiabao9.github.io/posts/4a17b156.html</id>
+    <published>2024-04-11T07:39:03.000Z</published>
+    <updated>2024-04-16T14:22:51.221Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
+        
+      
+    
+    
+    
+    <category term="前端" scheme="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
