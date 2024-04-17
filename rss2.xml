@@ -15,8 +15,94 @@
     <atom:link href="https://lijiabao9.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>大棚一日同风起，扶摇直上九万里</description>
-    <pubDate>Tue, 16 Apr 2024 14:22:51 GMT</pubDate>
+    <pubDate>Wed, 17 Apr 2024 17:08:47 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>利用Github搭建图床</title>
+      <link>https://lijiabao9.github.io/posts/c738de7c.html</link>
+      <guid>https://lijiabao9.github.io/posts/c738de7c.html</guid>
+      <pubDate>Wed, 17 Apr 2024 12:58:26 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;github创建仓库&quot;&gt;&lt;a href=&quot;#github创建仓库&quot; class=&quot;headerlink&quot; title=&quot;github创建仓库&quot;&gt;&lt;/a&gt;github创建仓库&lt;/h2&gt;&lt;p&gt;首先，需要在 github 上创建一个仓库，重点是</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/">服务搭建</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/%E5%9B%BE%E5%BA%8A/">图床</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/c738de7c.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>JS两种模块化规范CommonJS与ESM</title>
+      <link>https://lijiabao9.github.io/posts/98b3d8b1.html</link>
+      <guid>https://lijiabao9.github.io/posts/98b3d8b1.html</guid>
+      <pubDate>Wed, 17 Apr 2024 11:58:46 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;在 JavaScript 中，模块化开发，一些容易混淆的地方。&lt;/p&gt;
+&lt;p&gt;模块化开发，分两种规范：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;CommonJS&lt;/code&gt;，基于 &lt;emp&gt;nodejs&lt;/emp&gt; 环境，比如 webpack、babel</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/JavaScript/">JavaScript</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/98b3d8b1.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>npm发布package到官方库</title>
+      <link>https://lijiabao9.github.io/posts/5aa8e66c.html</link>
+      <guid>https://lijiabao9.github.io/posts/5aa8e66c.html</guid>
+      <pubDate>Tue, 16 Apr 2024 16:19:48 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;自己写的 package，怎样发布到 npm 上，让其他人也可以通过 npm install XXX 直接安装使用。&lt;/p&gt;
+&lt;p&gt;本文通过 npm 官方镜像上传。&lt;/p&gt;
+&lt;h2 id=&quot;设置全局镜像源（可选）&quot;&gt;&lt;a href=&quot;#设置全局镜像源（可选）&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/npm/">npm</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/5aa8e66c.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>Hexo分类磁贴插件失效修复</title>
@@ -28,7 +114,7 @@
         
           
           
-      <description>&lt;h2 id=&quot;写在最前&quot;&gt;&lt;a href=&quot;#写在最前&quot; class=&quot;headerlink&quot; title=&quot;写在最前&quot;&gt;&lt;/a&gt;写在最前&lt;/h2&gt;&lt;p&gt;此插件在应用页面添加分类磁贴，原教程&lt;a</description>
+      <description>&lt;h2 id=&quot;写在最前&quot;&gt;&lt;a href=&quot;#写在最前&quot; class=&quot;headerlink&quot; title=&quot;写在最前&quot;&gt;&lt;/a&gt;写在最前&lt;/h2&gt;&lt;p&gt;原来插件在应用页面添加分类磁贴，原教程&lt;a</description>
           
         
       
