@@ -15,8 +15,118 @@
     <atom:link href="https://lijiabao9.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>大棚一日同风起，扶摇直上九万里</description>
-    <pubDate>Thu, 18 Apr 2024 15:04:07 GMT</pubDate>
+    <pubDate>Sat, 20 Apr 2024 05:53:45 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Ubuntu基本命令（四）基础常用命令</title>
+      <link>https://lijiabao9.github.io/posts/12782939.html</link>
+      <guid>https://lijiabao9.github.io/posts/12782939.html</guid>
+      <pubDate>Sat, 20 Apr 2024 04:34:23 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;文件解压缩&quot;&gt;&lt;a href=&quot;#文件解压缩&quot; class=&quot;headerlink&quot; title=&quot;文件解压缩&quot;&gt;&lt;/a&gt;文件解压缩&lt;/h2&gt;&lt;p&gt;压缩文件&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Ubuntu/">Ubuntu</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/12782939.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Ubuntu基本命令（三）用户管理</title>
+      <link>https://lijiabao9.github.io/posts/c8969aa0.html</link>
+      <guid>https://lijiabao9.github.io/posts/c8969aa0.html</guid>
+      <pubDate>Sat, 20 Apr 2024 03:46:18 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;查看用户&quot;&gt;&lt;a href=&quot;#查看用户&quot; class=&quot;headerlink&quot; title=&quot;查看用户&quot;&gt;&lt;/a&gt;查看用户&lt;/h2&gt;&lt;p&gt;查看当前用户&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Ubuntu/">Ubuntu</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/c8969aa0.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Ubuntu基本命令（二）服务器基本配置</title>
+      <link>https://lijiabao9.github.io/posts/d1ebfa35.html</link>
+      <guid>https://lijiabao9.github.io/posts/d1ebfa35.html</guid>
+      <pubDate>Sat, 20 Apr 2024 03:45:55 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;修改服务器时区&quot;&gt;&lt;a href=&quot;#修改服务器时区&quot; class=&quot;headerlink&quot; title=&quot;修改服务器时区&quot;&gt;&lt;/a&gt;修改服务器时区&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Ubuntu/">Ubuntu</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/d1ebfa35.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Ubuntu基本命令（一）远程连接服务器</title>
+      <link>https://lijiabao9.github.io/posts/61ef753c.html</link>
+      <guid>https://lijiabao9.github.io/posts/61ef753c.html</guid>
+      <pubDate>Sat, 20 Apr 2024 01:54:21 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;服务器配置SSH远程登录&quot;&gt;&lt;a href=&quot;#服务器配置SSH远程登录&quot; class=&quot;headerlink&quot; title=&quot;服务器配置SSH远程登录&quot;&gt;&lt;/a&gt;服务器配置SSH远程登录&lt;/h2&gt;&lt;p&gt;默认情况下，首次安装 Ubuntu 时，不允许通过 SSH</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Ubuntu/">Ubuntu</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/61ef753c.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>利用Github搭建图床</title>

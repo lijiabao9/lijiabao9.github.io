@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2024-04-18T15:04:07.469Z</updated>
+  <updated>2024-04-20T05:53:45.283Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,11 +17,113 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Ubuntu基本命令（四）基础常用命令</title>
+    <link href="https://lijiabao9.github.io/posts/12782939.html"/>
+    <id>https://lijiabao9.github.io/posts/12782939.html</id>
+    <published>2024-04-20T04:34:23.000Z</published>
+    <updated>2024-04-20T05:53:45.283Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;文件解压缩&quot;&gt;&lt;a href=&quot;#文件解压缩&quot; class=&quot;headerlink&quot; title=&quot;文件解压缩&quot;&gt;&lt;/a&gt;文件解压缩&lt;/h2&gt;&lt;p&gt;压缩文件&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</summary>
+        
+      
+    
+    
+    
+    <category term="服务器" scheme="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+    <category term="Ubuntu" scheme="https://lijiabao9.github.io/tags/Ubuntu/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu基本命令（三）用户管理</title>
+    <link href="https://lijiabao9.github.io/posts/c8969aa0.html"/>
+    <id>https://lijiabao9.github.io/posts/c8969aa0.html</id>
+    <published>2024-04-20T03:46:18.000Z</published>
+    <updated>2024-04-20T05:53:45.283Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;查看用户&quot;&gt;&lt;a href=&quot;#查看用户&quot; class=&quot;headerlink&quot; title=&quot;查看用户&quot;&gt;&lt;/a&gt;查看用户&lt;/h2&gt;&lt;p&gt;查看当前用户&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</summary>
+        
+      
+    
+    
+    
+    <category term="服务器" scheme="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+    <category term="Ubuntu" scheme="https://lijiabao9.github.io/tags/Ubuntu/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu基本命令（二）服务器基本配置</title>
+    <link href="https://lijiabao9.github.io/posts/d1ebfa35.html"/>
+    <id>https://lijiabao9.github.io/posts/d1ebfa35.html</id>
+    <published>2024-04-20T03:45:55.000Z</published>
+    <updated>2024-04-20T05:53:45.283Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;修改服务器时区&quot;&gt;&lt;a href=&quot;#修改服务器时区&quot; class=&quot;headerlink&quot; title=&quot;修改服务器时区&quot;&gt;&lt;/a&gt;修改服务器时区&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</summary>
+        
+      
+    
+    
+    
+    <category term="服务器" scheme="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+    <category term="Ubuntu" scheme="https://lijiabao9.github.io/tags/Ubuntu/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu基本命令（一）远程连接服务器</title>
+    <link href="https://lijiabao9.github.io/posts/61ef753c.html"/>
+    <id>https://lijiabao9.github.io/posts/61ef753c.html</id>
+    <published>2024-04-20T01:54:21.000Z</published>
+    <updated>2024-04-20T05:53:45.283Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;服务器配置SSH远程登录&quot;&gt;&lt;a href=&quot;#服务器配置SSH远程登录&quot; class=&quot;headerlink&quot; title=&quot;服务器配置SSH远程登录&quot;&gt;&lt;/a&gt;服务器配置SSH远程登录&lt;/h2&gt;&lt;p&gt;默认情况下，首次安装 Ubuntu 时，不允许通过 SSH</summary>
+        
+      
+    
+    
+    
+    <category term="服务器" scheme="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+    <category term="Ubuntu" scheme="https://lijiabao9.github.io/tags/Ubuntu/"/>
+    
+  </entry>
+  
+  <entry>
     <title>利用Github搭建图床</title>
     <link href="https://lijiabao9.github.io/posts/c738de7c.html"/>
     <id>https://lijiabao9.github.io/posts/c738de7c.html</id>
     <published>2024-04-17T12:58:26.000Z</published>
-    <updated>2024-04-18T15:04:07.469Z</updated>
+    <updated>2024-04-20T05:53:45.283Z</updated>
     
     
       
@@ -46,7 +148,7 @@
     <link href="https://lijiabao9.github.io/posts/98b3d8b1.html"/>
     <id>https://lijiabao9.github.io/posts/98b3d8b1.html</id>
     <published>2024-04-17T11:58:46.000Z</published>
-    <updated>2024-04-18T15:04:07.469Z</updated>
+    <updated>2024-04-20T05:53:45.283Z</updated>
     
     
       
@@ -74,7 +176,7 @@
     <link href="https://lijiabao9.github.io/posts/5aa8e66c.html"/>
     <id>https://lijiabao9.github.io/posts/5aa8e66c.html</id>
     <published>2024-04-16T16:19:48.000Z</published>
-    <updated>2024-04-18T15:04:07.469Z</updated>
+    <updated>2024-04-20T05:53:45.283Z</updated>
     
     
       
@@ -101,7 +203,7 @@
     <link href="https://lijiabao9.github.io/posts/d93be394.html"/>
     <id>https://lijiabao9.github.io/posts/d93be394.html</id>
     <published>2024-04-13T07:39:03.000Z</published>
-    <updated>2024-04-18T15:04:07.469Z</updated>
+    <updated>2024-04-20T05:53:45.283Z</updated>
     
     
       
@@ -126,7 +228,7 @@
     <link href="https://lijiabao9.github.io/posts/34ab88a3.html"/>
     <id>https://lijiabao9.github.io/posts/34ab88a3.html</id>
     <published>2024-04-13T07:22:50.000Z</published>
-    <updated>2024-04-18T15:04:07.469Z</updated>
+    <updated>2024-04-20T05:53:45.283Z</updated>
     
     
       
@@ -151,7 +253,7 @@
     <link href="https://lijiabao9.github.io/posts/4a17b156.html"/>
     <id>https://lijiabao9.github.io/posts/4a17b156.html</id>
     <published>2024-04-11T07:39:03.000Z</published>
-    <updated>2024-04-18T15:04:07.469Z</updated>
+    <updated>2024-04-20T05:53:45.283Z</updated>
     
     
       
