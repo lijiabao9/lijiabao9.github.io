@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2024-04-20T05:53:45.283Z</updated>
+  <updated>2024-04-20T10:49:00.861Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Shadowsocks服务搭建</title>
+    <link href="https://lijiabao9.github.io/posts/685360c9.html"/>
+    <id>https://lijiabao9.github.io/posts/685360c9.html</id>
+    <published>2024-04-20T07:32:36.000Z</published>
+    <updated>2024-04-20T10:49:00.861Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;服务端搭建服务&quot;&gt;&lt;a href=&quot;#服务端搭建服务&quot; class=&quot;headerlink&quot; title=&quot;服务端搭建服务&quot;&gt;&lt;/a&gt;服务端搭建服务&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</summary>
+        
+      
+    
+    
+    
+    <category term="服务搭建" scheme="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/"/>
+    
+    
+    <category term="shadowsocks" scheme="https://lijiabao9.github.io/tags/shadowsocks/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Ubuntu基本命令（四）基础常用命令</title>
     <link href="https://lijiabao9.github.io/posts/12782939.html"/>
     <id>https://lijiabao9.github.io/posts/12782939.html</id>
     <published>2024-04-20T04:34:23.000Z</published>
-    <updated>2024-04-20T05:53:45.283Z</updated>
+    <updated>2024-04-20T10:49:00.861Z</updated>
     
     
       
@@ -47,7 +72,7 @@
     <link href="https://lijiabao9.github.io/posts/c8969aa0.html"/>
     <id>https://lijiabao9.github.io/posts/c8969aa0.html</id>
     <published>2024-04-20T03:46:18.000Z</published>
-    <updated>2024-04-20T05:53:45.283Z</updated>
+    <updated>2024-04-20T10:49:00.861Z</updated>
     
     
       
@@ -73,7 +98,7 @@
     <link href="https://lijiabao9.github.io/posts/d1ebfa35.html"/>
     <id>https://lijiabao9.github.io/posts/d1ebfa35.html</id>
     <published>2024-04-20T03:45:55.000Z</published>
-    <updated>2024-04-20T05:53:45.283Z</updated>
+    <updated>2024-04-20T10:49:00.861Z</updated>
     
     
       
@@ -98,7 +123,7 @@
     <link href="https://lijiabao9.github.io/posts/61ef753c.html"/>
     <id>https://lijiabao9.github.io/posts/61ef753c.html</id>
     <published>2024-04-20T01:54:21.000Z</published>
-    <updated>2024-04-20T05:53:45.283Z</updated>
+    <updated>2024-04-20T10:49:00.861Z</updated>
     
     
       
@@ -123,7 +148,7 @@
     <link href="https://lijiabao9.github.io/posts/c738de7c.html"/>
     <id>https://lijiabao9.github.io/posts/c738de7c.html</id>
     <published>2024-04-17T12:58:26.000Z</published>
-    <updated>2024-04-20T05:53:45.283Z</updated>
+    <updated>2024-04-20T10:49:00.861Z</updated>
     
     
       
@@ -148,7 +173,7 @@
     <link href="https://lijiabao9.github.io/posts/98b3d8b1.html"/>
     <id>https://lijiabao9.github.io/posts/98b3d8b1.html</id>
     <published>2024-04-17T11:58:46.000Z</published>
-    <updated>2024-04-20T05:53:45.283Z</updated>
+    <updated>2024-04-20T10:49:00.861Z</updated>
     
     
       
@@ -176,7 +201,7 @@
     <link href="https://lijiabao9.github.io/posts/5aa8e66c.html"/>
     <id>https://lijiabao9.github.io/posts/5aa8e66c.html</id>
     <published>2024-04-16T16:19:48.000Z</published>
-    <updated>2024-04-20T05:53:45.283Z</updated>
+    <updated>2024-04-20T10:49:00.861Z</updated>
     
     
       
@@ -203,7 +228,7 @@
     <link href="https://lijiabao9.github.io/posts/d93be394.html"/>
     <id>https://lijiabao9.github.io/posts/d93be394.html</id>
     <published>2024-04-13T07:39:03.000Z</published>
-    <updated>2024-04-20T05:53:45.283Z</updated>
+    <updated>2024-04-20T10:49:00.861Z</updated>
     
     
       
@@ -228,7 +253,7 @@
     <link href="https://lijiabao9.github.io/posts/34ab88a3.html"/>
     <id>https://lijiabao9.github.io/posts/34ab88a3.html</id>
     <published>2024-04-13T07:22:50.000Z</published>
-    <updated>2024-04-20T05:53:45.283Z</updated>
+    <updated>2024-04-20T10:49:00.861Z</updated>
     
     
       
@@ -253,7 +278,7 @@
     <link href="https://lijiabao9.github.io/posts/4a17b156.html"/>
     <id>https://lijiabao9.github.io/posts/4a17b156.html</id>
     <published>2024-04-11T07:39:03.000Z</published>
-    <updated>2024-04-20T05:53:45.283Z</updated>
+    <updated>2024-04-20T10:49:00.861Z</updated>
     
     
       

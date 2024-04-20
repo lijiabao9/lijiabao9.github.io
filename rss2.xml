@@ -15,8 +15,35 @@
     <atom:link href="https://lijiabao9.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>大棚一日同风起，扶摇直上九万里</description>
-    <pubDate>Sat, 20 Apr 2024 05:53:45 GMT</pubDate>
+    <pubDate>Sat, 20 Apr 2024 10:49:00 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Shadowsocks服务搭建</title>
+      <link>https://lijiabao9.github.io/posts/685360c9.html</link>
+      <guid>https://lijiabao9.github.io/posts/685360c9.html</guid>
+      <pubDate>Sat, 20 Apr 2024 07:32:36 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;服务端搭建服务&quot;&gt;&lt;a href=&quot;#服务端搭建服务&quot; class=&quot;headerlink&quot; title=&quot;服务端搭建服务&quot;&gt;&lt;/a&gt;服务端搭建服务&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/">服务搭建</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/shadowsocks/">shadowsocks</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/685360c9.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>Ubuntu基本命令（四）基础常用命令</title>
