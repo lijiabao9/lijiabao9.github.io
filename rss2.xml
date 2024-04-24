@@ -15,8 +15,113 @@
     <atom:link href="https://lijiabao9.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>大棚一日同风起，扶摇直上九万里</description>
-    <pubDate>Sun, 21 Apr 2024 06:06:20 GMT</pubDate>
+    <pubDate>Wed, 24 Apr 2024 15:49:06 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>WSL环境变量隔离宿主机</title>
+      <link>https://lijiabao9.github.io/posts/c98be727.html</link>
+      <guid>https://lijiabao9.github.io/posts/c98be727.html</guid>
+      <pubDate>Wed, 24 Apr 2024 15:38:53 GMT</pubDate>
+      
+      <description>windows 系统创建的 wsl，wsl 会使用到 windows 的环境变量，产生混乱，隔离外层的环境变量</description>
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/WSL/">WSL</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/c98be727.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Maven阿里云镜像源</title>
+      <link>https://lijiabao9.github.io/posts/a4b25fc9.html</link>
+      <guid>https://lijiabao9.github.io/posts/a4b25fc9.html</guid>
+      <pubDate>Wed, 24 Apr 2024 15:25:39 GMT</pubDate>
+      
+      <description>maven官方仓库位于国外，下载速度很慢，使用国内的阿里云镜像，加速下载</description>
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Maven/">Maven</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/a4b25fc9.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Maven项目迁移到非公网依赖报错</title>
+      <link>https://lijiabao9.github.io/posts/a3f186d.html</link>
+      <guid>https://lijiabao9.github.io/posts/a3f186d.html</guid>
+      <pubDate>Wed, 24 Apr 2024 14:50:19 GMT</pubDate>
+      
+      <description>在互联网创建的maven项目，有时需要部署到没有公网环境的局域网内，源码迁移时，运行报错的解决方法</description>
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E5%90%8E%E7%AB%AF/">后端</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Maven/">Maven</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/a3f186d.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>将WSL从C盘迁移到其他盘</title>
+      <link>https://lijiabao9.github.io/posts/3cc0d60.html</link>
+      <guid>https://lijiabao9.github.io/posts/3cc0d60.html</guid>
+      <pubDate>Wed, 24 Apr 2024 14:29:26 GMT</pubDate>
+      
+      <description>windows系统下的wsl，默认安装位置是C盘，安装的发行版本的虚拟磁盘也放在C盘，将这些发行系统迁移到其他盘，释放C盘空间</description>
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/WSL/">WSL</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/3cc0d60.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>NodeJS多版本管理</title>
+      <link>https://lijiabao9.github.io/posts/e0e55c77.html</link>
+      <guid>https://lijiabao9.github.io/posts/e0e55c77.html</guid>
+      <pubDate>Wed, 24 Apr 2024 13:51:09 GMT</pubDate>
+      
+      <description>在服务器通过nvm管理多个版本的nodejs</description>
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/NodeJS/">NodeJS</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/e0e55c77.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>Rustdest私有部署</title>
