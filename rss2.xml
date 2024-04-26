@@ -15,8 +15,29 @@
     <atom:link href="https://lijiabao9.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>大棚一日同风起，扶摇直上九万里</description>
-    <pubDate>Wed, 24 Apr 2024 15:49:06 GMT</pubDate>
+    <pubDate>Fri, 26 Apr 2024 17:43:47 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Ubuntu安装JDK教程</title>
+      <link>https://lijiabao9.github.io/posts/2e6357f8.html</link>
+      <guid>https://lijiabao9.github.io/posts/2e6357f8.html</guid>
+      <pubDate>Fri, 26 Apr 2024 15:28:05 GMT</pubDate>
+      
+      <description>介绍在Ubuntu系统上，怎样安装JDK</description>
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/JDK/">JDK</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/2e6357f8.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>WSL环境变量隔离宿主机</title>
@@ -40,7 +61,7 @@
     </item>
     
     <item>
-      <title>Maven阿里云镜像源</title>
+      <title>配置Maven阿里云镜像源</title>
       <link>https://lijiabao9.github.io/posts/a4b25fc9.html</link>
       <guid>https://lijiabao9.github.io/posts/a4b25fc9.html</guid>
       <pubDate>Wed, 24 Apr 2024 15:25:39 GMT</pubDate>
@@ -61,7 +82,7 @@
     </item>
     
     <item>
-      <title>Maven项目迁移到非公网依赖报错</title>
+      <title>将开发的Maven项目迁移到局域网</title>
       <link>https://lijiabao9.github.io/posts/a3f186d.html</link>
       <guid>https://lijiabao9.github.io/posts/a3f186d.html</guid>
       <pubDate>Wed, 24 Apr 2024 14:50:19 GMT</pubDate>
@@ -103,7 +124,7 @@
     </item>
     
     <item>
-      <title>NodeJS多版本管理</title>
+      <title>Ubuntu管理node多版本</title>
       <link>https://lijiabao9.github.io/posts/e0e55c77.html</link>
       <guid>https://lijiabao9.github.io/posts/e0e55c77.html</guid>
       <pubDate>Wed, 24 Apr 2024 13:51:09 GMT</pubDate>
