@@ -15,8 +15,29 @@
     <atom:link href="https://lijiabao9.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>大棚一日同风起，扶摇直上九万里</description>
-    <pubDate>Sat, 27 Apr 2024 08:44:46 GMT</pubDate>
+    <pubDate>Sat, 27 Apr 2024 08:46:56 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>在windows环境通过压缩包安装MySQL服务</title>
+      <link>https://lijiabao9.github.io/posts/e22cf072.html</link>
+      <guid>https://lijiabao9.github.io/posts/e22cf072.html</guid>
+      <pubDate>Sat, 27 Apr 2024 07:32:05 GMT</pubDate>
+      
+      <description>介绍在 windows 环境下，怎样通过压缩包，配置启动 MySQL 服务</description>
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E6%8A%80%E6%9C%AF%E5%B7%A5%E5%85%B7/">技术工具</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/MySQL/">MySQL</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/e22cf072.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>在Sublime搭建C++开发环境</title>
@@ -414,27 +435,6 @@
       
       
       <comments>https://lijiabao9.github.io/posts/98b3d8b1.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>npm发布package到官方库</title>
-      <link>https://lijiabao9.github.io/posts/5aa8e66c.html</link>
-      <guid>https://lijiabao9.github.io/posts/5aa8e66c.html</guid>
-      <pubDate>Tue, 16 Apr 2024 16:19:48 GMT</pubDate>
-      
-      <description>将自己写的nodejs项目，发布到npm官方镜像，以供别人下载使用</description>
-      
-      
-      
-      
-      <category domain="https://lijiabao9.github.io/categories/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/">前端开发</category>
-      
-      
-      <category domain="https://lijiabao9.github.io/tags/npm/">npm</category>
-      
-      
-      <comments>https://lijiabao9.github.io/posts/5aa8e66c.html#disqus_thread</comments>
       
     </item>
     
