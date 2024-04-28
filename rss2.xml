@@ -15,8 +15,29 @@
     <atom:link href="https://lijiabao9.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>大棚一日同风起，扶摇直上九万里</description>
-    <pubDate>Sat, 27 Apr 2024 11:58:34 GMT</pubDate>
+    <pubDate>Sun, 28 Apr 2024 12:50:04 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>本地搭建类chatGPT大模型Web交互界面</title>
+      <link>https://lijiabao9.github.io/posts/e9bedad6.html</link>
+      <guid>https://lijiabao9.github.io/posts/e9bedad6.html</guid>
+      <pubDate>Sat, 27 Apr 2024 13:24:54 GMT</pubDate>
+      
+      <description>在自己本机搭建一个人工智能大模型服务，并提供Web界面，实现chatGPT的效果</description>
+      
+      
+      
+      
+      <category domain="https://lijiabao9.github.io/categories/%E5%BA%94%E7%94%A8%E6%90%AD%E5%BB%BA/">应用搭建</category>
+      
+      
+      <category domain="https://lijiabao9.github.io/tags/Ollama/">Ollama</category>
+      
+      
+      <comments>https://lijiabao9.github.io/posts/e9bedad6.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>Java实现图片叠加与拼接</title>
@@ -414,27 +435,6 @@
       
       
       <comments>https://lijiabao9.github.io/posts/61ef753c.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>利用Github搭建图床</title>
-      <link>https://lijiabao9.github.io/posts/c738de7c.html</link>
-      <guid>https://lijiabao9.github.io/posts/c738de7c.html</guid>
-      <pubDate>Wed, 17 Apr 2024 12:58:26 GMT</pubDate>
-      
-      <description>利用github搭建免费的图床服务，通过PicGo软件，方便管理图床</description>
-      
-      
-      
-      
-      <category domain="https://lijiabao9.github.io/categories/%E5%BA%94%E7%94%A8%E6%90%AD%E5%BB%BA/">应用搭建</category>
-      
-      
-      <category domain="https://lijiabao9.github.io/tags/%E5%9B%BE%E5%BA%8A/">图床</category>
-      
-      
-      <comments>https://lijiabao9.github.io/posts/c738de7c.html#disqus_thread</comments>
       
     </item>
     
