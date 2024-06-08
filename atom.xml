@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2024-06-04T15:58:22.129Z</updated>
+  <updated>2024-06-08T13:54:58.389Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://lijiabao9.github.io/posts/749ad7d8.html"/>
     <id>https://lijiabao9.github.io/posts/749ad7d8.html</id>
     <published>2024-06-04T15:25:27.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">docker常用命令操作，镜像容器运行，镜像构建，dockerCompose等</summary>
@@ -40,7 +40,7 @@
     <link href="https://lijiabao9.github.io/posts/2f615c17.html"/>
     <id>https://lijiabao9.github.io/posts/2f615c17.html</id>
     <published>2024-05-23T13:06:28.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">web项目中，引入swagger依赖，提供在线的接口文档</summary>
@@ -59,7 +59,7 @@
     <link href="https://lijiabao9.github.io/posts/48221f8a.html"/>
     <id>https://lijiabao9.github.io/posts/48221f8a.html</id>
     <published>2024-05-23T11:55:47.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">简单记录MybatisPLus的应用示例</summary>
@@ -78,7 +78,7 @@
     <link href="https://lijiabao9.github.io/posts/e9bedad6.html"/>
     <id>https://lijiabao9.github.io/posts/e9bedad6.html</id>
     <published>2024-04-27T13:24:54.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">在自己本机搭建一个人工智能大模型服务，并提供Web界面，实现chatGPT的效果</summary>
@@ -97,7 +97,7 @@
     <link href="https://lijiabao9.github.io/posts/5ed07020.html"/>
     <id>https://lijiabao9.github.io/posts/5ed07020.html</id>
     <published>2024-04-27T08:53:27.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">通过 JAVA 实现，图片叠加，图片拼接</summary>
@@ -116,7 +116,7 @@
     <link href="https://lijiabao9.github.io/posts/e22cf072.html"/>
     <id>https://lijiabao9.github.io/posts/e22cf072.html</id>
     <published>2024-04-27T07:32:05.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">介绍在 windows 环境下，怎样通过压缩包，配置启动 MySQL 服务</summary>
@@ -135,7 +135,7 @@
     <link href="https://lijiabao9.github.io/posts/1f055284.html"/>
     <id>https://lijiabao9.github.io/posts/1f055284.html</id>
     <published>2024-04-27T07:08:42.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">在Sublime Text软件中，集成 C++ 开发环境，能编译运行 cpp 文件</summary>
@@ -154,7 +154,7 @@
     <link href="https://lijiabao9.github.io/posts/7f1a5ba4.html"/>
     <id>https://lijiabao9.github.io/posts/7f1a5ba4.html</id>
     <published>2024-04-27T06:39:31.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">在Sublime Text软件中，集成java开发环境，能编译运行java文件</summary>
@@ -173,7 +173,7 @@
     <link href="https://lijiabao9.github.io/posts/ed3b1c3a.html"/>
     <id>https://lijiabao9.github.io/posts/ed3b1c3a.html</id>
     <published>2024-04-27T03:03:41.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">参考文档，redis基础的常用命令</summary>
@@ -192,7 +192,7 @@
     <link href="https://lijiabao9.github.io/posts/918aee18.html"/>
     <id>https://lijiabao9.github.io/posts/918aee18.html</id>
     <published>2024-04-27T00:13:41.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">在 WSL 中做配置，使得 WSL 的请求，可以走外层 windows 的代理流量</summary>
@@ -211,7 +211,7 @@
     <link href="https://lijiabao9.github.io/posts/7b25a45.html"/>
     <id>https://lijiabao9.github.io/posts/7b25a45.html</id>
     <published>2024-04-27T00:01:34.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">介绍在Ubuntu系统上，怎样安装Redis</summary>
@@ -230,7 +230,7 @@
     <link href="https://lijiabao9.github.io/posts/2e6357f8.html"/>
     <id>https://lijiabao9.github.io/posts/2e6357f8.html</id>
     <published>2024-04-26T15:28:05.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">介绍在Ubuntu系统上，怎样安装JDK</summary>
@@ -249,7 +249,7 @@
     <link href="https://lijiabao9.github.io/posts/c98be727.html"/>
     <id>https://lijiabao9.github.io/posts/c98be727.html</id>
     <published>2024-04-24T15:38:53.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">windows 系统创建的 wsl，wsl 会使用到 windows 的环境变量，产生混乱，隔离外层的环境变量</summary>
@@ -268,7 +268,7 @@
     <link href="https://lijiabao9.github.io/posts/a4b25fc9.html"/>
     <id>https://lijiabao9.github.io/posts/a4b25fc9.html</id>
     <published>2024-04-24T15:25:39.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">maven官方仓库位于国外，下载速度很慢，使用国内的阿里云镜像，加速下载</summary>
@@ -287,7 +287,7 @@
     <link href="https://lijiabao9.github.io/posts/a3f186d.html"/>
     <id>https://lijiabao9.github.io/posts/a3f186d.html</id>
     <published>2024-04-24T14:50:19.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">在互联网创建的maven项目，有时需要部署到没有公网环境的局域网内，源码迁移时，运行报错的解决方法</summary>
@@ -306,7 +306,7 @@
     <link href="https://lijiabao9.github.io/posts/3cc0d60.html"/>
     <id>https://lijiabao9.github.io/posts/3cc0d60.html</id>
     <published>2024-04-24T14:29:26.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">windows系统下的wsl，默认安装位置是C盘，安装的发行版本的虚拟磁盘也放在C盘，将这些发行系统迁移到其他盘，释放C盘空间</summary>
@@ -325,7 +325,7 @@
     <link href="https://lijiabao9.github.io/posts/e0e55c77.html"/>
     <id>https://lijiabao9.github.io/posts/e0e55c77.html</id>
     <published>2024-04-24T13:51:09.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">在服务器通过nvm管理多个版本的nodejs</summary>
@@ -344,7 +344,7 @@
     <link href="https://lijiabao9.github.io/posts/44c37433.html"/>
     <id>https://lijiabao9.github.io/posts/44c37433.html</id>
     <published>2024-04-20T15:48:10.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">私人服务器上部署rustdesk服务的教程</summary>
@@ -363,7 +363,7 @@
     <link href="https://lijiabao9.github.io/posts/685360c9.html"/>
     <id>https://lijiabao9.github.io/posts/685360c9.html</id>
     <published>2024-04-20T07:32:36.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">自建机场，shadowsocks服务搭建</summary>
@@ -382,7 +382,7 @@
     <link href="https://lijiabao9.github.io/posts/12782939.html"/>
     <id>https://lijiabao9.github.io/posts/12782939.html</id>
     <published>2024-04-20T04:34:23.000Z</published>
-    <updated>2024-06-04T15:58:22.129Z</updated>
+    <updated>2024-06-08T13:54:58.389Z</updated>
     
     
     <summary type="html">ubuntu系统，一些常用的基础命令，记录方便快速查看</summary>
