@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2025-06-09T15:57:59.923Z</updated>
+  <updated>2025-06-09T17:42:41.656Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,23 +17,21 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
+    <title>Hello Hexo</title>
     <link href="https://lijiabao9.github.io/posts/4a17b156.html"/>
     <id>https://lijiabao9.github.io/posts/4a17b156.html</id>
-    <published>2025-06-09T15:57:59.923Z</published>
-    <updated>2025-06-09T15:57:59.923Z</updated>
+    <published>2025-06-09T17:42:41.656Z</published>
+    <updated>2025-06-09T17:42:41.656Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
-        
-      
+    <summary type="html">Hexo 官方快速启动指南</summary>
     
     
     
+    <category term="Hexo" scheme="https://lijiabao9.github.io/categories/Hexo/"/>
+    
+    
+    <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
     
   </entry>
   
