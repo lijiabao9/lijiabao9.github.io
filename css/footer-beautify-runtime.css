@@ -1,0 +1,27 @@
+/* footer-beautify 计时器样式 */
+
+#workboard {
+    font-size: 12px
+}
+
+.runtime-text {
+    font-family: 'LXGW WenKai', sans-serif;
+    font-size: 0.90rem;
+    color: #8262f6; /* 鲜艳的红色-确保白底可见 */
+    background: rgba(255,255,255,0.6); /* 白色半透明背景 */
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-shadow: 0 0 2px rgba(0,0,0,0.1);
+    white-space: nowrap;
+}
+
+/* 暗色模式适配 */
+[data-theme="dark"] .runtime-text {
+    color: #f39c12; /* 橙色-确保黑底可见 */
+    background: rgba(0,0,0,0.7);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .runtime-text small {
+    color: #2ecc71; /* 绿色辅助色 */
+}
