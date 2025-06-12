@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2025-06-11T13:27:13.676Z</updated>
+  <updated>2025-06-12T14:02:09.658Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,21 +17,77 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Butterfly-Plus 魔改标签外挂的使用参考手册</title>
+    <link href="https://lijiabao9.github.io/posts/1b254452.html"/>
+    <id>https://lijiabao9.github.io/posts/1b254452.html</id>
+    <published>2025-06-11T17:30:54.000Z</published>
+    <updated>2025-06-12T14:02:09.658Z</updated>
+    
+    
+    <summary type="html">介绍 hexo-butterfly-tag-plugins-plus 的标签外挂的基本使用方法，以及验证渲染效果。</summary>
+    
+    
+    
+    <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
+    
+    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
+    
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    
+    
+    <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
+    
+    <category term="Butterfly" scheme="https://lijiabao9.github.io/tags/Butterfly/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Butterfly 原生标签外挂的使用指南</title>
+    <link href="https://lijiabao9.github.io/posts/d87f7e0c.html"/>
+    <id>https://lijiabao9.github.io/posts/d87f7e0c.html</id>
+    <published>2025-06-09T16:59:00.000Z</published>
+    <updated>2025-06-12T14:02:09.658Z</updated>
+    
+    
+    <summary type="html">介绍 Butterfly 的标签外挂的基本使用方法，以及验证渲染效果。</summary>
+    
+    
+    
+    <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
+    
+    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
+    
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    
+    
+    <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
+    
+    <category term="Butterfly" scheme="https://lijiabao9.github.io/tags/Butterfly/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Hello Hexo</title>
     <link href="https://lijiabao9.github.io/posts/4a17b156.html"/>
     <id>https://lijiabao9.github.io/posts/4a17b156.html</id>
-    <published>2025-06-11T13:27:13.676Z</published>
-    <updated>2025-06-11T13:27:13.676Z</updated>
+    <published>2025-06-09T16:00:00.000Z</published>
+    <updated>2025-06-12T14:02:09.659Z</updated>
     
     
     <summary type="html">Hexo 官方快速启动指南</summary>
     
     
     
-    <category term="Hexo" scheme="https://lijiabao9.github.io/categories/Hexo/"/>
+    <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
+    
+    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
+    
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
+    
+    <category term="Blog" scheme="https://lijiabao9.github.io/tags/Blog/"/>
     
   </entry>
   
