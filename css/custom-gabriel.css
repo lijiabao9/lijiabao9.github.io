@@ -1,0 +1,128 @@
+
+/*  时间轴，生肖样式  */
+.article-sort-item.year {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* 控制所有元素之间的间距 */
+}
+.article-sort-item.year > .year-text {
+    margin-right: 0.3rem;
+}
+
+
+/* 侧边栏，分类样式 */
+/* 多级分类容器 - 基础样式 */
+.card-category-list {
+    width: 100%;
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+}
+/* 分类项基础样式 */
+.card-category-list-item {
+    position: relative;
+    width: 100%;
+    margin: 4px 0;
+}
+/* 分类链接样式（保留点击跳转功能） */
+.card-category-list-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: var(--style-border);
+    transition: all 0.3s ease;
+}
+/* 子分类容器 - 初始隐藏 */
+.card-category-list.child {
+    max-height: 0;
+    overflow: hidden;
+    padding-left: 20px;
+    border-left: 2px dashed var(--anzhiyu-theme-op);
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+/* 悬停时展开子分类 */
+.card-category-list-item:hover > .card-category-list.child {
+    max-height: 1000px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+/* 分类名称与计数 */
+.card-category-list-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.card-category-list-count {
+    min-width: 24px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    background: var(--anzhiyu-theme-op);
+    border-radius: 4px;
+    padding: 0 4px;
+    margin-left: 8px;
+}
+/* 悬停效果增强 */
+.card-category-list-link:hover {
+    color: var(--anzhiyu-white);
+    background-color: var(--anzhiyu-theme);
+    box-shadow: var(--anzhiyu-shadow-theme);
+    transform: translateX(4px);
+}
+/* 多级指示器（视觉提示） */
+.card-category-list-item:has(> .card-category-list.child) > .card-category-list-link::after {
+    content: "›";
+    margin-left: 8px;
+    transform: rotate(0);
+    transition: transform 0.3s;
+}
+.card-category-list-item:hover:has(> .card-category-list.child) > .card-category-list-link::after {
+    transform: rotate(90deg);
+}
+/* 响应式微调 */
+@media screen and (min-width: 1300px) {
+    .card-category-list-link:hover {
+        transform: translateX(4px) scale(1.03);
+    }
+}
+
+
+
+
+/* 侧边栏个人卡片渐变色 */
+#aside-content > .card-widget, #aside-content .card-webinfo {
+    background: linear-gradient(135deg, #0a2463, #3e5c9a, #7cb8d1);
+    background-size: 400%;
+    box-shadow: var(--anzhiyu-shadow-black);
+    animation: gradient 15s ease infinite;
+    position: relative;
+    color: #b9ed9b;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3)
+}
+.site-data > a .headline, .site-data > a .length-num, .card-info-social-icons i {
+    color: #b9ed9b !important;
+}
+/* 网站信息卡片渐变色 */
+#aside-content .card-webinfo {
+    background: linear-gradient(135deg, #2d0b59, #6a3093, #a044ff);
+    background-size: 400%;
+    box-shadow: var(--anzhiyu-shadow-black);
+    animation: gradient 15s ease infinite;
+    position: relative;
+    color: #40f4d9;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3)
+}
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
