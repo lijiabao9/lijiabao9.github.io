@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2025-06-13T15:35:54.038Z</updated>
+  <updated>2025-06-14T10:19:08.575Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,14 +17,20 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Butterfly-Plus 魔改标签外挂的使用参考手册</title>
+    <title>Butterfly-Plus标签外挂的使用参考</title>
     <link href="https://lijiabao9.github.io/posts/1b254452.html"/>
     <id>https://lijiabao9.github.io/posts/1b254452.html</id>
-    <published>2025-06-11T17:30:54.000Z</published>
-    <updated>2025-06-13T15:35:54.038Z</updated>
+    <published>2025-06-09T19:00:00.000Z</published>
+    <updated>2025-06-14T10:19:08.575Z</updated>
     
     
-    <summary type="html">介绍 hexo-butterfly-tag-plugins-plus 的标签外挂的基本使用方法，以及验证渲染效果。</summary>
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;Tag-Plugins-Plus 作为 Butterfly 主题的增强版标签外挂系统，在保留原有功能的基础上，新增了更强大的内容展示能力和交互特性。&lt;br&gt;本文将详细介绍 Tag-Plugins-Plus</summary>
+        
+      
     
     
     
@@ -42,14 +48,84 @@
   </entry>
   
   <entry>
-    <title>Butterfly 原生标签外挂的使用指南</title>
+    <title>Butterfly标签外挂的使用参考</title>
+    <link href="https://lijiabao9.github.io/posts/a3e5b9d2.html"/>
+    <id>https://lijiabao9.github.io/posts/a3e5b9d2.html</id>
+    <published>2025-06-09T18:30:00.000Z</published>
+    <updated>2025-06-14T10:19:08.576Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;Butterfly 主题强大的标签外挂 Tag-Plugins 功能，能够为 Hexo 博客内容带来丰富的排版样式和交互效果。&lt;br&gt;本文将全面解析 Butterfly 标签外挂的使用方法。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div</summary>
+        
+      
+    
+    
+    
+    <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
+    
+    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
+    
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    
+    
+    <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
+    
+    <category term="Butterfly" scheme="https://lijiabao9.github.io/tags/Butterfly/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Butterfly主题应用以及魔改记录（三）</title>
+    <link href="https://lijiabao9.github.io/posts/4c8f1d6a.html"/>
+    <id>https://lijiabao9.github.io/posts/4c8f1d6a.html</id>
+    <published>2025-06-09T18:00:00.000Z</published>
+    <updated>2025-06-14T10:19:08.575Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;Butterfly 是 Hexo 生态中广受欢迎的高颜值主题，以其优雅的设计、丰富的功能和高度可定制性著称。&lt;br&gt;本文将系统记录 Butterfly</summary>
+        
+      
+    
+    
+    
+    <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
+    
+    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
+    
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    
+    
+    <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
+    
+    <category term="Butterfly" scheme="https://lijiabao9.github.io/tags/Butterfly/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Butterfly主题应用以及魔改记录（二）</title>
     <link href="https://lijiabao9.github.io/posts/d87f7e0c.html"/>
     <id>https://lijiabao9.github.io/posts/d87f7e0c.html</id>
-    <published>2025-06-09T16:59:00.000Z</published>
-    <updated>2025-06-13T15:35:54.037Z</updated>
+    <published>2025-06-09T17:30:00.000Z</published>
+    <updated>2025-06-14T10:19:08.576Z</updated>
     
     
-    <summary type="html">介绍 Butterfly 的标签外挂的基本使用方法，以及验证渲染效果。</summary>
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;Butterfly 是 Hexo 生态中广受欢迎的高颜值主题，以其优雅的设计、丰富的功能和高度可定制性著称。&lt;br&gt;本文将系统记录 Butterfly</summary>
+        
+      
     
     
     
@@ -67,14 +143,82 @@
   </entry>
   
   <entry>
-    <title>Hello Hexo</title>
+    <title>Butterfly主题应用以及魔改记录（一）</title>
+    <link href="https://lijiabao9.github.io/posts/3227fdf7.html"/>
+    <id>https://lijiabao9.github.io/posts/3227fdf7.html</id>
+    <published>2025-06-09T17:00:00.000Z</published>
+    <updated>2025-06-14T10:19:08.575Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;Butterfly 是 Hexo 生态中广受欢迎的高颜值主题，以其优雅的设计、丰富的功能和高度可定制性著称。&lt;br&gt;本文将系统记录 Butterfly</summary>
+        
+      
+    
+    
+    
+    <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
+    
+    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
+    
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    
+    
+    <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
+    
+    <category term="Butterfly" scheme="https://lijiabao9.github.io/tags/Butterfly/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo 网站 SEO 优化插件</title>
+    <link href="https://lijiabao9.github.io/posts/5071adbc.html"/>
+    <id>https://lijiabao9.github.io/posts/5071adbc.html</id>
+    <published>2025-06-09T16:30:00.000Z</published>
+    <updated>2025-06-14T10:19:08.576Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;Hexo 作为一款高效的静态博客框架，虽然天生对搜索引擎友好，但仍需通过专业的 SEO 优化来提升网站在搜索结果中的排名和曝光度。&lt;br&gt;本文将详细介绍 Hexo 博客必备的 SEO</summary>
+        
+      
+    
+    
+    
+    <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
+    
+    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
+    
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    
+    
+    <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
+    
+    <category term="SEO" scheme="https://lijiabao9.github.io/tags/SEO/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo 博客快速搭建指南</title>
     <link href="https://lijiabao9.github.io/posts/4a17b156.html"/>
     <id>https://lijiabao9.github.io/posts/4a17b156.html</id>
     <published>2025-06-09T16:00:00.000Z</published>
-    <updated>2025-06-13T15:35:54.038Z</updated>
+    <updated>2025-06-14T10:19:08.576Z</updated>
     
     
-    <summary type="html">Hexo 官方快速启动指南</summary>
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;想要快速搭建一个轻量、高效的静态博客？&lt;br&gt;Hexo</summary>
+        
+      
     
     
     
@@ -86,8 +230,6 @@
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
-    
-    <category term="Blog" scheme="https://lijiabao9.github.io/tags/Blog/"/>
     
   </entry>
   

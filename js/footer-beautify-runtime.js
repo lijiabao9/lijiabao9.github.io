@@ -1,5 +1,5 @@
 // 建站时间
-const siteStartTime = new Date("06/09/2025 20:00:00");
+const siteStartTime = new Date("06/10/2025 00:00:00");
 
 function createtime() {
     const now = new Date();
