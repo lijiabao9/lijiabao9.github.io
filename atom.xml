@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2025-06-16T03:41:37.120Z</updated>
+  <updated>2025-06-16T10:04:28.224Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,11 +17,92 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Ubuntu上Docker部署指南：从安装到第一个容器</title>
+    <link href="https://lijiabao9.github.io/posts/a56494b2.html"/>
+    <id>https://lijiabao9.github.io/posts/a56494b2.html</id>
+    <published>2025-06-11T22:50:55.000Z</published>
+    <updated>2025-06-16T10:04:28.224Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;想在 Ubuntu 上快速部署 Docker？本教程将带你从 apt 源配置开始，完成Docker CE安装等关键步骤，最后通过运行容器验证部署成功。&lt;br&gt;无论是开发还是生产环境，这份指南都能帮你快速搭建可靠的 Docker</summary>
+        
+      
+    
+    
+    
+    <category term="运维圣殿" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/"/>
+    
+    <category term="容器星河" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/%E5%AE%B9%E5%99%A8%E6%98%9F%E6%B2%B3/"/>
+    
+    
+    <category term="Ubuntu" scheme="https://lijiabao9.github.io/tags/Ubuntu/"/>
+    
+    <category term="Docker" scheme="https://lijiabao9.github.io/tags/Docker/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu部署Nginx全指南：从安装到HTTPS安全配置</title>
+    <link href="https://lijiabao9.github.io/posts/54a2a043.html"/>
+    <id>https://lijiabao9.github.io/posts/54a2a043.html</id>
+    <published>2025-06-11T22:19:45.000Z</published>
+    <updated>2025-06-16T10:04:28.224Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;想在 Ubuntu 上快速部署</summary>
+        
+      
+    
+    
+    
+    <category term="运维圣殿" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/"/>
+    
+    <category term="网络边界" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/%E7%BD%91%E7%BB%9C%E8%BE%B9%E7%95%8C/"/>
+    
+    
+    <category term="Ubuntu" scheme="https://lijiabao9.github.io/tags/Ubuntu/"/>
+    
+    <category term="Nginx" scheme="https://lijiabao9.github.io/tags/Nginx/"/>
+    
+    <category term="HTTPS" scheme="https://lijiabao9.github.io/tags/HTTPS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Snipaste：程序员的高效截图神器</title>
+    <link href="https://lijiabao9.github.io/posts/45182a65.html"/>
+    <id>https://lijiabao9.github.io/posts/45182a65.html</id>
+    <published>2025-06-10T16:30:43.000Z</published>
+    <updated>2025-06-16T10:04:28.224Z</updated>
+    
+    
+    <summary type="html">Snipaste 是一个简单但强大的截图工具，也可以让你将截图贴回到屏幕上！</summary>
+    
+    
+    
+    <category term="运维圣殿" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/"/>
+    
+    <category term="工具密卷" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/%E5%B7%A5%E5%85%B7%E5%AF%86%E5%8D%B7/"/>
+    
+    
+    <category term="Snipaste" scheme="https://lijiabao9.github.io/tags/Snipaste/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Everything：秒搜百万文件的终极搜索神器</title>
     <link href="https://lijiabao9.github.io/posts/abdf63d7.html"/>
     <id>https://lijiabao9.github.io/posts/abdf63d7.html</id>
-    <published>2025-06-16T03:23:45.000Z</published>
-    <updated>2025-06-16T03:41:37.120Z</updated>
+    <published>2025-06-10T16:00:45.000Z</published>
+    <updated>2025-06-16T10:04:28.224Z</updated>
     
     
       
@@ -47,63 +128,11 @@
   </entry>
   
   <entry>
-    <title>Snipaste：程序员的高效截图神器</title>
-    <link href="https://lijiabao9.github.io/posts/45182a65.html"/>
-    <id>https://lijiabao9.github.io/posts/45182a65.html</id>
-    <published>2025-06-16T02:26:43.000Z</published>
-    <updated>2025-06-16T03:41:37.120Z</updated>
-    
-    
-    <summary type="html">Snipaste 是一个简单但强大的截图工具，也可以让你将截图贴回到屏幕上！</summary>
-    
-    
-    
-    <category term="运维圣殿" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/"/>
-    
-    <category term="工具密卷" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/%E5%B7%A5%E5%85%B7%E5%AF%86%E5%8D%B7/"/>
-    
-    
-    <category term="Snipaste" scheme="https://lijiabao9.github.io/tags/Snipaste/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Markdown写作利器：GitHub图床+PicGo自动化上传</title>
-    <link href="https://lijiabao9.github.io/posts/69261444.html"/>
-    <id>https://lijiabao9.github.io/posts/69261444.html</id>
-    <published>2025-06-16T01:37:12.000Z</published>
-    <updated>2025-06-16T03:41:37.120Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;还在为博客配图托管发愁？GitHub 不仅是代码仓库，还能变身免费高速图床！&lt;br&gt;本教程手把手教你通过 PicGo 配置 GitHub 图床，实现一键上传、自动生成 Markdown 链接，让图片管理像 Git</summary>
-        
-      
-    
-    
-    
-    <category term="运维圣殿" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/"/>
-    
-    <category term="工具密卷" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/%E5%B7%A5%E5%85%B7%E5%AF%86%E5%8D%B7/"/>
-    
-    
-    <category term="Markdown" scheme="https://lijiabao9.github.io/tags/Markdown/"/>
-    
-    <category term="GitHub" scheme="https://lijiabao9.github.io/tags/GitHub/"/>
-    
-    <category term="PicGo" scheme="https://lijiabao9.github.io/tags/PicGo/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Markdown语法：从标记符号到文档宇宙</title>
     <link href="https://lijiabao9.github.io/posts/bd4878ce.html"/>
     <id>https://lijiabao9.github.io/posts/bd4878ce.html</id>
-    <published>2025-06-16T00:09:07.000Z</published>
-    <updated>2025-06-16T03:41:37.119Z</updated>
+    <published>2025-06-10T00:00:07.000Z</published>
+    <updated>2025-06-16T10:04:28.224Z</updated>
     
     
       
@@ -130,7 +159,7 @@
     <link href="https://lijiabao9.github.io/posts/1b254452.html"/>
     <id>https://lijiabao9.github.io/posts/1b254452.html</id>
     <published>2025-06-09T19:00:00.000Z</published>
-    <updated>2025-06-16T03:41:37.119Z</updated>
+    <updated>2025-06-16T10:04:28.223Z</updated>
     
     
       
@@ -145,9 +174,7 @@
     
     <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
     
-    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
-    
-    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/Hexo%E5%8D%9A%E5%AE%A2/"/>
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
@@ -161,7 +188,7 @@
     <link href="https://lijiabao9.github.io/posts/a3e5b9d2.html"/>
     <id>https://lijiabao9.github.io/posts/a3e5b9d2.html</id>
     <published>2025-06-09T18:30:00.000Z</published>
-    <updated>2025-06-16T03:41:37.120Z</updated>
+    <updated>2025-06-16T10:04:28.224Z</updated>
     
     
       
@@ -178,9 +205,7 @@
     
     <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
     
-    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
-    
-    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/Hexo%E5%8D%9A%E5%AE%A2/"/>
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
@@ -194,7 +219,7 @@
     <link href="https://lijiabao9.github.io/posts/4c8f1d6a.html"/>
     <id>https://lijiabao9.github.io/posts/4c8f1d6a.html</id>
     <published>2025-06-09T18:00:00.000Z</published>
-    <updated>2025-06-16T03:41:37.119Z</updated>
+    <updated>2025-06-16T10:04:28.223Z</updated>
     
     
       
@@ -209,9 +234,7 @@
     
     <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
     
-    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
-    
-    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/Hexo%E5%8D%9A%E5%AE%A2/"/>
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
@@ -225,7 +248,7 @@
     <link href="https://lijiabao9.github.io/posts/d87f7e0c.html"/>
     <id>https://lijiabao9.github.io/posts/d87f7e0c.html</id>
     <published>2025-06-09T17:30:00.000Z</published>
-    <updated>2025-06-16T03:41:37.120Z</updated>
+    <updated>2025-06-16T10:04:28.223Z</updated>
     
     
       
@@ -240,9 +263,7 @@
     
     <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
     
-    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
-    
-    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/Hexo%E5%8D%9A%E5%AE%A2/"/>
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
@@ -252,11 +273,42 @@
   </entry>
   
   <entry>
+    <title>Markdown写作利器：GitHub图床+PicGo自动化上传</title>
+    <link href="https://lijiabao9.github.io/posts/69261444.html"/>
+    <id>https://lijiabao9.github.io/posts/69261444.html</id>
+    <published>2025-06-09T17:00:12.000Z</published>
+    <updated>2025-06-16T10:04:28.224Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;还在为博客配图托管发愁？GitHub 不仅是代码仓库，还能变身免费高速图床！&lt;br&gt;本教程手把手教你通过 PicGo 配置 GitHub 图床，实现一键上传、自动生成 Markdown 链接，让图片管理像 Git</summary>
+        
+      
+    
+    
+    
+    <category term="运维圣殿" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/"/>
+    
+    <category term="工具密卷" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/%E5%B7%A5%E5%85%B7%E5%AF%86%E5%8D%B7/"/>
+    
+    
+    <category term="Markdown" scheme="https://lijiabao9.github.io/tags/Markdown/"/>
+    
+    <category term="GitHub" scheme="https://lijiabao9.github.io/tags/GitHub/"/>
+    
+    <category term="PicGo" scheme="https://lijiabao9.github.io/tags/PicGo/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Butterfly主题应用以及魔改记录（一）</title>
     <link href="https://lijiabao9.github.io/posts/3227fdf7.html"/>
     <id>https://lijiabao9.github.io/posts/3227fdf7.html</id>
     <published>2025-06-09T17:00:00.000Z</published>
-    <updated>2025-06-16T03:41:37.119Z</updated>
+    <updated>2025-06-16T10:04:28.223Z</updated>
     
     
       
@@ -271,9 +323,7 @@
     
     <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
     
-    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
-    
-    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/Hexo%E5%8D%9A%E5%AE%A2/"/>
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
@@ -287,7 +337,7 @@
     <link href="https://lijiabao9.github.io/posts/5071adbc.html"/>
     <id>https://lijiabao9.github.io/posts/5071adbc.html</id>
     <published>2025-06-09T16:30:00.000Z</published>
-    <updated>2025-06-16T03:41:37.120Z</updated>
+    <updated>2025-06-16T10:04:28.224Z</updated>
     
     
       
@@ -302,9 +352,7 @@
     
     <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
     
-    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
-    
-    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/Hexo%E5%8D%9A%E5%AE%A2/"/>
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
@@ -318,7 +366,7 @@
     <link href="https://lijiabao9.github.io/posts/4a17b156.html"/>
     <id>https://lijiabao9.github.io/posts/4a17b156.html</id>
     <published>2025-06-09T16:00:00.000Z</published>
-    <updated>2025-06-16T03:41:37.120Z</updated>
+    <updated>2025-06-16T10:04:28.224Z</updated>
     
     
       
@@ -333,9 +381,7 @@
     
     <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
     
-    <category term="造物日志" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/"/>
-    
-    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E9%80%A0%E7%89%A9%E6%97%A5%E5%BF%97/Hexo%E5%8D%9A%E5%AE%A2/"/>
+    <category term="Hexo博客" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/Hexo%E5%8D%9A%E5%AE%A2/"/>
     
     
     <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
