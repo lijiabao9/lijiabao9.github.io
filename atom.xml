@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2025-06-19T14:07:42.456Z</updated>
+  <updated>2025-06-20T16:26:26.391Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://lijiabao9.github.io/posts/29173918.html"/>
     <id>https://lijiabao9.github.io/posts/29173918.html</id>
     <published>2025-06-19T13:29:09.000Z</published>
-    <updated>2025-06-19T14:07:42.456Z</updated>
+    <updated>2025-06-20T16:26:26.391Z</updated>
     
     
       
@@ -48,7 +48,7 @@
     <link href="https://lijiabao9.github.io/posts/d67724de.html"/>
     <id>https://lijiabao9.github.io/posts/d67724de.html</id>
     <published>2025-06-19T12:21:55.000Z</published>
-    <updated>2025-06-19T14:07:42.456Z</updated>
+    <updated>2025-06-20T16:26:26.392Z</updated>
     
     
       
@@ -79,7 +79,7 @@
     <link href="https://lijiabao9.github.io/posts/9c9de28a.html"/>
     <id>https://lijiabao9.github.io/posts/9c9de28a.html</id>
     <published>2025-06-13T04:09:03.000Z</published>
-    <updated>2025-06-19T14:07:42.456Z</updated>
+    <updated>2025-06-20T16:26:26.391Z</updated>
     
     
       
@@ -106,7 +106,7 @@
     <link href="https://lijiabao9.github.io/posts/a56494b2.html"/>
     <id>https://lijiabao9.github.io/posts/a56494b2.html</id>
     <published>2025-06-11T22:50:55.000Z</published>
-    <updated>2025-06-19T14:07:42.456Z</updated>
+    <updated>2025-06-20T16:26:26.392Z</updated>
     
     
       
@@ -135,7 +135,7 @@
     <link href="https://lijiabao9.github.io/posts/54a2a043.html"/>
     <id>https://lijiabao9.github.io/posts/54a2a043.html</id>
     <published>2025-06-11T22:19:45.000Z</published>
-    <updated>2025-06-19T14:07:42.456Z</updated>
+    <updated>2025-06-20T16:26:26.392Z</updated>
     
     
       
@@ -162,11 +162,41 @@
   </entry>
   
   <entry>
+    <title>Sublime Text高效之道：合法授权与 C++ / Java 全环境配置指南</title>
+    <link href="https://lijiabao9.github.io/posts/6ce3e6b0.html"/>
+    <id>https://lijiabao9.github.io/posts/6ce3e6b0.html</id>
+    <published>2025-06-10T17:30:31.000Z</published>
+    <updated>2025-06-20T16:26:26.392Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;Sublime Text 是一款文本编辑工具，以其简洁、美观的界面而闻名。&lt;br&gt;本文探讨如何合法使用 Sublime Text 构建高效的 C++ / Java 开发环境。&lt;/p&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="运维圣殿" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/"/>
+    
+    <category term="工具密卷" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/%E5%B7%A5%E5%85%B7%E5%AF%86%E5%8D%B7/"/>
+    
+    
+    <category term="Sublime Text" scheme="https://lijiabao9.github.io/tags/Sublime-Text/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Markdown写作利器：GitHub图床+PicGo自动化上传</title>
     <link href="https://lijiabao9.github.io/posts/69261444.html"/>
     <id>https://lijiabao9.github.io/posts/69261444.html</id>
     <published>2025-06-10T17:00:12.000Z</published>
-    <updated>2025-06-19T14:07:42.457Z</updated>
+    <updated>2025-06-20T16:26:26.392Z</updated>
     
     
       
@@ -197,7 +227,7 @@
     <link href="https://lijiabao9.github.io/posts/45182a65.html"/>
     <id>https://lijiabao9.github.io/posts/45182a65.html</id>
     <published>2025-06-10T16:30:43.000Z</published>
-    <updated>2025-06-19T14:07:42.457Z</updated>
+    <updated>2025-06-20T16:26:26.392Z</updated>
     
     
     <summary type="html">Snipaste 是一个简单但强大的截图工具，也可以让你将截图贴回到屏幕上！</summary>
@@ -218,7 +248,7 @@
     <link href="https://lijiabao9.github.io/posts/abdf63d7.html"/>
     <id>https://lijiabao9.github.io/posts/abdf63d7.html</id>
     <published>2025-06-10T16:00:45.000Z</published>
-    <updated>2025-06-19T14:07:42.457Z</updated>
+    <updated>2025-06-20T16:26:26.392Z</updated>
     
     
       
@@ -248,7 +278,7 @@
     <link href="https://lijiabao9.github.io/posts/bd4878ce.html"/>
     <id>https://lijiabao9.github.io/posts/bd4878ce.html</id>
     <published>2025-06-10T04:00:07.000Z</published>
-    <updated>2025-06-19T14:07:42.456Z</updated>
+    <updated>2025-06-20T16:26:26.391Z</updated>
     
     
       
@@ -275,7 +305,7 @@
     <link href="https://lijiabao9.github.io/posts/1b254452.html"/>
     <id>https://lijiabao9.github.io/posts/1b254452.html</id>
     <published>2025-06-09T19:00:00.000Z</published>
-    <updated>2025-06-19T14:07:42.455Z</updated>
+    <updated>2025-06-20T16:26:26.390Z</updated>
     
     
       
@@ -304,7 +334,7 @@
     <link href="https://lijiabao9.github.io/posts/a3e5b9d2.html"/>
     <id>https://lijiabao9.github.io/posts/a3e5b9d2.html</id>
     <published>2025-06-09T18:30:00.000Z</published>
-    <updated>2025-06-19T14:07:42.455Z</updated>
+    <updated>2025-06-20T16:26:26.391Z</updated>
     
     
       
@@ -335,7 +365,7 @@
     <link href="https://lijiabao9.github.io/posts/4c8f1d6a.html"/>
     <id>https://lijiabao9.github.io/posts/4c8f1d6a.html</id>
     <published>2025-06-09T18:00:00.000Z</published>
-    <updated>2025-06-19T14:07:42.455Z</updated>
+    <updated>2025-06-20T16:26:26.390Z</updated>
     
     
       
@@ -364,7 +394,7 @@
     <link href="https://lijiabao9.github.io/posts/d87f7e0c.html"/>
     <id>https://lijiabao9.github.io/posts/d87f7e0c.html</id>
     <published>2025-06-09T17:30:00.000Z</published>
-    <updated>2025-06-19T14:07:42.455Z</updated>
+    <updated>2025-06-20T16:26:26.391Z</updated>
     
     
       
@@ -393,7 +423,7 @@
     <link href="https://lijiabao9.github.io/posts/3227fdf7.html"/>
     <id>https://lijiabao9.github.io/posts/3227fdf7.html</id>
     <published>2025-06-09T17:00:00.000Z</published>
-    <updated>2025-06-19T14:07:42.455Z</updated>
+    <updated>2025-06-20T16:26:26.390Z</updated>
     
     
       
@@ -422,7 +452,7 @@
     <link href="https://lijiabao9.github.io/posts/5071adbc.html"/>
     <id>https://lijiabao9.github.io/posts/5071adbc.html</id>
     <published>2025-06-09T16:30:00.000Z</published>
-    <updated>2025-06-19T14:07:42.456Z</updated>
+    <updated>2025-06-20T16:26:26.391Z</updated>
     
     
       
@@ -451,7 +481,7 @@
     <link href="https://lijiabao9.github.io/posts/4a17b156.html"/>
     <id>https://lijiabao9.github.io/posts/4a17b156.html</id>
     <published>2025-06-09T16:00:00.000Z</published>
-    <updated>2025-06-19T14:07:42.456Z</updated>
+    <updated>2025-06-20T16:26:26.391Z</updated>
     
     
       
