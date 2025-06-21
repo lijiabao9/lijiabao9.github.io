@@ -1,0 +1,883 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>代理节点从 0 到 1：SS + Trojan + VMess / VLESS + 3X-UI 管理面板 | Gabriel的随笔</title><meta name="author" content="Gabriel"><meta name="copyright" content="Gabriel"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文详细介绍如何自建高速、稳定的代理节点，涵盖多种流行协议及管理面板。无论你是个人用户还是小型团队，本文都能帮你搭建稳定、高速的代理网络！   Shadowsocks 协议这是一个简单的对称加密算法，对请求加密后，是无规则字节流。特征明显，容易被 GFW 检测到，会被封端口甚至拉黑 IP。  ss-server: https:&#x2F;&#x2F;github.com&#x2F;shadowsocks&#x2F;shadowsocks">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代理节点从 0 到 1：SS + Trojan + VMess &#x2F; VLESS + 3X-UI 管理面板">
+<meta property="og:url" content="https://lijiabao9.github.io/posts/4650d9e4.html">
+<meta property="og:site_name" content="Gabriel的随笔">
+<meta property="og:description" content="本文详细介绍如何自建高速、稳定的代理节点，涵盖多种流行协议及管理面板。无论你是个人用户还是小型团队，本文都能帮你搭建稳定、高速的代理网络！   Shadowsocks 协议这是一个简单的对称加密算法，对请求加密后，是无规则字节流。特征明显，容易被 GFW 检测到，会被封端口甚至拉黑 IP。  ss-server: https:&#x2F;&#x2F;github.com&#x2F;shadowsocks&#x2F;shadowsocks">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250621173454472.png">
+<meta property="article:published_time" content="2025-06-12T16:30:03.000Z">
+<meta property="article:modified_time" content="2025-06-21T11:58:29.233Z">
+<meta property="article:author" content="Gabriel">
+<meta property="article:tag" content="V2Ray">
+<meta property="article:tag" content="Shadowsocks">
+<meta property="article:tag" content="Trojan">
+<meta property="article:tag" content="VLess">
+<meta property="article:tag" content="VMess">
+<meta property="article:tag" content="3X-UI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250621173454472.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "代理节点从 0 到 1：SS + Trojan + VMess / VLESS + 3X-UI 管理面板",
+  "url": "https://lijiabao9.github.io/posts/4650d9e4.html",
+  "image": "https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250621173454472.png",
+  "datePublished": "2025-06-12T16:30:03.000Z",
+  "dateModified": "2025-06-21T11:58:29.233Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Gabriel",
+      "url": "https://lijiabao9.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/info/favicon.png"><link rel="canonical" href="https://lijiabao9.github.io/posts/4650d9e4.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="manifest" href="/pwa/manifest.json"/><link rel="apple-touch-icon" sizes="180x180" href="/pwa/128.png"/><link rel="icon" type="image/png" sizes="32x32" href="/pwa/32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/pwa/16.png"/><link rel="mask-icon" href="/pwa/128.png" color="#5bbad5"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-center"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '代理节点从 0 到 1：SS + Trojan + VMess / VLESS + 3X-UI 管理面板',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom-anzhiyu.css" media="defer" onload="this.media='all'"><script data-pjax src="https://npm.elemecdn.com/pace-js@1.2.4/pace.min.js"></script><script data-pjax src="/js/gabriel-tool-kit.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="/css/footer-beautify-runtime.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Gabriel的随笔" type="application/atom+xml">
+</head><body><div id="web_bg" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/info/site-background.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/info/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fas fa-comment-dots"></i><span> 说说</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250621173454472.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Gabriel的随笔</span></a><a class="nav-page-title" href="/"><span class="site-name">代理节点从 0 到 1：SS + Trojan + VMess / VLESS + 3X-UI 管理面板</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fas fa-comment-dots"></i><span> 说说</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">代理节点从 0 到 1：SS + Trojan + VMess / VLESS + 3X-UI 管理面板</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-06-12T16:30:03.000Z" title="发表于 2025-06-13 00:30:03">2025-06-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-06-21T11:58:29.233Z" title="更新于 2025-06-21 19:58:29">2025-06-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/">项目工坊</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E6%9E%81%E5%AE%A2%E7%8E%A9%E5%85%B7/">极客玩具</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="umamiPV" data-path="/posts/4650d9e4.html"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tip info"><p>本文详细介绍如何自建高速、稳定的代理节点，涵盖多种流行协议及管理面板。<br>无论你是个人用户还是小型团队，本文都能帮你搭建稳定、高速的代理网络！</p>
+</div>
+<hr>
+<h2 id="Shadowsocks-协议"><a href="#Shadowsocks-协议" class="headerlink" title="Shadowsocks 协议"></a>Shadowsocks 协议</h2><p>这是一个简单的对称加密算法，对请求加密后，是无规则字节流。<br>特征明显，容易被 GFW 检测到，会被封端口甚至拉黑 IP。</p>
+<blockquote>
+<p>ss-server: <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/shadowsocks/shadowsocks-libev">https://github.com/shadowsocks/shadowsocks-libev</a><br>ss-client: <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/shadowsocks/shadowsocks-windows">https://github.com/shadowsocks/shadowsocks-windows</a><br>v2ray-plugin: <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/shadowsocks/v2ray-plugin">https://github.com/shadowsocks/v2ray-plugin</a></p>
+</blockquote>
+<p>通过 <code>apt</code> 直接搭建服务：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">apt install shadowsocks-libev</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------------------------------- 以下是服务安装后的 管理命令</span></span><br><span class="line">systemctl status shadowsocks-libev      <span class="comment"># 查看服务状态</span></span><br><span class="line">systemctl start shadowsocks-libev       <span class="comment"># 启动服务</span></span><br><span class="line">systemctl stop shadowsocks-libev        <span class="comment"># 停止服务</span></span><br><span class="line">systemctl restart shadowsocks-libev     <span class="comment"># 重启服务</span></span><br><span class="line"></span><br><span class="line">journalctl -f -u shadowsocks-libev      <span class="comment"># 查看服务日志</span></span><br><span class="line">apt purge shadowsocks-libev             <span class="comment"># 完全卸载服务</span></span><br></pre></td></tr></table></figure></p>
+<p>修改配置文件 <code>/etc/shadowsocks-libev/config.json</code> 后重启服务。<br><strong>server</strong> 改成允许所有ip访问，<strong>server_port</strong> 服务端口；<br><strong>method</strong> 加密方法，<strong>password</strong> 加密密码；<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;server&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.0.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;mode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tcp_and_udp&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;server_port&quot;</span><span class="punctuation">:</span> <span class="number">8388</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;local_port&quot;</span><span class="punctuation">:</span> <span class="number">1080</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JW5nAQkcI4QV&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;timeout&quot;</span><span class="punctuation">:</span> <span class="number">86400</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;method&quot;</span><span class="punctuation">:</span> <span class="string">&quot;chacha20-ietf-poly1305&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>这时，客户端 ss-client 填写 服务器ip、服务端口8388、method、password 就可以翻墙了。</p>
+<div class="note flat"><p>可以通过安装 <code>v2ray-plugin</code> 对请求进行伪装，降低被探测的风险（被封的几率还是很大）。</p>
+<p>服务器端：<code>apt install shadowsocks-v2ray-plugin</code><br>配置文件 <code>/etc/shadowsocks-libev/config.json</code> 增加插件配置后，重启服务：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;server&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.0.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;mode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tcp_and_udp&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;server_port&quot;</span><span class="punctuation">:</span> <span class="number">8388</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;local_port&quot;</span><span class="punctuation">:</span> <span class="number">1080</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JW5nAQkcI4QV&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;timeout&quot;</span><span class="punctuation">:</span> <span class="number">86400</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;method&quot;</span><span class="punctuation">:</span> <span class="string">&quot;chacha20-ietf-poly1305&quot;</span><span class="punctuation">,</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">&quot;plugin&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ss-v2ray-plugin&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;plugin_opts&quot;</span><span class="punctuation">:</span> <span class="string">&quot;server&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>客户端，下载 github 项目的 <code>v2ray-plugin.exe</code>，放到 ss-client 的同级目录下，节点配置增加：<br>插件程序：<strong>v2ray-plugin.exe</strong><br>插件选项：<strong>‘server’</strong></p>
+<p>这就会将请求伪装成了 WebSocket（HTTP）。</p>
+</div>
+<h2 id="Torjan-协议"><a href="#Torjan-协议" class="headerlink" title="Torjan 协议"></a>Torjan 协议</h2><p>前提，需要拥有 <code>域名</code> 和 <code>证书</code>：<br>参考我的文章：</p>
+<ul>
+<li><a href="../posts/814c87c3.html">从购买到配置：手把手教你将域名托管到Cloudflare</a></li>
+<li><a href="../posts/d67724de.html">使用ACME和CloudFlare实现HTTPS证书自动申请与续期</a></li>
+</ul>
+<p>trojan 协议不对数据进行加密，会对请求添加协议头，表明这是 trojan 协议，以及添加一个密码（用来验证）。<br>然后交给 TLS 进行完整加密。<br>服务端利用 TLS 解密后，检测是否是有效的 trojan 协议，如果不是，就会反代到配置的伪装网站。</p>
+<blockquote>
+<p>trojon-go: <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/p4gefau1t/trojan-go">https://github.com/p4gefau1t/trojan-go</a></p>
+</blockquote>
+<p>通过手动下载二进制可执行文件安装服务：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建目录</span></span><br><span class="line">mkdri trojan</span><br><span class="line"><span class="built_in">cd</span> trojan</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载解压</span></span><br><span class="line">wget https://github.com/p4gefau1t/trojan-go/releases/download/v0.10.6/trojan-go-linux-arm.zip</span><br><span class="line">unzip trojan-go-darwin-arm64.zip</span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载只需要删除这个文件夹就可以了</span></span><br><span class="line"><span class="built_in">rm</span> -rf ./trojan</span><br></pre></td></tr></table></figure></p>
+<p>在当前目录下，新建配置文件 <code>config.json</code>：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;run_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;server&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;local_addr&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.0.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;local_port&quot;</span><span class="punctuation">:</span> <span class="number">2443</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;remote_addr&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://wwww.bing.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;remote_port&quot;</span><span class="punctuation">:</span> <span class="number">80</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;A7f#pL9x!qW2Z*mV&quot;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ssl&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;cert&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/etc/cert/fullchain.cer&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/etc/cert/131499.xyz.key&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;sni&quot;</span><span class="punctuation">:</span> <span class="string">&quot;131499.xyz&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure><br>注意证书需要使用 <strong>全链路证书</strong>，启动服务 <code>./trojan-go</code></p>
+<p>客户端，新建 trojan 节点，<br><code>地址</code> 填写域名 131499.xyz，<code>端口</code> 填写 2443，<code>密码</code> 填写 A7f#pL9x!qW2Z*mV，<br><code>传输层协议</code> 选择 tcp，<code>传输层安全</code> 选择 tls，<br>就能愉快翻墙了。</p>
+<h2 id="VMess-协议"><a href="#VMess-协议" class="headerlink" title="VMess 协议"></a>VMess 协议</h2><p>VMess 的加密方式比较复杂，一般选择 auto，会随机推选一种加密方式和加密密码，对原请求进行加密；<br>然后将 加密方式 和 加密密码 ，记录到 vmess 的协议头，利用 用户id 对此部位进行加密；<br>再基于 时间戳浮动 和 <code>用户id</code>，进行 md5哈希 计算，写到协议头，这是 vmess 检测请求是否有效的方法（生成时间范围的大数组，检验是否在数组内）。</p>
+<p>还有一个额外id，比如设置 1，是说再额外利用一个用户id进行哈希计算，因为流量太多了不够用。<br>新版本都是设置 <code>额外id</code> 为 <code>0</code>，表示利用 aead 加密，因为哈希不安全。</p>
+<blockquote>
+<p>一键脚本：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/v2fly/fhs-install-v2ray">https://github.com/v2fly/fhs-install-v2ray</a></p>
+</blockquote>
+<p>利用一键脚本安装服务：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 一键安装</span><br><span class="line">bash &lt;(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)</span><br><span class="line"></span><br><span class="line">// 只更新 .dat 资料档</span><br><span class="line">bash &lt;(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)</span><br><span class="line"></span><br><span class="line">// 一键卸载</span><br><span class="line">bash &lt;(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove</span><br></pre></td></tr></table></figure></p>
+<p>编辑配置文件 <code>/usr/local/etc/v2ray/config.json</code><br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">2443</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vmess&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;e3a5d4f1-7c2b-4f96-8b3e-1f2c6d9a8b7e&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;alterId&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;freedom&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure><br>服务就搭建好了，VMess 协议本身就只支持这些配置。<br>客户端添加 VMess 节点，配置：<br><strong>地址</strong>，服务器 ip<br><strong>端口</strong>，服务端口 2443<br><strong>用户id</strong>，e3a5d4f1-7c2b-4f96-8b3e-1f2c6d9a8b7e<br><strong>额外id</strong>，0<br>就可以翻墙了。</p>
+<div class="note flat"><p>这样加密的数据，也是无规则的字节流，和 Shadowsocks 协议一样，很容易被探测到。<br>利用 v2ray 强大的功能，可以引入 <code>TLS</code> 加密，以及用 <code>websocket</code> 协议承载（后续会解释为什么加一层 ws）。</p>
+<p>直接修改配置文件：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">2443</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vmess&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;e3a5d4f1-7c2b-4f96-8b3e-1f2c6d9a8b7e&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;alterId&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;streamSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;network&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ws&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;security&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tls&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;tlsSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;certificates&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                        <span class="punctuation">&#123;</span></span><br><span class="line">                            <span class="attr">&quot;certificateFile&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/cert/131499.xyz.cer&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;keyFile&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/cert/131499.xyz.key&quot;</span></span><br><span class="line">                        <span class="punctuation">&#125;</span></span><br><span class="line">                    <span class="punctuation">]</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;freedom&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>注意到这时启动服务器会失败，是因为服务权限不足，读取不到证书文件。<br>vim <code>/etc/systemd/system/v2ray.service</code><br>把 <code>User=nobody</code> 删除掉，再启动服务就可以了。</p>
+<p>客户端这时，只需把 <code>传输层协议</code> 改成 <strong>ws</strong>，<code>传输层安全</code> 改成 <strong>tls</strong> 就可以了。</p>
+<hr>
+<p>外面还可以再套一层 web，将 TLS 协议交给 nginx 解析。<br>nginx 增加反代配置，将路径 <code>/vmess</code> 请求交给 vmess 服务，其他请求转发到伪装网站。<br><code>nginx.conf</code> 配置文件示例：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen 80 default_server;</span><br><span class="line">        listen [::]:80 default_server;</span><br><span class="line"></span><br><span class="line">        server_name _;</span><br><span class="line"></span><br><span class="line">        rewrite ^(.*)$ https://$host$1 permanent;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">        listen 443 ssl default_server;</span><br><span class="line">        listen [::]:443 ssl default_server;</span><br><span class="line"></span><br><span class="line">        server_name _;</span><br><span class="line"></span><br><span class="line">        gzip off;</span><br><span class="line">        ssl_ciphers HIGH:!aNULL:!MD5;</span><br><span class="line"></span><br><span class="line">        ssl_certificate  /cert/131499.xyz.cer;</span><br><span class="line">        ssl_certificate_key /cert/131499.xyz.key;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">                proxy_pass http://www.bing.com;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location /vmess &#123;</span><br><span class="line">                proxy_pass http://127.0.0.1:2443;</span><br><span class="line"></span><br><span class="line">                proxy_redirect off;</span><br><span class="line"></span><br><span class="line">                proxy_http_version 1.1;</span><br><span class="line">                proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">                proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line"></span><br><span class="line">                proxy_set_header Host $host;</span><br><span class="line">                proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于 TLS 协议解密，是给了外层的 nginx 处理，vmess 服务就需要把 tls 配置去掉，增加 ws 协议的路径验证<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">2443</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vmess&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;e3a5d4f1-7c2b-4f96-8b3e-1f2c6d9a8b7e&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;alterId&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;streamSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;network&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ws&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;wsSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/vmess&quot;</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;freedom&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>客户端，只需在 <code>传输层协议路径</code>，配置好路径 /vmess 就可以了。</p>
+<p>这就是 <strong>VMess + WS + TLS + WEB</strong>。</p>
+</div>
+<h2 id="VLess-协议"><a href="#VLess-协议" class="headerlink" title="VLess 协议"></a>VLess 协议</h2><p>VLess 协议，类似于 Trojan 协议，也是不对数据进行加密，交给 TLS 加密。<br>它的优势是，协议头比较精简。</p>
+<blockquote>
+<p>一键脚本：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/XTLS/Xray-install">https://github.com/XTLS/Xray-install</a></p>
+</blockquote>
+<p>利用一键脚本安装服务：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 一键安装</span><br><span class="line">bash -c <span class="string">&quot;<span class="subst">$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)</span>&quot;</span> @ install</span><br><span class="line"></span><br><span class="line">// 更新 geoip 文档</span><br><span class="line">bash -c <span class="string">&quot;<span class="subst">$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)</span>&quot;</span> @ install-geodata</span><br><span class="line"></span><br><span class="line">// 一键卸载</span><br><span class="line">bash -c <span class="string">&quot;<span class="subst">$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)</span>&quot;</span> @ remove</span><br></pre></td></tr></table></figure></p>
+<p>编辑配置文件 <code>/usr/local/etc/xray/config.json</code><br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;log&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;loglevel&quot;</span><span class="punctuation">:</span> <span class="string">&quot;warning&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">2443</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vless&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;72bac1c4-02de-49b4-e498-fa8767638c23&quot;</span><span class="punctuation">,</span> </span><br><span class="line">                        <span class="attr">&quot;flow&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xtls-rprx-vision&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;decryption&quot;</span><span class="punctuation">:</span> <span class="string">&quot;none&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;fallbacks&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;dest&quot;</span><span class="punctuation">:</span> <span class="number">8388</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;streamSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;network&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tcp&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;security&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tls&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;tlsSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;certificates&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                        <span class="punctuation">&#123;</span></span><br><span class="line">                            <span class="attr">&quot;certificateFile&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/cert/131499.xyz.cer&quot;</span><span class="punctuation">,</span> </span><br><span class="line">                            <span class="attr">&quot;keyFile&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/cert/131499.xyz.key&quot;</span></span><br><span class="line">                        <span class="punctuation">&#125;</span></span><br><span class="line">                    <span class="punctuation">]</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">8388</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;listen&quot;</span><span class="punctuation">:</span> <span class="string">&quot;127.0.0.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;trojan&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;A7f#pL9x!qW2Z*mV&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;fallbacks&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;dest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://wwww.bing.com&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;streamSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;network&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tcp&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;security&quot;</span><span class="punctuation">:</span> <span class="string">&quot;none&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;freedom&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>这时启动会报错，是由于服务权限不足，无法读取证书文件。<br>vim /etc/systemd/system/xray.service<br>把 <strong>User=nobody</strong> 删除掉，再启动服务。</p>
+<p>这是搭建了 <strong>vless + tcp + tls</strong> 的服务，然后利用了 xray 的回落功能，<br>当请求的协议不是 vless 时，将请求交给 trojan 服务，这个也配置了回落到 伪装网站。</p>
+<p>客户端，就可以配置使用 vless 节点 或者 trojan 节点了。（入口端口是 2433，tcp + tls）</p>
+<h2 id="3X-UI-面板（推荐安装）"><a href="#3X-UI-面板（推荐安装）" class="headerlink" title="3X-UI 面板（推荐安装）"></a>3X-UI 面板（推荐安装）</h2><p>这是一个新手友好的 节点搭建 可视化面板。</p>
+<p>项目官方地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/MHSanaei/3x-ui">https://github.com/MHSanaei/3x-ui</a><br>一键安装脚本：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt update -y &amp;&amp; apt install git -y</span><br><span class="line"></span><br><span class="line">bash &lt;(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)</span><br></pre></td></tr></table></figure></p>
+<p>运行完成后，返回默认登录信息，比如：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Username: KQv7YKAbv2</span><br><span class="line">Password: NZ277xk8g2</span><br><span class="line">Port: 23355</span><br><span class="line">WebBasePath: VjiPY18FZc0HLY5</span><br><span class="line">Access URL: http://ip:23355/VjiPY18FZc0HLY5</span><br></pre></td></tr></table></figure><br>浏览器键入访问路径，输入账号密码登录就可以了。<br>也可以在服务器上通过 <code>x-ui</code> 指令，按照提示，选择 <code>[1-25]</code> 执行更新、卸载等功能。</p>
+<div class="note primary flat"><p>建议选择 <code>23</code>，开启 拥塞控制算法，提高节点速度；<br><code>6</code> 重新设置账号密码，<code>7</code> 设置面板路径；</p>
+<p>面板服务本身，是通过 http 访问的，提示不安全，建议升级到 https。<br>这里就不利用面板提供的一键功能了，不想暴露端口到公网。<br>通过 nginx 做一层 SSL 443 端口的反代到面板服务就可以。<br>然后在 【面板设置 -&gt; 常规 -&gt; 证书】，【面板监听IP】为 127.0.0.1 只允许本机。<br>例如，反代域名是 myxui.131499.xyz，只需访问 <code>https://myxui.131499.xyz/VjiPY18FZc0HLY5</code> 就可以登录面板了。</p>
+</div>
+<div class="note flat"><p>面板可以配置登录行为，推送通知到 telegram 机器人。<br>具体机器人创建：<br>在 TG 上通过 @BotFathre 创建好机器人后，得到 api_token<br>在 TG 上通过 @userinfobot 得到自己 TG 账号的 id，tg_id</p>
+<p>面板配置 -&gt; Telegram机器人配置：<br>    常规配置，勾选 <strong>启用 Telegram 机器人</strong>；<br>    Telegram机器人令牌（Token）：<strong>api_token</strong><br>    管理员聊天ID：<strong>tg_id</strong></p>
+</div>
+<hr>
+<p>【入站列表】，在这里可以快速创建节点服务，可以为节点分配客户端用户（可限制使用流量和到期时间）：</p>
+<p>示例，【添加入站】</p>
+<div class="note primary flat"><p>协议：vless<br>监听：127.0.0.1<br>端口：保持默认随机分配的，如 <strong>5269</strong><br>传输：WebSocket<br>主机：<strong>131499.xyz</strong><br>路径：<strong>/ray</strong><br>安全：无</p>
+<p>也是不想暴露节点端口到公网，TLS加密放到 nginx 解析处理。<br>配置 131499.xyz 域名的 443 端口反代。<br>将路径 <strong>/ray</strong> 的流量，交给本机的 5269（记得声明ws协议头）</p>
+<p>客户端，注意配置 地址是域名，端口是443，ws（配置路径 /ray ） + tls 就可以了。<br>其实就是 <code>VLess + WS + TLS + WEB</code></p>
+</div>
+<div class="note primary flat"><p>协议：vless<br>监听：<br>端口：保持默认随机分配的，如 <strong>6629</strong><br>传输：TCP(RAW)<br>安全：Reality<br>Dest（Target）：tesla.com:443<br>SNI：tesla.com,www.tesla.com<br>点击 <strong>Get New Cert</strong><br>客户端 Flow，选择：xtls-rprx-vision</p>
+<p>注意：客户端导入节点配置后，如果 ping 不通，可以尝试将 地址 填写为 服务器ip；<br>然后服务器需要放行此服务的端口，如 6629；</p>
+<p>这就是现在常用最稳定的，<code>VLess + Vison + Reality</code><br>要注意 Reality 网站的配置，需要是国内可以正常访问的。</p>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io">Gabriel</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io/posts/4650d9e4.html">https://lijiabao9.github.io/posts/4650d9e4.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lijiabao9.github.io" target="_blank">Gabriel的随笔</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/V2Ray/">V2Ray</a><a class="post-meta__tags" href="/tags/Shadowsocks/">Shadowsocks</a><a class="post-meta__tags" href="/tags/Trojan/">Trojan</a><a class="post-meta__tags" href="/tags/VLess/">VLess</a><a class="post-meta__tags" href="/tags/VMess/">VMess</a><a class="post-meta__tags" href="/tags/3X-UI/">3X-UI</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250621173454472.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/info/wechat.png" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/info/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/info/alipay.png" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/info/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/9c9de28a.html" title="Artalk私有化部署指南：打造轻量、安全的评论系统"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250616120421556.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Artalk私有化部署指南：打造轻量、安全的评论系统</div></div><div class="info-2"><div class="info-item-1">还在依赖 Disqus 或 Valine？Artalk 是一款开箱即用的自托管评论系统，支持Markdown、多站点管理、防垃圾过滤。本教程将带你从零开始完成 Artalk 的私有化部署，包括 Docker 配置、Nginx反向代理、邮件通知设置，打造完全掌控的评论服务。  环境说明：  操作系统：Ubuntu 22.04 LTS CPU架构：ARMv8（aarch64/arm64） 域名托管到 CloudFlare  参考官文文档：Artalk  基于Docker部署123456789docker run -d \    --name artalk \    -p 23366:23366 \    -v /data/artalk/data:/data \    -e &quot;TZ=Asia/Shanghai&quot; \    -e &quot;ATK_LOCALE=zh-CN&quot; \    -e &quot;ATK_SITE_DEFAULT=Gabriel的博客&quot; \    -e...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="artalk-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/info/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Gabriel</div><div class="author-info-description">记录技术探索，也写人间烟火。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lijiabao9"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:ljiabao9@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Gmail"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">新手上路 | 这里记录着从Hello World到Hello Universe的每一步探索 🌌</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Shadowsocks-%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.</span> <span class="toc-text">Shadowsocks 协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Torjan-%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.</span> <span class="toc-text">Torjan 协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VMess-%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.</span> <span class="toc-text">VMess 协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VLess-%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.</span> <span class="toc-text">VLess 协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3X-UI-%E9%9D%A2%E6%9D%BF%EF%BC%88%E6%8E%A8%E8%8D%90%E5%AE%89%E8%A3%85%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">3X-UI 面板（推荐安装）</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/4650d9e4.html" title="代理节点从 0 到 1：SS + Trojan + VMess / VLESS + 3X-UI 管理面板"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250621173454472.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代理节点从 0 到 1：SS + Trojan + VMess / VLESS + 3X-UI 管理面板"/></a><div class="content"><a class="title" href="/posts/4650d9e4.html" title="代理节点从 0 到 1：SS + Trojan + VMess / VLESS + 3X-UI 管理面板">代理节点从 0 到 1：SS + Trojan + VMess / VLESS + 3X-UI 管理面板</a><time datetime="2025-06-12T16:30:03.000Z" title="发表于 2025-06-13 00:30:03">2025-06-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/9c9de28a.html" title="Artalk私有化部署指南：打造轻量、安全的评论系统"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250616120421556.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Artalk私有化部署指南：打造轻量、安全的评论系统"/></a><div class="content"><a class="title" href="/posts/9c9de28a.html" title="Artalk私有化部署指南：打造轻量、安全的评论系统">Artalk私有化部署指南：打造轻量、安全的评论系统</a><time datetime="2025-06-12T16:09:03.000Z" title="发表于 2025-06-13 00:09:03">2025-06-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/54a2a043.html" title="Ubuntu部署Nginx全指南：从安装到HTTPS安全配置"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250616142233309.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu部署Nginx全指南：从安装到HTTPS安全配置"/></a><div class="content"><a class="title" href="/posts/54a2a043.html" title="Ubuntu部署Nginx全指南：从安装到HTTPS安全配置">Ubuntu部署Nginx全指南：从安装到HTTPS安全配置</a><time datetime="2025-06-11T17:19:45.000Z" title="发表于 2025-06-12 01:19:45">2025-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/a56494b2.html" title="Ubuntu上Docker部署指南：从安装到第一个容器"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250616135637685.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu上Docker部署指南：从安装到第一个容器"/></a><div class="content"><a class="title" href="/posts/a56494b2.html" title="Ubuntu上Docker部署指南：从安装到第一个容器">Ubuntu上Docker部署指南：从安装到第一个容器</a><time datetime="2025-06-11T16:50:55.000Z" title="发表于 2025-06-12 00:50:55">2025-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/d67724de.html" title="使用ACME和CloudFlare实现HTTPS证书自动申请与续期"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250619202050622.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用ACME和CloudFlare实现HTTPS证书自动申请与续期"/></a><div class="content"><a class="title" href="/posts/d67724de.html" title="使用ACME和CloudFlare实现HTTPS证书自动申请与续期">使用ACME和CloudFlare实现HTTPS证书自动申请与续期</a><time datetime="2025-06-11T16:30:55.000Z" title="发表于 2025-06-12 00:30:55">2025-06-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2025 By Gabriel</div><div class="footer_custom_text">🚧 施工中 | 这是一个程序员用代码和咖啡构建的思维城堡 💻☕ | Bug和灵感同样欢迎！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script><script>(function() {
+  const abcjsInit = function() {
+    const abcjsFn = function() {
+      setTimeout(function() {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.innerHTML, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://cdn.jsdelivr.net/npm/abcjs/dist/abcjs-basic-min.min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  let artalkItem = null
+  const option = null
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const destroyArtalk = () => {
+    if (artalkItem) {
+      artalkItem.destroy()
+      artalkItem = null
+    }
+  }
+
+  const artalkChangeMode = theme => artalkItem && artalkItem.setDarkMode(theme === 'dark')
+
+  const initArtalk = (el = document, pageKey = location.pathname) => {
+    artalkItem = Artalk.init({
+      el: el.querySelector('#artalk-wrap'),
+      server: 'https://artalk.778825.xyz/',
+      site: 'Gabriel的博客',
+      darkMode: document.documentElement.getAttribute('data-theme') === 'dark',
+      ...option,
+      pageKey: isShuoshuo ? pageKey : (option && option.pageKey) || pageKey
+    })
+
+    if (GLOBAL_CONFIG.lightbox === 'null') return
+    artalkItem.on('list-loaded', () => {
+      artalkItem.ctx.get('list').getCommentNodes().forEach(comment => {
+        const $content = comment.getRender().$content
+        btf.loadLightbox($content.querySelectorAll('img:not([atk-emoticon])'))
+      })
+    })
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyArtalk = () => {
+        destroyArtalk()
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    btf.addGlobalFn('pjaxSendOnce', destroyArtalk, 'destroyArtalk')
+    btf.addGlobalFn('themeChange', artalkChangeMode, 'artalk')
+  }
+
+  const loadArtalk = async (el, pageKey) => {
+    if (typeof Artalk === 'object') initArtalk(el, pageKey)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/artalk/dist/Artalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/artalk/dist/Artalk.min.js')
+      initArtalk(el, pageKey)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Artalk' === 'Artalk'
+      ? window.shuoshuoComment = { loadComment: loadArtalk }
+      : window.loadOtherComment = loadArtalk
+    return
+  }
+
+  if ('Artalk' === 'Artalk' || !false) {
+    if (false) btf.loadComment(document.getElementById('artalk-wrap'), loadArtalk)
+    else setTimeout(loadArtalk, 100)
+  } else {
+    window.loadOtherComment = loadArtalk
+  }
+})()</script></div><script>window.newestComments = {
+  changeContent: content => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<code>.*?<\/code>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g, "") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0, 150) + '...'
+    }
+    return content
+  },
+
+  generateHtml: (array, ele) => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class="aside-list-item">'
+
+        if (true && array[i].avatar) {
+          const imgAttr = 'src'
+          const lazyloadNative = ''
+          result += `<a href="${array[i].url}" class="thumbnail"><img ${imgAttr}="${array[i].avatar}" alt="${array[i].nick}" ${lazyloadNative}></a>`
+        }
+
+        result += `<div class="content">
+        <a class="comment" href="${array[i].url}" title="${array[i].content}">${array[i].content}</a>
+        <div class="name"><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '暂无评论'
+    }
+
+    ele.innerHTML = result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh(ele)
+  },
+
+  newestCommentInit: (name, getComment) => {
+    const $dom = document.querySelector('#card-newest-comments .aside-list')
+    if ($dom) {
+      const data = btf.saveToLocal.get(name)
+      if (data) {
+        newestComments.generateHtml(JSON.parse(data), $dom)
+      } else {
+        getComment($dom)
+      }
+    }
+  },
+
+  run: (name, getComment) => {
+    newestComments.newestCommentInit(name, getComment)
+    btf.addGlobalFn('pjaxComplete', () => newestComments.newestCommentInit(name, getComment), name)
+  }
+}</script><script>window.addEventListener('load', () => {
+  const keyName = 'artalk-newest-comments'
+  const { changeContent, generateHtml, run } = window.newestComments
+
+  const getAvatarValue = async () => {
+    const predefinedAvatarCdn = ''
+    const predefinedAvatarDefault = ''
+
+    const avatarDefaultFormat = e => e.startsWith('d=') ? e : `d=${e}`
+
+    if (predefinedAvatarCdn && predefinedAvatarDefault) {
+      return { avatarCdn: predefinedAvatarCdn, avatarDefault: avatarDefaultFormat(predefinedAvatarDefault) }
+    }
+
+    try {
+      const res = await fetch('https://artalk.778825.xyz//api/v2/conf')
+      const result = await res.json()
+      const { mirror, params, default: defaults } = result.frontend_conf.gravatar
+      const avatarCdn = predefinedAvatarCdn || mirror
+      let avatarDefault = avatarDefaultFormat(predefinedAvatarDefault || params || defaults)
+      return { avatarCdn, avatarDefault}
+    } catch (e) {
+      console.error(e)
+      return { avatarCdn: predefinedAvatarCdn, avatarDefault: avatarDefaultFormat(predefinedAvatarDefault) }
+    }
+  }
+
+  const searchParams = new URLSearchParams({
+    'site_name': 'Gabriel的博客',
+    'limit': '12', // Fetch more comments to filter pending comments
+  })
+
+  const getComment = async (ele) => {
+    try {
+      const res = await fetch(`https://artalk.778825.xyz//api/v2/stats/latest_comments?${searchParams}`)
+      const result = await res.json()
+      const { avatarCdn, avatarDefault } = await getAvatarValue()
+      const artalk = result.data
+        .filter(e => !e.is_pending) // Filter pending comments
+        .slice(0, 6) // Limit the number of comments
+        .map(e => {
+          const avatar = avatarCdn && e.email_encrypted ? `${avatarCdn}${e.email_encrypted}?${avatarDefault}` : ''
+          return {
+            'avatar': avatar,
+            'content': changeContent(e.content_marked),
+            'nick': e.nick,
+            'url': e.page_url,
+            'date': e.date,
+          }
+        })
+      btf.saveToLocal.set(keyName, JSON.stringify(artalk), 10/(60*24))
+      generateHtml(artalk, ele)
+    } catch (e) {
+      console.log(e)
+      ele.textContent= "无法获取评论，请确认相关配置是否正确"
+    }
+  }
+
+  run(keyName, getComment)
+})</script><div class="aplayer no-destroy" data-id="2761236917" data-server="netease" data-type="playlist" data-order="list" data-fixed="true" data-preload="auto" data-autoplay="false" data-mutex="true"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="存在先于本质,我思故我在,知行合一,道法自然,Stay Hungry" data-fontsize="15px" data-random="true" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => fn())
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true 
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><script>(() => {
+  const option = null
+  const config = {"site_uv":true,"site_pv":true,"page_pv":true,"token":"api_NOwAtS7pmgZ5rkaYcHvv8ON2hXbZ7Lbc"}
+
+  const runTrack = () => {
+    umami.track(props => ({ ...props, url: window.location.pathname, title: GLOBAL_CONFIG_SITE.title }))
+  }
+
+  const loadUmamiJS = () => {
+    btf.getScript('https://cloud.umami.is/script.js', {
+      'data-website-id': '32a465ed-ee33-4610-821b-389e0ded56d7',
+      'data-auto-track': 'false',
+      ...option
+    }).then(runTrack)
+  }
+
+  const getData = async (isPost) => {
+    const now = Date.now()
+    const keyUrl = isPost ? `&url=${window.location.pathname}` : ''
+    const headerList = { 'Accept': 'application/json' }
+    if (false) headerList['Authorization'] = `Bearer ${config.token}`
+    else headerList['x-umami-api-key'] = config.token
+    const res = await fetch(`https://api.umami.is/v1/websites/32a465ed-ee33-4610-821b-389e0ded56d7/stats?startAt=0000000000&endAt=${now}${keyUrl}`, {
+      method: "GET",
+      headers: headerList
+    })
+    return await res.json()
+  }
+
+  const insertData = async () => {
+    try {
+      if (GLOBAL_CONFIG_SITE.pageType === 'post' && config.page_pv) {
+        const pagePV = document.getElementById('umamiPV')
+        if (pagePV) {
+          const data = await getData(true)
+          pagePV.textContent = data.pageviews.value
+        }
+      } else {
+        const data = (config.site_uv || config.site_pv) && await getData()
+        if (config.site_uv) {
+          const siteUV = document.getElementById('umami-site-uv')
+          if (siteUV) siteUV.textContent = data.visitors.value
+        }
+        if (config.site_pv) {
+          const sitePV = document.getElementById('umami-site-pv')
+          if (sitePV) sitePV.textContent = data.pageviews.value
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load Umami Analytics:', e)
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', runTrack, 'umami_analytics_run_track')
+  btf.addGlobalFn('pjaxComplete', insertData, 'umami_analytics_insert')
+
+  loadUmamiJS()
+  insertData()
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="输入关键词，解锁知识胶囊 💊" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" rel="external nofollow noreferrer" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" rel="external nofollow noreferrer" style="margin-inline:5px" data-title="主题版本Butterfly_v4.2.2" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://www.jsdelivr.com/" rel="external nofollow noreferrer" style="margin-inline:5px" data-title="本站使用JsDelivr为静态资源提供CDN加速" title=""><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&amp;logo=jsDelivr" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" rel="external nofollow noreferrer" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/footer-beautify-runtime.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;posts/1b254452.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250613014839616.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-06-09</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;posts/1b254452.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt="">Butterfly-Plus标签外挂的使用参考</a><div class="blog-slider__text">时间洪流中的一枚书签！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;posts/1b254452.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;posts/a3e5b9d2.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/PicGo/blog/20250613014926741.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-06-09</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;posts/a3e5b9d2.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt="">Butterfly标签外挂的使用参考</a><div class="blog-slider__text">时间洪流中的一枚书签！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;posts/a3e5b9d2.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt="">详情       </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><script async src="/js/ali_icon_font.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><script data-pjax src="https://unpkg.com/oh-my-live2d"></script><script>const oml2d = OML2D.loadOml2d({dockedPosition:"left",parentElement:document.body,primaryColor:"#70329f",sayHello:false,transitionTime:1000,models:[{"name":"纳西妲","path":"/live2d_models/Nahida_1080/Nahida_1080.model3.json"}],tips:{messageLine: 3,style: {"width":250,"height":120,"left":"calc(50% - 20px)","top":"-100px","color":"#40f4d9","border":"1px solid #b56ef2","backdrop-filter":"blur(6px) saturate(1.5)","box-shadow":"inset 0 0 20px rgba(197, 137, 246, 0.4),0 2px 5px rgba(0, 0, 0, 0.1)"},copyTips: {"duration":3000,"priority":2,"message":["字句如露，采撷时请记得留一片云作为归处~","墨香未干，思绪尚温，转载时请为故事保留来时的路标~","这些句子曾在月光下晾晒，若你收藏，请保留它们晒过的那轮月亮~","文字如蝶，轻拈时请莫折损它的翅膀，转载时请注明这片花园的名字~","每个字都带着作者的体温，若你喜欢，请记得它最初安家的地方~"]},welcomeTips: {"duration":6000,"priority":3,"message":{"daybreak":"「晨露未晞时，世界正轻轻醒来。愿今日的光，都落在你的期待上」","morning":"「朝云染窗棂，纸笔相候多时。若觉倦了，不妨与风共舞片刻」","noon":"「日影正中天，且将心事暂搁。一箸春蔬，半盏清茶，都是光阴的馈赠」","afternoon":"「蝉鸣在帘外织网，困意如潮汐漫涨。你手边那杯茶，正温着整个下午」","dusk":"「暮色像缓缓合上的书页，而你是今天最美的句读」","night":"「星子开始研磨墨汁，要不要把今天的故事，再说给月亮听？」","lateNight":"「灯火已瘦，睡意正稠。让枕头接住你所有未完成的梦」","weeHours":"「整个银河都在你眼里打盹，而睫毛成了最后的守夜人」"}},idleTips:{duration:5000,priority:1,interval:60000,message:function(){
+  return axios.get('https://v1.hitokoto.cn?c=i')
+    .then(function (response) {
+      return response.data.hitokoto ;
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+,wordTheDay:function(wordTheDayData){
+  return `${wordTheDayData.hitokoto}    by.${wordTheDayData.from}`;
+}
+}},statusBar:{"disable":false,"style":{"color":"#40f4d9"},"errorColor":"#f40505","restMessage":"茶烟歇处，伊人暂隐"},menus:{disable:false,items:(defaultItems) => {
+  return [
+    defaultItems[0],
+    {
+      id: '闲聊模式',
+      title: '闲聊模式',
+      icon: 'icon-network-conn',
+      onClick: (oml2d) => { oml2d.startTipsIdle(); oml2d.tipsMessage('小草神已为你接入「虚空终端」！', 2000, 4); }
+    },
+    {
+      id: '自闭模式',
+      title: '自闭模式',
+      icon: 'icon-network-dis-conn',
+      onClick: (oml2d) => { oml2d.stopTipsIdle(); oml2d.tipsMessage('小草神将你踢出了「虚空网络」！', 2000, 4); }
+    },
+    {
+      id: '随机音乐',
+      title: '随机音乐',
+      icon: 'icon-music',
+      onClick: (oml2d) => { oml2d.tipsMessage(gabrielToolKit.randomPlayMusic(), 2000, 4); }
+    },
+    {
+      id: '关闭音乐',
+      title: '关闭音乐',
+      icon: 'icon-music-pause',
+      onClick: (oml2d) => { oml2d.tipsMessage(gabrielToolKit.pauseMusic(), 2000, 4); }
+    }
+  ]
+}
+}});</script><!-- hexo injector body_end end --></body></html>
