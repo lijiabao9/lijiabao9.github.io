@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2025-06-23T15:11:34.325Z</updated>
+  <updated>2025-06-24T22:25:45.476Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,11 +17,42 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>零门槛搭建私有 ChatGPT：本地大模型 Web 交互全指南</title>
+    <link href="https://lijiabao9.github.io/posts/dbdb05e2.html"/>
+    <id>https://lijiabao9.github.io/posts/dbdb05e2.html</id>
+    <published>2025-06-23T23:00:22.000Z</published>
+    <updated>2025-06-24T22:25:45.476Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;本教程手把手教你搭建本地类ChatGPT的Web交互界面。&lt;br&gt;无需编程基础，30分钟拥有专属AI助手！&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;Open WebUI&lt;/code&gt; 是一个可扩展、功能丰富且用户友好的自托管</summary>
+        
+      
+    
+    
+    
+    <category term="项目工坊" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/"/>
+    
+    <category term="极客玩具" scheme="https://lijiabao9.github.io/categories/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E5%9D%8A/%E6%9E%81%E5%AE%A2%E7%8E%A9%E5%85%B7/"/>
+    
+    
+    <category term="AI" scheme="https://lijiabao9.github.io/tags/AI/"/>
+    
+    <category term="ChatGPT" scheme="https://lijiabao9.github.io/tags/ChatGPT/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Ollama 本地大模型一键部署：安装与使用全指南</title>
     <link href="https://lijiabao9.github.io/posts/e3134c46.html"/>
     <id>https://lijiabao9.github.io/posts/e3134c46.html</id>
     <published>2025-06-23T13:45:39.000Z</published>
-    <updated>2025-06-23T15:11:34.325Z</updated>
+    <updated>2025-06-24T22:25:45.476Z</updated>
     
     
       
@@ -52,7 +83,7 @@
     <link href="https://lijiabao9.github.io/posts/72e40ac4.html"/>
     <id>https://lijiabao9.github.io/posts/72e40ac4.html</id>
     <published>2025-06-23T12:11:32.000Z</published>
-    <updated>2025-06-23T15:11:34.326Z</updated>
+    <updated>2025-06-24T22:25:45.476Z</updated>
     
     
       
@@ -80,7 +111,7 @@
     <link href="https://lijiabao9.github.io/posts/4650d9e4.html"/>
     <id>https://lijiabao9.github.io/posts/4650d9e4.html</id>
     <published>2025-06-12T16:30:03.000Z</published>
-    <updated>2025-06-23T15:11:34.325Z</updated>
+    <updated>2025-06-24T22:25:45.476Z</updated>
     
     
       
@@ -120,7 +151,7 @@
     <link href="https://lijiabao9.github.io/posts/9c9de28a.html"/>
     <id>https://lijiabao9.github.io/posts/9c9de28a.html</id>
     <published>2025-06-12T16:09:03.000Z</published>
-    <updated>2025-06-23T15:11:34.325Z</updated>
+    <updated>2025-06-24T22:25:45.476Z</updated>
     
     
       
@@ -143,11 +174,41 @@
   </entry>
   
   <entry>
+    <title>Windows 压缩包安装 PostgreSQL 教程：绿色版部署详解</title>
+    <link href="https://lijiabao9.github.io/posts/7b45a28f.html"/>
+    <id>https://lijiabao9.github.io/posts/7b45a28f.html</id>
+    <published>2025-06-12T04:52:33.000Z</published>
+    <updated>2025-06-24T22:25:45.475Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;本教程详细介绍如何在 Windows 系统通过官方压缩包安装 PostgreSQL 数据库，实现绿色版部署。&lt;/p&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;安装包下载解压&quot;&gt;&lt;a href=&quot;#安装包下载解压&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="运维圣殿" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/"/>
+    
+    <category term="终端巫术" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/%E7%BB%88%E7%AB%AF%E5%B7%AB%E6%9C%AF/"/>
+    
+    
+    <category term="PostgreSQL" scheme="https://lijiabao9.github.io/tags/PostgreSQL/"/>
+    
+  </entry>
+  
+  <entry>
     <title>WSL2实用手册：环境变量独立配置与宿主机代理复用</title>
     <link href="https://lijiabao9.github.io/posts/11d079a8.html"/>
     <id>https://lijiabao9.github.io/posts/11d079a8.html</id>
     <published>2025-06-12T04:51:33.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
+    <updated>2025-06-24T22:25:45.474Z</updated>
     
     
       
@@ -177,7 +238,7 @@
     <link href="https://lijiabao9.github.io/posts/46634fb8.html"/>
     <id>https://lijiabao9.github.io/posts/46634fb8.html</id>
     <published>2025-06-12T04:49:33.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
+    <updated>2025-06-24T22:25:45.475Z</updated>
     
     
       
@@ -204,7 +265,7 @@
     <link href="https://lijiabao9.github.io/posts/54a2a043.html"/>
     <id>https://lijiabao9.github.io/posts/54a2a043.html</id>
     <published>2025-06-11T17:19:45.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
+    <updated>2025-06-24T22:25:45.475Z</updated>
     
     
       
@@ -235,7 +296,7 @@
     <link href="https://lijiabao9.github.io/posts/150b83ee.html"/>
     <id>https://lijiabao9.github.io/posts/150b83ee.html</id>
     <published>2025-06-11T16:55:55.000Z</published>
-    <updated>2025-06-23T15:11:34.322Z</updated>
+    <updated>2025-06-24T22:25:45.474Z</updated>
     
     
       
@@ -265,7 +326,7 @@
     <link href="https://lijiabao9.github.io/posts/e26ab01a.html"/>
     <id>https://lijiabao9.github.io/posts/e26ab01a.html</id>
     <published>2025-06-11T16:55:55.000Z</published>
-    <updated>2025-06-23T15:11:34.322Z</updated>
+    <updated>2025-06-24T22:25:45.474Z</updated>
     
     
       
@@ -295,7 +356,7 @@
     <link href="https://lijiabao9.github.io/posts/a56494b2.html"/>
     <id>https://lijiabao9.github.io/posts/a56494b2.html</id>
     <published>2025-06-11T16:50:55.000Z</published>
-    <updated>2025-06-23T15:11:34.322Z</updated>
+    <updated>2025-06-24T22:25:45.474Z</updated>
     
     
       
@@ -324,7 +385,7 @@
     <link href="https://lijiabao9.github.io/posts/d67724de.html"/>
     <id>https://lijiabao9.github.io/posts/d67724de.html</id>
     <published>2025-06-11T16:30:55.000Z</published>
-    <updated>2025-06-23T15:11:34.324Z</updated>
+    <updated>2025-06-24T22:25:45.475Z</updated>
     
     
       
@@ -355,7 +416,7 @@
     <link href="https://lijiabao9.github.io/posts/814c87c3.html"/>
     <id>https://lijiabao9.github.io/posts/814c87c3.html</id>
     <published>2025-06-11T16:07:09.000Z</published>
-    <updated>2025-06-23T15:11:34.324Z</updated>
+    <updated>2025-06-24T22:25:45.475Z</updated>
     
     
       
@@ -387,7 +448,7 @@
     <link href="https://lijiabao9.github.io/posts/29173918.html"/>
     <id>https://lijiabao9.github.io/posts/29173918.html</id>
     <published>2025-06-11T16:05:09.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
+    <updated>2025-06-24T22:25:45.475Z</updated>
     
     
       
@@ -414,7 +475,7 @@
     <link href="https://lijiabao9.github.io/posts/15a7da52.html"/>
     <id>https://lijiabao9.github.io/posts/15a7da52.html</id>
     <published>2025-06-11T16:03:09.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
+    <updated>2025-06-24T22:25:45.475Z</updated>
     
     
       
@@ -443,7 +504,7 @@
     <link href="https://lijiabao9.github.io/posts/6a17f34b.html"/>
     <id>https://lijiabao9.github.io/posts/6a17f34b.html</id>
     <published>2025-06-11T16:02:09.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
+    <updated>2025-06-24T22:25:45.475Z</updated>
     
     
       
@@ -471,7 +532,7 @@
     <link href="https://lijiabao9.github.io/posts/3059e645.html"/>
     <id>https://lijiabao9.github.io/posts/3059e645.html</id>
     <published>2025-06-11T16:00:09.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
+    <updated>2025-06-24T22:25:45.475Z</updated>
     
     
       
@@ -501,7 +562,7 @@
     <link href="https://lijiabao9.github.io/posts/6ce3e6b0.html"/>
     <id>https://lijiabao9.github.io/posts/6ce3e6b0.html</id>
     <published>2025-06-10T17:30:31.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
+    <updated>2025-06-24T22:25:45.474Z</updated>
     
     
       
@@ -531,7 +592,7 @@
     <link href="https://lijiabao9.github.io/posts/45182a65.html"/>
     <id>https://lijiabao9.github.io/posts/45182a65.html</id>
     <published>2025-06-10T16:40:43.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
+    <updated>2025-06-24T22:25:45.474Z</updated>
     
     
     <summary type="html">Snipaste 是一个简单但强大的截图工具，也可以让你将截图贴回到屏幕上！</summary>
@@ -544,67 +605,6 @@
     
     
     <category term="Snipaste" scheme="https://lijiabao9.github.io/tags/Snipaste/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Everything：秒搜百万文件的终极搜索神器</title>
-    <link href="https://lijiabao9.github.io/posts/abdf63d7.html"/>
-    <id>https://lijiabao9.github.io/posts/abdf63d7.html</id>
-    <published>2025-06-10T16:20:45.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;Everything就像是给你的电脑装上了’文件GPS’——输入几个字母，瞬间定位目标文件。&lt;br&gt;无论是遗忘在哪个角落的文档，还是散落各处的代码文件，它都能在眨眼间帮你找到！&lt;/p&gt;
-&lt;/div&gt;
-&lt;hr&gt;
-&lt;p&gt;下载安装</summary>
-        
-      
-    
-    
-    
-    <category term="运维圣殿" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/"/>
-    
-    <category term="工具密卷" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/%E5%B7%A5%E5%85%B7%E5%AF%86%E5%8D%B7/"/>
-    
-    
-    <category term="Everything" scheme="https://lijiabao9.github.io/tags/Everything/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PicGo：一键上传 + 自动重命名，打造流畅的 GitHub 图床体验</title>
-    <link href="https://lijiabao9.github.io/posts/69261444.html"/>
-    <id>https://lijiabao9.github.io/posts/69261444.html</id>
-    <published>2025-06-10T16:05:12.000Z</published>
-    <updated>2025-06-23T15:11:34.323Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;div class=&quot;tip info&quot;&gt;&lt;p&gt;还在为博客配图托管发愁？GitHub 不仅是代码仓库，还能变身免费高速图床！&lt;br&gt;本教程手把手教你通过 PicGo 配置 GitHub 图床，实现一键上传、自动生成 Markdown 链接，让图片管理像 Git</summary>
-        
-      
-    
-    
-    
-    <category term="运维圣殿" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/"/>
-    
-    <category term="工具密卷" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%9C%A3%E6%AE%BF/%E5%B7%A5%E5%85%B7%E5%AF%86%E5%8D%B7/"/>
-    
-    
-    <category term="Markdown" scheme="https://lijiabao9.github.io/tags/Markdown/"/>
-    
-    <category term="GitHub" scheme="https://lijiabao9.github.io/tags/GitHub/"/>
-    
-    <category term="PicGo" scheme="https://lijiabao9.github.io/tags/PicGo/"/>
     
   </entry>
   
