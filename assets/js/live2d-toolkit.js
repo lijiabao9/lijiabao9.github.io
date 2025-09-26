@@ -1,8 +1,8 @@
 /* 工具方法，作用于 live2d 人偶的菜单功能注入 */
 
-if (!window.live2dToolKit) {
+if (!window.live2dToolkit) {
     const tk = {};
-    window.live2dToolKit = tk;
+    window.live2dToolkit = tk;
 
 
     // --------------------------------------------- 辅助函数 ---------------------------------------------
@@ -263,13 +263,26 @@ if (!window.live2dToolKit) {
     }
 
     /**
-     * 暂停音乐
+     * 暂停/播放音乐
      */
-    tk.pauseMusic = () => {
+    tk.togglePlayPause = () => {
         // 1. 获取 aplayer 实例
         const ap = getAPlayer();
         if (!ap) {
             return '歌声的精灵好像还没抵达，再呼唤一下试试看？';
+        }
+        // ✨ 新增：判断如果播放器当前是暂停状态，则直接继续播放
+        if (ap.audio && ap.audio.paused) {
+            ap.play();
+            // 获取当前歌曲信息并返回提示
+            const currentSong = ap.list.audios[ap.list.index];
+            const info = `${currentSong.name} - ${currentSong.artist}`;
+            const resumeMessages = [
+                `继续为你播放：「${info}」`,
+                `让暂停的乐章继续为你奏响：「${info}」`,
+                `旋律继续~ 正在播放「${info}」`
+            ];
+            return randomItem(resumeMessages);
         }
         // 2. 调用 API 停止播放
         ap.pause();
@@ -344,7 +357,7 @@ if (!window.live2dToolKit) {
                         // 核心逻辑：只有当歌词文本发生变化时，才触发
                         if (currentLyricText && currentLyricText !== lyricSyncState.lastLyric) {
                             lyricSyncState.lastLyric = currentLyricText;       // 更新“上一句歌词”
-                            oml2d.tipsMessage(currentLyricText, 4000, 2);
+                            oml2d.tipsMessage(currentLyricText, 10000, 2);
                         }
                     }
                 }
@@ -379,6 +392,8 @@ if (!window.live2dToolKit) {
         ];
         return randomItem(attemptMessages);
     }
+    tk.linkAPlayerToLive2D();
+
 
     /**
      * 关闭歌词同步功能
@@ -415,6 +430,69 @@ if (!window.live2dToolKit) {
         ];
         return randomItem(failureMessages);
     }
-}
 
-window.live2dToolKit.linkAPlayerToLive2D();
+
+
+
+
+    // ---------------------------------------------- hexo 功能区 ------------------------------------
+
+    // 创建一个变量来存储文章列表
+    let allPosts = [];
+
+    // 创建一个函数来加载文章数据
+    let isPostsLoaded = false;
+    function loadPostData() {
+        // 使用 fetch API 请求生成的 json 文件
+        fetch('/api/posts.json')
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.posts.length > 0) {
+                    allPosts = data.posts;
+                    isPostsLoaded = true;
+                    console.log('文章列表加载成功！文章数量：' + allPosts.length);
+                }
+            })
+            .catch(err => console.error('加载文章列表失败：' ,err));
+    }
+    loadPostData();
+
+    /**
+     * 随机跳转文章
+     */
+    tk.jump2randomPost = () => {
+        if (!isPostsLoaded || 0 === allPosts.length) {
+            loadPostData();
+            return '知识库正在同步中，请稍后再试哦…';
+        }
+
+        // 随机选取一篇文章
+        const post = randomItem(allPosts);
+
+        // 进行链接跳转
+        const url = `/${post.path}`;
+        if (window.pjax || typeof window.Pjax === 'function') {
+            // 使用 Pjax API 进行无刷新跳转
+            const _pjax = window.pjax || new window.Pjax();
+            _pjax.loadUrl(url);
+        } else {
+            // 使用 location.href 进行跳转
+            window.location.href = url;
+        }
+
+        // 从消息池中随机选择一条消息并返回
+        const messages = [
+            `正在带你前往「${post.title}」~`,
+            `从世界树的记忆里，为你找到了「${post.title}」。`,
+            `欸嘿，我们来一场说走就走的知识旅行，目的地：「${post.title}」！`,
+            `让「${post.title}」的智慧之光照亮你的思绪吧。`,
+            `虚空终端检索到了新的知识：「${post.title}」。`,
+            `瞧，我为你发现了宝藏！是「${post.title}」哦。`,
+            `准备好哦，我们要进行一次小小的梦境跃迁，去往「${post.title}」。`,
+            `连接到知识库…为你提取了「${post.title}」。`,
+            `这篇「${post.title}」里，或许藏着你想要的答案。`,
+            `页面航线已规划，下一站：「${post.title}」。`
+        ];
+        return randomItem(messages);
+    }
+}
