@@ -271,19 +271,6 @@ if (!window.live2dToolKit) {
         if (!ap) {
             return '歌声的精灵好像还没抵达，再呼唤一下试试看？';
         }
-        // ✨ 新增：判断如果播放器当前是暂停状态，则直接继续播放
-        if (ap.audio && ap.audio.paused) {
-            ap.play();
-            // 获取当前歌曲信息并返回提示
-            const currentSong = ap.list.audios[ap.list.index];
-            const info = `${currentSong.name} - ${currentSong.artist}`;
-            const resumeMessages = [
-                `继续为你播放：「${info}」`,
-                `让暂停的乐章继续为你奏响：「${info}」`,
-                `旋律继续~ 正在播放「${info}」`
-            ];
-            return randomItem(resumeMessages);
-        }
         // 2. 调用 API 停止播放
         ap.pause();
         // 3. 返回随机消息
