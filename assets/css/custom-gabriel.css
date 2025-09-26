@@ -1,0 +1,146 @@
+/* 页脚透明 */
+#footer {
+    background: transparent !important;
+}
+/* 头图透明 */
+#page-header {
+    background: transparent !important;
+}
+/* top-img 黑色透明玻璃效果移除 */
+#page-header:not(.not-top-img):before {
+    background-color: transparent !important;
+}
+
+
+/* 滚动条 */
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #3b70fc;
+    border-radius: 2em;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+::-moz-selection {
+    color: #fff;
+    background-color: #3b70fc;
+}
+
+
+/* 音乐播放器 */
+
+/* 隐藏底部的歌词 */
+.aplayer .aplayer-lrc {
+  display: none !important;
+}
+
+/* 箭头部分重定位 */
+.aplayer.aplayer-fixed.aplayer-narrow {
+    left: 15px;
+    bottom: 15px;
+    /* 提升 z-index 以免被页面其他元素遮挡 */
+    z-index: 999;
+}
+/* 默认隐藏播放器 */
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+    /* 毛玻璃效果 */
+    background-color: rgba(45, 45, 45, 0.7);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+
+    /* 边框与阴影 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+    /* 默认隐藏的动画效果 */
+    transform: translateX(-80px);
+    opacity: 0.5;
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+/* 鼠标悬停，弹出播放器 */
+.aplayer.aplayer-fixed.aplayer-narrow:hover .aplayer-body {
+    transform: translateX(0);
+    opacity: 1;
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+}
+
+
+
+/* 文章页H1-H6图标样式效果 */
+h1::before,
+h2::before,
+h3::before,
+h4::before,
+h5::before,
+h6::before {
+    -webkit-animation: ccc 1.6s linear infinite;
+    /* 小风车转起来 */
+    animation: ccc 1.6s linear infinite;
+}
+@-webkit-keyframes ccc {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(-1turn);
+        transform: rotate(-1turn);
+    }
+}
+@keyframes ccc {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(-1turn);
+        transform: rotate(-1turn);
+    }
+}
+
+
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 侧边栏个人卡片渐变色 */
+#aside-content > .card-widget, #aside-content .card-webinfo {
+    background: linear-gradient(135deg, #0a2463, #3e5c9a, #7cb8d1);
+    background-size: 400%;
+    box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.05);
+    animation: gradient 15s ease infinite;
+    position: relative;
+    color: #b9ed9b;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3)
+}
+/* 社交图标颜色 */
+.site-data > a .headline, .site-data > a .length-num, .card-info-social-icons i {
+    color: #b9ed9b !important;
+}
+/* 网站信息卡片渐变色 */
+#aside-content .card-webinfo {
+    background: linear-gradient(135deg, #2d0b59, #6a3093, #a044ff);
+    background-size: 400%;
+    box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.05);
+    animation: gradient 15s ease infinite;
+    position: relative;
+    color: #40f4d9;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3)
+}
