@@ -12,6 +12,18 @@
 }
 
 
+/* 魔改所需：时间轴生肖icon，导航栏菜单icon */
+svg.icon {
+    /* 这里定义svg.icon，避免和Butterfly自带的note标签冲突 */
+    width: 1em;
+    height: 1em;
+    /* width和height定义图标的默认宽度和高度*/
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+
 /* 滚动条 */
 ::-webkit-scrollbar {
     width: 8px;
@@ -69,11 +81,10 @@
 
 
 
-/* 文章页H1-H6图标样式效果 */
+/* H1-H6标题，图标转动起来 */
 h1::before, h2::before, h3::before,
 h4::before, h5::before, h6::before {
     -webkit-animation: ccc 1.6s linear infinite;
-    /* 小风车转起来 */
     animation: ccc 1.6s linear infinite;
 }
 @-webkit-keyframes ccc {
@@ -99,38 +110,18 @@ h4::before, h5::before, h6::before {
 
 
 
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-/* 侧边栏个人卡片渐变色 */
-#aside-content > .card-widget, #aside-content .card-webinfo {
-    background: linear-gradient(135deg, #0a2463, #3e5c9a, #7cb8d1);
-    background-size: 400%;
-    box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.05);
-    animation: gradient 15s ease infinite;
-    position: relative;
-    color: #b9ed9b;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.3)
-}
-/* 社交图标颜色 */
-.site-data > a .headline, .site-data > a .length-num, .card-info-social-icons i {
-    color: #b9ed9b !important;
-}
-/* 网站信息卡片渐变色 */
-#aside-content .card-webinfo {
-    background: linear-gradient(135deg, #2d0b59, #6a3093, #a044ff);
-    background-size: 400%;
-    box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.05);
-    animation: gradient 15s ease infinite;
-    position: relative;
-    color: #40f4d9;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.3)
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

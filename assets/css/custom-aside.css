@@ -96,16 +96,55 @@
 
 
 
-/* 时间轴生肖icon，导航栏菜单icon */
-svg.icon {
-    /* 这里定义svg.icon，避免和Butterfly自带的note标签冲突 */
-    width: 1em;
-    height: 1em;
-    /* width和height定义图标的默认宽度和高度*/
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
+/* 渐变动画定义 */
+@keyframes gradient {
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
 }
+/* 侧边栏，个人卡片，渐变色 */
+#aside-content > .card-widget, #aside-content .card-webinfo {
+    background: linear-gradient(135deg, #0a2463, #3e5c9a, #7cb8d1);
+    background-size: 400%;
+    box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.05);
+    animation: gradient 15s ease infinite;
+    position: relative;
+    color: #b9ed9b;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3)
+}
+/* 侧边栏，个人卡片，社交图标颜色 */
+.site-data > a .headline, .site-data > a .length-num, .card-info-social-icons i {
+    color: #b9ed9b !important;
+}
+/* 侧边栏，网站信息卡片，渐变色 */
+#aside-content .card-webinfo {
+    background: linear-gradient(135deg, #2d0b59, #6a3093, #a044ff);
+    background-size: 400%;
+    box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.05);
+    animation: gradient 15s ease infinite;
+    position: relative;
+    color: #40f4d9;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3)
+}
+
+
+
+/* 侧边栏，分类卡片 */
+#aside-content .card-categories ul.card-category-list > .card-category-list-item a:hover {
+    color: var(--anzhiyu-white);
+    background-color: var(--anzhiyu-theme);
+    box-shadow: var(--anzhiyu-shadow-theme);
+    border-radius: 8px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
 
 
 /* 侧边栏，标签卡片 */
@@ -133,7 +172,6 @@ svg.icon {
     opacity: 0.4;
     margin-left: 2px;
 }
-
 
 
 
@@ -210,19 +248,7 @@ li.card-archive-list-item {
 
 
 
-/* 侧边栏，分类卡片 */
-#aside-content .card-categories ul.card-category-list > .card-category-list-item a:hover {
-    color: var(--anzhiyu-white);
-    background-color: var(--anzhiyu-theme);
-    box-shadow: var(--anzhiyu-shadow-theme);
-    border-radius: 8px;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-}
-
-
-
-/* 侧边栏，最近文章 */
+/* 侧边栏，最近文章卡片 */
 #aside-content .aside-list > .aside-list-item .content > time {
     display: none;
 }
@@ -270,3 +296,6 @@ li.card-archive-list-item {
 .card-widget.card-recent-post {
     padding: 0.4rem 0.6rem !important;
 }
+
+
+
