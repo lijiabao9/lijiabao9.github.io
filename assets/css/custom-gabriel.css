@@ -13,21 +13,17 @@
 
 
 /* 滚动条 */
-
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
     height: 10px;
 }
-
 ::-webkit-scrollbar-thumb {
     background-color: #3b70fc;
     border-radius: 2em;
 }
-
 ::-webkit-scrollbar-corner {
     background-color: transparent;
 }
-
 ::-moz-selection {
     color: #fff;
     background-color: #3b70fc;
@@ -40,7 +36,6 @@
 .aplayer .aplayer-lrc {
   display: none !important;
 }
-
 /* 箭头部分重定位 */
 .aplayer.aplayer-fixed.aplayer-narrow {
     left: 15px;
@@ -75,12 +70,8 @@
 
 
 /* 文章页H1-H6图标样式效果 */
-h1::before,
-h2::before,
-h3::before,
-h4::before,
-h5::before,
-h6::before {
+h1::before, h2::before, h3::before,
+h4::before, h5::before, h6::before {
     -webkit-animation: ccc 1.6s linear infinite;
     /* 小风车转起来 */
     animation: ccc 1.6s linear infinite;
@@ -119,7 +110,6 @@ h6::before {
         background-position: 0% 50%;
     }
 }
-
 /* 侧边栏个人卡片渐变色 */
 #aside-content > .card-widget, #aside-content .card-webinfo {
     background: linear-gradient(135deg, #0a2463, #3e5c9a, #7cb8d1);
