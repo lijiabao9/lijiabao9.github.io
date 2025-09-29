@@ -1,0 +1,637 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Markdown 语法 | Gabriel的博客</title><meta name="author" content="Gabriel"><meta name="copyright" content="Gabriel"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Markdown 是一种轻量级标记语言，语法十分简单，常用的标记符号不超过十个。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Markdown 语法">
+<meta property="og:url" content="https://lijiabao9.github.io/posts/3c50d03d.html">
+<meta property="og:site_name" content="Gabriel的博客">
+<meta property="og:description" content="Markdown 是一种轻量级标记语言，语法十分简单，常用的标记符号不超过十个。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250928214252878.webp">
+<meta property="article:published_time" content="2025-09-27T14:57:15.000Z">
+<meta property="article:modified_time" content="2025-09-29T17:27:34.997Z">
+<meta property="article:author" content="Gabriel">
+<meta property="article:tag" content="Markdown">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250928214252878.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Markdown 语法",
+  "url": "https://lijiabao9.github.io/posts/3c50d03d.html",
+  "image": "https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250928214252878.webp",
+  "datePublished": "2025-09-27T14:57:15.000Z",
+  "dateModified": "2025-09-29T17:27:34.997Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Gabriel",
+      "url": "https://lijiabao9.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/favicon.webp"><link rel="canonical" href="https://lijiabao9.github.io/posts/3c50d03d.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: Gabriel","link":"链接: ","source":"来源: Gabriel的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-center"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Markdown 语法',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@latest/css/all.min.css""><link rel="stylesheet" href="/assets/css/custom-butterfly.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="/assets/css/custom-aside.css" media="defer" onload="this.media='all'"><script src="/assets/js/live2d-toolkit.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.0.0"><link rel="alternate" href="/atom.xml" title="Gabriel的博客" type="application/atom+xml">
+</head><body><div id="web_bg" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/site-background-2.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-shouye"></use></svg><span> 首页</span></a></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-wenzhang"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-shijianzhou"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-biaoqian"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-fenlei"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-shoucang"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-zhaopian"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-wodetuijian"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-liuyanban"></use></svg><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-wenji-suibi"></use></svg><span> 随笔</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-guanyu"></use></svg><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250928214252878.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Gabriel的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Markdown 语法</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-shouye"></use></svg><span> 首页</span></a></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-wenzhang"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-shijianzhou"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-biaoqian"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-fenlei"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-shoucang"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-zhaopian"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-wodetuijian"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-liuyanban"></use></svg><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-wenji-suibi"></use></svg><span> 随笔</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-guanyu"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Markdown 语法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-09-27T14:57:15.000Z" title="发表于 2025-09-27 22:57:15">2025-09-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-09-29T17:27:34.997Z" title="更新于 2025-09-30 01:27:34">2025-09-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AF%AD%E6%B3%95%E6%96%87%E6%A1%A3/">语法文档</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2025-09-30 01:27:34&quot;}" hidden></div><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://markdown.com.cn/" title="Markdown 教程">Markdown</a> 是一种轻量级标记语言，语法十分简单，常用的标记符号不超过十个。</p>
+<h2 id="速查表"><a href="#速查表" class="headerlink" title="速查表"></a>速查表</h2><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250928012449370.webp" alt="" title="Markdown 语法速查表"></p>
+<h2 id="标题语法"><a href="#标题语法" class="headerlink" title="标题语法"></a>标题语法</h2><p>要创建标题，在单词或短语前面添加井号（<code>#</code>），并紧跟一个空格。</p>
+<p><code>#</code> 号的数量代表了标题的级别，支持 1~6 级标题。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <div class="table-container"><table><thead><tr><th style="text-align:left">Markdown 语法</th><th style="text-align:left">效果预览</th></tr></thead><tbody><tr><td style="text-align:left"># 一级标题</td><td style="text-align:left"><font size="6">一级标题</font></td></tr><tr><td style="text-align:left">## 二级标题</td><td style="text-align:left"><font size="5">二级标题</font></td></tr><tr><td style="text-align:left">### 三级标题</td><td style="text-align:left"><font size="4">三级标题</font></td></tr><tr><td style="text-align:left">#### 四级标题</td><td style="text-align:left"><font size="3">四级标题</font></td></tr><tr><td style="text-align:left">##### 五级标题</td><td style="text-align:left"><font size="2">五级标题</font></td></tr><tr><td style="text-align:left">###### 六级标题</td><td style="text-align:left"><font size="1">六级标题</font></td></tr></tbody></table></div>
+              </div>
+            </details>
+<h2 id="强调语法"><a href="#强调语法" class="headerlink" title="强调语法"></a>强调语法</h2><p>要用 <em>斜体</em> 显示文本，在单词或短语前后添加一个星号 <code>*</code>。</p>
+<p>要 <strong>加粗</strong> 文本，在单词或短语的前后各添加两个星号 <code>**</code>。</p>
+<p>要同时用 <strong><em>粗体和斜体</em></strong> 突出显示文本，在单词或短语的前后各添加三个星号 <code>***</code>。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <div class="table-container"><table><thead><tr><th style="text-align:left">Markdonwn 语法</th><th style="text-align:left">效果预览</th></tr></thead><tbody><tr><td style="text-align:left">Italicized text is the *cat’s meow*.</td><td style="text-align:left">Italicized text is the <em>cat’s meow</em>.</td></tr><tr><td style="text-align:left">I just love **bold text**.</td><td style="text-align:left">I just love <strong>bold text</strong>.</td></tr><tr><td style="text-align:left">This text is ***really important***.</td><td style="text-align:left">This text is <strong><em>really important</em></strong>.</td></tr></tbody></table></div>
+              </div>
+            </details>
+<h2 id="引用语法"><a href="#引用语法" class="headerlink" title="引用语法"></a>引用语法</h2><p>要创建块引用，在段落前添加一个 <code>&gt;</code> 符号，后面紧跟一个空格。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="quote">&gt; Dorothy followed her through many of the beautiful rooms in her castle.</span></span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><blockquote><p>Dorothy followed her through many of the beautiful rooms in her castle.</p></blockquote>
+              </div>
+            </details>
+<h2 id="列表语法"><a href="#列表语法" class="headerlink" title="列表语法"></a>列表语法</h2><p>可以将多个条目组织成有序或无序列表。</p>
+<p>创建有序列表，在每个列表项前添加数字，并紧跟一个英文句点，再紧跟一个空格。</p>
+<p>创建无序列表，在每个列表项前面添加破折号 <code>-</code>，后面紧跟一个空格。</p>
+<details class="folding-tag" green><summary> 有序列表 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> First item</span><br><span class="line"><span class="bullet">2.</span> Second item</span><br><span class="line"><span class="bullet">3.</span> Third item</span><br><span class="line"><span class="bullet">    1.</span> Indented item</span><br><span class="line"><span class="bullet">    2.</span> Indented item</span><br><span class="line"><span class="bullet">4.</span> Fourth item</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><ol><li>First item</li><li>Second item</li><li>Third item<ol><li>Indented item</li><li>Indented item</li></ol></li><li>Fourth item</li></ol>
+              </div>
+            </details>
+<details class="folding-tag" green><summary> 无序列表 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> First item</span><br><span class="line"><span class="bullet">-</span> Second item</span><br><span class="line"><span class="bullet">-</span> Third item</span><br><span class="line"><span class="bullet">    -</span> Indented item</span><br><span class="line"><span class="bullet">    -</span> Indented item</span><br><span class="line"><span class="bullet">-</span> Fourth item</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><ul><li>First item</li><li>Second item</li><li>Third item<ul><li>Indented item</li><li>Indented item</li></ul></li><li>Fourth item</li></ul>
+              </div>
+            </details>
+<h2 id="代码语法"><a href="#代码语法" class="headerlink" title="代码语法"></a>代码语法</h2><p>要将单词或短语表示为代码，将其包裹在反引号 <code>`</code> 中。</p>
+<p>如果单词或短语中包含一个或多个反引号，将其包裹在双反引号 (<code>``</code>) 中。</p>
+<p>要创建代码块，在代码块前后行上使用三个反引号（<code>```</code>）。 首行的反引号可指定代码语言，实现语法高亮。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <div class="table-container"><table><thead><tr><th style="text-align:left">Markdonwn 语法</th><th style="text-align:left">效果预览</th></tr></thead><tbody><tr><td style="text-align:left">At the command prompt, type `nano`</td><td style="text-align:left">At the command prompt, type <code>nano</code>.</td></tr><tr><td style="text-align:left">``Use `code` in your Markdown file.``</td><td style="text-align:left"><code>Use `code` in your Markdown file.</code></td></tr></tbody></table></div><p>代码块书写示例：</p><p>```json<br>{<br>“firstName”: “John”,<br>“lastName”: “Smith”,<br>“age”: 25<br>}<br>```</p><p>代码块效果如下所示：</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;firstName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;John&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;lastName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Smith&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">25</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+              </div>
+            </details>
+<h2 id="分隔线语法"><a href="#分隔线语法" class="headerlink" title="分隔线语法"></a>分隔线语法</h2><p>要创建分隔线，在单独一行上使用三个或多个破折号 (<code>---</code>) ，并且不能包含其他内容。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Try to put a blank line before...</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">...and after a horizontal rule.</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><p>Try to put a blank line before…</p><hr><p>…and after a horizontal rule.</p>
+              </div>
+            </details>
+<h2 id="链接语法"><a href="#链接语法" class="headerlink" title="链接语法"></a>链接语法</h2><p>链接文本放在 <strong>方括号</strong> 内，链接地址放在后面的 <strong>圆括号</strong> 中，链接 title 可选。</p>
+<p>语法格式：<code>[超链接显示名](超链接地址 &quot;超链接title&quot;)</code></p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这是一个链接 [<span class="string">Markdown语法</span>](<span class="link">https://markdown.com.cn &quot;最好的 markdown 教程&quot;</span>)。</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><p>这是一个链接 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://markdown.com.cn" title="最好的 markdown 教程">Markdown语法</a>。</p>
+              </div>
+            </details>
+<h2 id="图片语法"><a href="#图片语法" class="headerlink" title="图片语法"></a>图片语法</h2><p>要添加图像，使用感叹号 (<code>!</code>), 在 <em>方括号</em> 增加替代文本，图片链接放在 <strong>圆括号</strong> 里，链接 title 可选。</p>
+<p>语法代码：<code>![图片alt](图片链接 &quot;图片title&quot;)</code></p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![<span class="string">可选alt文本</span>](<span class="link">https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/avatar.webp &quot;这是我的头像&quot;</span>)</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/avatar.webp" alt="可选alt文本" title="这是我的头像"></p>
+              </div>
+            </details>
+<h2 id="转义字符语法"><a href="#转义字符语法" class="headerlink" title="转义字符语法"></a>转义字符语法</h2><p>要显示原本用于格式化 Markdown 文档的字符，在字符前面添加反斜杠字符 <code>\</code>。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\* Without the backslash, this would be a bullet in an unordered list.</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><p>* Without the backslash, this would be a bullet in an unordered list.</p>
+              </div>
+            </details>
+<h2 id="表格语法"><a href="#表格语法" class="headerlink" title="表格语法"></a>表格语法</h2><p>要添加表，使用三个或多个连字符（<code>---</code>）创建每列的标题，并使用管道（<code>|</code>）分隔每列。</p>
+<p>可在标题行的连字符的左侧、右侧或两侧，添加冒号（<code>:</code>），设置表格对齐方式。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">| 姓名 | 性别 |</span><br><span class="line">| :--- | :--- |</span><br><span class="line">| 李雷 | 男 |</span><br><span class="line">| 韩梅梅 | 女 |</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><div class="table-container"><table><thead><tr><th style="text-align:left">姓名</th><th style="text-align:left">性别</th></tr></thead><tbody><tr><td style="text-align:left">李雷</td><td style="text-align:left">男</td></tr><tr><td style="text-align:left">韩梅梅</td><td style="text-align:left">女</td></tr></tbody></table></div>
+              </div>
+            </details>
+<h2 id="删除线语法"><a href="#删除线语法" class="headerlink" title="删除线语法"></a>删除线语法</h2><p>要给文本添加中心水平线表示删除，用两个波浪号 <code>~~</code> 包裹文本。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~~世界是平坦的。~~ 我们现在知道世界是圆的。</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><p><del>世界是平坦的。</del> 我们现在知道世界是圆的。</p>
+              </div>
+            </details></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io">Gabriel</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io/posts/3c50d03d.html">https://lijiabao9.github.io/posts/3c50d03d.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lijiabao9.github.io" target="_blank">Gabriel的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Markdown/">Markdown</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250928214252878.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/wechat.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/wechat.webp" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/alipay.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/alipay.webp" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/54e68d5e.html" title="Butterfly 标签外挂语法"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250929204425315.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Butterfly 标签外挂语法</div></div><div class="info-2"><div class="info-item-1">深入探索 Hexo Butterfly 主题强大的标签外挂（Tag Plugins）功能，详细介绍外挂标签的语法及效果。</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Gabriel</div><div class="author-info-description">记录技术探索，也写人间烟火。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lijiabao9"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:ljiabao9@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">新手上路 | 这里记录着从 Hello World 到 Hello Universe 的每一步探索 🌌</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="toc-number">1.</span> <span class="toc-text">速查表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E9%A2%98%E8%AF%AD%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">标题语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%BA%E8%B0%83%E8%AF%AD%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">强调语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E8%AF%AD%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">引用语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E8%AF%AD%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">列表语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E8%AF%AD%E6%B3%95"><span class="toc-number">6.</span> <span class="toc-text">代码语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E9%9A%94%E7%BA%BF%E8%AF%AD%E6%B3%95"><span class="toc-number">7.</span> <span class="toc-text">分隔线语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5%E8%AF%AD%E6%B3%95"><span class="toc-number">8.</span> <span class="toc-text">链接语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E8%AF%AD%E6%B3%95"><span class="toc-number">9.</span> <span class="toc-text">图片语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E8%AF%AD%E6%B3%95"><span class="toc-number">10.</span> <span class="toc-text">转义字符语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A8%E6%A0%BC%E8%AF%AD%E6%B3%95"><span class="toc-number">11.</span> <span class="toc-text">表格语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%BA%BF%E8%AF%AD%E6%B3%95"><span class="toc-number">12.</span> <span class="toc-text">删除线语法</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/27853e63.html" title="Tag Plugins Plus 标签外挂语法"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250930012532947.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Tag Plugins Plus 标签外挂语法"/></a><div class="content"><a class="title" href="/posts/27853e63.html" title="Tag Plugins Plus 标签外挂语法">Tag Plugins Plus 标签外挂语法</a><time datetime="2025-09-29T12:43:26.000Z" title="发表于 2025-09-29 20:43:26">2025-09-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/54e68d5e.html" title="Butterfly 标签外挂语法"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250929204425315.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Butterfly 标签外挂语法"/></a><div class="content"><a class="title" href="/posts/54e68d5e.html" title="Butterfly 标签外挂语法">Butterfly 标签外挂语法</a><time datetime="2025-09-28T13:51:02.000Z" title="发表于 2025-09-28 21:51:02">2025-09-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3c50d03d.html" title="Markdown 语法"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250928214252878.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Markdown 语法"/></a><div class="content"><a class="title" href="/posts/3c50d03d.html" title="Markdown 语法">Markdown 语法</a><time datetime="2025-09-27T14:57:15.000Z" title="发表于 2025-09-27 22:57:15">2025-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Gabriel</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.0.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">🚧 施工中 | 这是一个程序员用代码和咖啡构建的思维城堡 💻☕ | Bug和灵感同样欢迎！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.innerHTML, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://cdn.jsdelivr.net/npm/abcjs/dist/abcjs-basic-min.min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script></div><div class="aplayer no-destroy" data-id="2761236917" data-server="netease" data-type="playlist" data-order="list" data-fixed="true" data-preload="auto" data-autoplay="false" data-mutex="true"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;posts/27853e63.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt=""><img width="48" height="48" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250930012532947.webp" alt="" onerror="this.src=https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/cover.webp; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-09-29</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;posts/27853e63.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt="">Tag Plugins Plus 标签外挂语法</a><div class="blog-slider__text">带你玩转 Butterfly 主题的 Tag Plugins Plus 插件！手把手教你各种标签怎么用，轻松搞定花式排版和交互效果。</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;posts/27853e63.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;posts/54e68d5e.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt=""><img width="48" height="48" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250929204425315.webp" alt="" onerror="this.src=https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/cover.webp; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-09-28</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;posts/54e68d5e.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt="">Butterfly 标签外挂语法</a><div class="blog-slider__text">深入探索 Hexo Butterfly 主题强大的标签外挂（Tag Plugins）功能，详细介绍外挂标签的语法及效果。</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;posts/54e68d5e.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;posts/3c50d03d.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt=""><img width="48" height="48" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/post/20250928214252878.webp" alt="" onerror="this.src=https://cdn.jsdelivr.net/gh/lijiabao9/lijiabao9.pic.cloud@main/hexo/info/cover.webp; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-09-27</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;posts/3c50d03d.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt="">Markdown 语法</a><div class="blog-slider__text">Markdown 是一种轻量级标记语言，语法十分简单，常用的标记符号不超过十个。</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;posts/3c50d03d.html&quot;);" href="javascript:void(0);" rel="external nofollow noreferrer" alt="">详情       </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><script async src="/assets/js/ali_icon_font.js"></script><script data-pjax src="https://unpkg.com/oh-my-live2d"></script><script>const oml2d = OML2D.loadOml2d({dockedPosition:"left",parentElement:document.body,primaryColor:"#87C6A3",sayHello:false,transitionTime:1000,initialStatus:"active",mobileDisplay:false,stageStyle:{"bottom":"80px"},models:[{"name":"纳西妲","path":"/assets/live2d_models/Nahida_1080/Nahida_1080.model3.json","scale":0.05}],tips:{messageLine: 3,style: {"width":200,"height":100,"left":"calc(50% + 40px)","top":"-100px","font-size":"16px","color":"#E0FFF5","border-radius":"10px","border":"1px solid rgba(175, 230, 190, 0.7)","backdrop-filter":"blur(8px) saturate(1.8)","box-shadow":"inset 0 0 15px rgba(180, 255, 200, 0.3), 0 2px 5px rgba(0, 0, 0, 0.1)"},copyTips: {"duration":3000,"priority":2,"message":["字句如露，采撷时请记得留一片云作为归处~","墨香未干，思绪尚温，转载时请为故事保留来时的路标~","这些句子曾在月光下晾晒，若你收藏，请保留它们晒过的那轮月亮~","文字如蝶，轻拈时请莫折损它的翅膀，转载时请注明这片花园的名字~","每个字都带着作者的体温，若你喜欢，请记得它最初安家的地方~"]},welcomeTips: {"duration":6000,"priority":3,"message":{"daybreak":"「晨露未晞时，世界正轻轻醒来。愿今日的光，都落在你的期待上」","morning":"「朝云染窗棂，纸笔相候多时。若觉倦了，不妨与风共舞片刻」","noon":"「日影正中天，且将心事暂搁。一箸春蔬，半盏清茶，都是光阴的馈赠」","afternoon":"「蝉鸣在帘外织网，困意如潮汐漫涨。你手边那杯茶，正温着整个下午」","dusk":"「暮色像缓缓合上的书页，而你是今天最美的句读」","night":"「星子开始研磨墨汁，要不要把今天的故事，再说给月亮听？」","lateNight":"「灯火已瘦，睡意正稠。让枕头接住你所有未完成的梦」","weeHours":"「整个银河都在你眼里打盹，而睫毛成了最后的守夜人」"}},idleTips:{duration:20000,priority:1,interval:60000,wordTheDay:function(wordTheDayData){
+  return `${wordTheDayData.hitokoto}    by.${wordTheDayData.from}`;
+}
+}},statusBar:{"disable":false,"style":{"color":"#40f4d9"},"errorColor":"#f40505","restMessage":"茶烟歇处，伊人暂隐"},menus:{disable:false,style:{"display":"flex","flex-direction":"column","flex-wrap":"wrap","max-height":"160px","gap":"5px","right":"unset","left":"150px"},items:(defaultItems) => {
+  return [
+    defaultItems[0],
+    {
+      id: 'startTipsIdle',
+      title: '聆听梦境',
+      icon: 'icon-network-conn',
+      onClick: (oml2d) => { oml2d.startTipsIdle(); oml2d.tipsMessage('嘘，让我们一起听听，世界树的叶脉里都流淌着哪些秘密…！', 1000, 4); }
+    },
+    {
+      id: 'stopTipsIdle',
+      title: '独享此刻',
+      icon: 'icon-network-dis-conn',
+      onClick: (oml2d) => { oml2d.stopTipsIdle(); oml2d.tipsMessage('已从「虚空」网络安全断开，你的思绪现在只属于你了。', 1000, 4); }
+    },
+    {
+      id: 'randomMusic',
+      title: '随机音乐',
+      icon: 'icon-music',
+      onClick: (oml2d) => { const msg = window.live2dToolkit.playRandomMusic(); oml2d.tipsMessage(msg, 1000, 4); }
+    },
+    {
+      id: 'play-pause',
+      title: '播放/暂停',
+      icon: 'icon-vynil',
+      onClick: (oml2d) => { const msg = window.live2dToolkit.togglePlayPause(); oml2d.tipsMessage(msg, 1000, 4); }
+    },
+    {
+      id: 'jump2randomPost',
+      title: '世界树回响',
+      icon: 'icon-zu',
+      onClick: (oml2d) => { const msg = window.live2dToolkit.jump2randomPost(); oml2d.tipsMessage(msg, 2000, 4); }
+    }
+  ]
+}
+}});</script><!-- hexo injector body_end end --></body></html>

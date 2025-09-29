@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2025-09-27T05:37:44.959Z</updated>
+  <updated>2025-09-29T17:27:34.998Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,23 +17,59 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="https://lijiabao9.github.io/posts/4a17b156.html"/>
-    <id>https://lijiabao9.github.io/posts/4a17b156.html</id>
-    <published>2025-09-27T05:37:44.959Z</published>
-    <updated>2025-09-27T05:37:44.959Z</updated>
+    <title>Tag Plugins Plus 标签外挂语法</title>
+    <link href="https://lijiabao9.github.io/posts/27853e63.html"/>
+    <id>https://lijiabao9.github.io/posts/27853e63.html</id>
+    <published>2025-09-29T12:43:26.000Z</published>
+    <updated>2025-09-29T17:27:34.998Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
-        
-      
+    <summary type="html">带你玩转 Butterfly 主题的 Tag Plugins Plus 插件！手把手教你各种标签怎么用，轻松搞定花式排版和交互效果。</summary>
     
     
     
+    <category term="语法文档" scheme="https://lijiabao9.github.io/categories/%E8%AF%AD%E6%B3%95%E6%96%87%E6%A1%A3/"/>
+    
+    
+    <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Butterfly 标签外挂语法</title>
+    <link href="https://lijiabao9.github.io/posts/54e68d5e.html"/>
+    <id>https://lijiabao9.github.io/posts/54e68d5e.html</id>
+    <published>2025-09-28T13:51:02.000Z</published>
+    <updated>2025-09-29T17:27:34.997Z</updated>
+    
+    
+    <summary type="html">深入探索 Hexo Butterfly 主题强大的标签外挂（Tag Plugins）功能，详细介绍外挂标签的语法及效果。</summary>
+    
+    
+    
+    <category term="语法文档" scheme="https://lijiabao9.github.io/categories/%E8%AF%AD%E6%B3%95%E6%96%87%E6%A1%A3/"/>
+    
+    
+    <category term="Hexo" scheme="https://lijiabao9.github.io/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Markdown 语法</title>
+    <link href="https://lijiabao9.github.io/posts/3c50d03d.html"/>
+    <id>https://lijiabao9.github.io/posts/3c50d03d.html</id>
+    <published>2025-09-27T14:57:15.000Z</published>
+    <updated>2025-09-29T17:27:34.997Z</updated>
+    
+    
+    <summary type="html">Markdown 是一种轻量级标记语言，语法十分简单，常用的标记符号不超过十个。</summary>
+    
+    
+    
+    <category term="语法文档" scheme="https://lijiabao9.github.io/categories/%E8%AF%AD%E6%B3%95%E6%96%87%E6%A1%A3/"/>
+    
+    
+    <category term="Markdown" scheme="https://lijiabao9.github.io/tags/Markdown/"/>
     
   </entry>
   
