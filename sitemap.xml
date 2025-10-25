@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/shuoshuo/index.html</loc>
+    <loc>https://lijiabao9.github.io/tags/index.html</loc>
     
     <lastmod>2025-10-25</lastmod>
     
@@ -38,7 +38,7 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/tags/index.html</loc>
+    <loc>https://lijiabao9.github.io/shuoshuo/index.html</loc>
     
     <lastmod>2025-10-25</lastmod>
     
@@ -128,7 +128,7 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/assets/live2d_models/Nahida_1080/StarEye.exp3.json</loc>
+    <loc>https://lijiabao9.github.io/assets/live2d_models/Nahida_1080/Shy.exp3.json</loc>
     
     <lastmod>2025-10-25</lastmod>
     
@@ -137,7 +137,7 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/assets/live2d_models/Nahida_1080/Shy.exp3.json</loc>
+    <loc>https://lijiabao9.github.io/assets/live2d_models/Nahida_1080/StarEye.exp3.json</loc>
     
     <lastmod>2025-10-25</lastmod>
     
@@ -290,6 +290,15 @@
   </url>
   
   <url>
+    <loc>https://lijiabao9.github.io/posts/a30910d1.html</loc>
+    
+    <lastmod>2025-10-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://lijiabao9.github.io/posts/d8ebff22.html</loc>
     
     <lastmod>2025-10-25</lastmod>
@@ -351,14 +360,14 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/tags/Butterfly/</loc>
+    <loc>https://lijiabao9.github.io/tags/Markdown/</loc>
     <lastmod>2025-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/tags/Markdown/</loc>
+    <loc>https://lijiabao9.github.io/tags/Butterfly/</loc>
     <lastmod>2025-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -420,17 +429,31 @@
     <priority>0.2</priority>
   </url>
   
-
-  
   <url>
-    <loc>https://lijiabao9.github.io/categories/Hexo%E5%8D%9A%E5%AE%A2/</loc>
+    <loc>https://lijiabao9.github.io/tags/Zsh/</loc>
     <lastmod>2025-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
+    <loc>https://lijiabao9.github.io/tags/Oh-My-Zsh/</loc>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+
+  
+  <url>
     <loc>https://lijiabao9.github.io/categories/%E8%AF%AD%E6%B3%95%E6%96%87%E6%A1%A3/</loc>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/categories/Hexo%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2025-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
