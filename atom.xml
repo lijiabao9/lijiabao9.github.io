@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2025-10-29T16:34:49.370Z</updated>
+  <updated>2025-10-29T17:17:23.533Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,14 +17,35 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Ubuntu 系统安装 JDK</title>
+    <link href="https://lijiabao9.github.io/posts/a281d7c0.html"/>
+    <id>https://lijiabao9.github.io/posts/a281d7c0.html</id>
+    <published>2025-10-10T16:38:36.000Z</published>
+    <updated>2025-10-29T17:17:23.533Z</updated>
+    
+    
+    <summary type="html">在 Ubuntu 系统上安装 JDK 的过程</summary>
+    
+    
+    
+    <category term="云服务器" scheme="https://lijiabao9.github.io/categories/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+    <category term="Ubuntu" scheme="https://lijiabao9.github.io/tags/Ubuntu/"/>
+    
+    <category term="JDK" scheme="https://lijiabao9.github.io/tags/JDK/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Ubuntu 常用命令手册</title>
     <link href="https://lijiabao9.github.io/posts/9786c4e2.html"/>
     <id>https://lijiabao9.github.io/posts/9786c4e2.html</id>
     <published>2025-10-10T08:05:25.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.533Z</updated>
     
     
-    <summary type="html">记录常用的 Ubuntu 系统的常用命令</summary>
+    <summary type="html">常用的 Ubuntu 系统的命令手册</summary>
     
     
     
@@ -40,7 +61,7 @@
     <link href="https://lijiabao9.github.io/posts/9aade25f.html"/>
     <id>https://lijiabao9.github.io/posts/9aade25f.html</id>
     <published>2025-10-09T07:41:57.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.533Z</updated>
     
     
     <summary type="html">基于 PicGo 搭配 GitHub 实现图床，一键上传图片</summary>
@@ -63,7 +84,7 @@
     <link href="https://lijiabao9.github.io/posts/a30910d1.html"/>
     <id>https://lijiabao9.github.io/posts/a30910d1.html</id>
     <published>2025-10-08T10:55:32.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
     <summary type="html">Windows 安装 Zsh，用 Oh-My-Zsh 美化</summary>
@@ -86,7 +107,7 @@
     <link href="https://lijiabao9.github.io/posts/891810e3.html"/>
     <id>https://lijiabao9.github.io/posts/891810e3.html</id>
     <published>2025-10-07T07:55:32.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
     <summary type="html">Windows 安装 powershell7，用 Oh-My-Posh 美化</summary>
@@ -109,10 +130,10 @@
     <link href="https://lijiabao9.github.io/posts/b08af876.html"/>
     <id>https://lijiabao9.github.io/posts/b08af876.html</id>
     <published>2025-10-06T03:09:08.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
-    <summary type="html">Intelij IDEA 2025 安装破解，以及 常用设置</summary>
+    <summary type="html">Intelij IDEA 2025 的安装破解，以及常用设置</summary>
     
     
     
@@ -130,10 +151,10 @@
     <link href="https://lijiabao9.github.io/posts/3fb3953a.html"/>
     <id>https://lijiabao9.github.io/posts/3fb3953a.html</id>
     <published>2025-10-04T17:27:05.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
-    <summary type="html">记录 VS Code 安装与常用配置</summary>
+    <summary type="html">Visual Code 的安装，与常用配置</summary>
     
     
     
@@ -151,7 +172,7 @@
     <link href="https://lijiabao9.github.io/posts/fe774eb4.html"/>
     <id>https://lijiabao9.github.io/posts/fe774eb4.html</id>
     <published>2025-10-03T17:04:36.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
     <summary type="html">Sublime Text 4 安装破解，以及自定义构建指令</summary>
@@ -172,10 +193,10 @@
     <link href="https://lijiabao9.github.io/posts/922d9e90.html"/>
     <id>https://lijiabao9.github.io/posts/922d9e90.html</id>
     <published>2025-10-03T07:55:32.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
-    <summary type="html">记录 PostgreSQL 服务，使用 .zip 压缩包方式的安装与配置</summary>
+    <summary type="html">PostgreSQL 服务，使用 .zip 压缩包方式的安装与配置</summary>
     
     
     
@@ -193,10 +214,10 @@
     <link href="https://lijiabao9.github.io/posts/8b39915a.html"/>
     <id>https://lijiabao9.github.io/posts/8b39915a.html</id>
     <published>2025-10-02T04:55:32.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
-    <summary type="html">记录 MySQL 服务，使用 .zip 压缩包方式的安装与配置</summary>
+    <summary type="html">MySQL 服务，使用 .zip 压缩包方式的安装与配置</summary>
     
     
     
@@ -214,10 +235,10 @@
     <link href="https://lijiabao9.github.io/posts/e2b31524.html"/>
     <id>https://lijiabao9.github.io/posts/e2b31524.html</id>
     <published>2025-10-01T07:55:32.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
-    <summary type="html">记录 Navicat 软件的安装和破解</summary>
+    <summary type="html">Navicat 软件的安装和破解</summary>
     
     
     
@@ -235,10 +256,10 @@
     <link href="https://lijiabao9.github.io/posts/3fdf137b.html"/>
     <id>https://lijiabao9.github.io/posts/3fdf137b.html</id>
     <published>2025-09-30T02:35:32.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
-    <summary type="html">记录 Internet Download Manager 软件的安装和破解</summary>
+    <summary type="html">Internet Download Manager 软件的安装和破解</summary>
     
     
     
@@ -256,10 +277,10 @@
     <link href="https://lijiabao9.github.io/posts/ba5ff534.html"/>
     <id>https://lijiabao9.github.io/posts/ba5ff534.html</id>
     <published>2025-09-29T00:25:03.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
-    <summary type="html">记录 windows 系统上，开启 WSL2 功能的流程</summary>
+    <summary type="html">Windows 系统上，开启 WSL2 功能</summary>
     
     
     
@@ -277,7 +298,7 @@
     <link href="https://lijiabao9.github.io/posts/28085396.html"/>
     <id>https://lijiabao9.github.io/posts/28085396.html</id>
     <published>2025-09-28T02:25:32.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
     <summary type="html">记录个人开发软件的安装配置</summary>
@@ -296,7 +317,7 @@
     <link href="https://lijiabao9.github.io/posts/d8ebff22.html"/>
     <id>https://lijiabao9.github.io/posts/d8ebff22.html</id>
     <published>2025-09-27T02:15:32.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
     <summary type="html">记录个人常用软件的安装配置</summary>
@@ -315,7 +336,7 @@
     <link href="https://lijiabao9.github.io/posts/27853e63.html"/>
     <id>https://lijiabao9.github.io/posts/27853e63.html</id>
     <published>2025-09-26T13:02:26.000Z</published>
-    <updated>2025-10-29T16:34:49.369Z</updated>
+    <updated>2025-10-29T17:17:23.533Z</updated>
     
     
     <summary type="html">带你玩转 Butterfly 主题的 Tag Plugins Plus 插件！手把手教你各种标签怎么用，轻松搞定花式排版和交互效果。</summary>
@@ -334,7 +355,7 @@
     <link href="https://lijiabao9.github.io/posts/54e68d5e.html"/>
     <id>https://lijiabao9.github.io/posts/54e68d5e.html</id>
     <published>2025-09-25T12:30:02.000Z</published>
-    <updated>2025-10-29T16:34:49.369Z</updated>
+    <updated>2025-10-29T17:17:23.533Z</updated>
     
     
     <summary type="html">深入探索 Hexo Butterfly 主题强大的标签外挂（Tag Plugins）功能，详细介绍外挂标签的语法及效果。</summary>
@@ -353,10 +374,10 @@
     <link href="https://lijiabao9.github.io/posts/f7494f28.html"/>
     <id>https://lijiabao9.github.io/posts/f7494f28.html</id>
     <published>2025-09-24T12:00:58.000Z</published>
-    <updated>2025-10-29T16:34:49.369Z</updated>
+    <updated>2025-10-29T17:17:23.533Z</updated>
     
     
-    <summary type="html">记录 Butterfly 主题在 Hexo 的完整应用，以及深度定制过程</summary>
+    <summary type="html">Butterfly 主题在 Hexo 的完整应用，以及深度定制过程</summary>
     
     
     
@@ -374,7 +395,7 @@
     <link href="https://lijiabao9.github.io/posts/39541a22.html"/>
     <id>https://lijiabao9.github.io/posts/39541a22.html</id>
     <published>2025-09-23T11:30:58.000Z</published>
-    <updated>2025-10-29T16:34:49.369Z</updated>
+    <updated>2025-10-29T17:17:23.533Z</updated>
     
     
     <summary type="html">从零开始搭建 Hexo 博客，包括超简单的一键部署和自动部署，还有实用的 SEO 优化插件，让你的文章轻松被搜到！</summary>
@@ -393,7 +414,7 @@
     <link href="https://lijiabao9.github.io/posts/3c50d03d.html"/>
     <id>https://lijiabao9.github.io/posts/3c50d03d.html</id>
     <published>2025-09-22T11:00:15.000Z</published>
-    <updated>2025-10-29T16:34:49.370Z</updated>
+    <updated>2025-10-29T17:17:23.534Z</updated>
     
     
     <summary type="html">Markdown 是一种轻量级标记语言，语法十分简单，常用的标记符号不超过十个。</summary>
