@@ -6,7 +6,7 @@
   <link href="https://lijiabao9.github.io/atom.xml" rel="self"/>
   
   <link href="https://lijiabao9.github.io/"/>
-  <updated>2025-11-06T14:49:44.031Z</updated>
+  <updated>2025-11-22T02:38:26.694Z</updated>
   <id>https://lijiabao9.github.io/</id>
   
   <author>
@@ -17,11 +17,34 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Open-WebUI服务搭建</title>
+    <link href="https://lijiabao9.github.io/posts/8059d2f8.html"/>
+    <id>https://lijiabao9.github.io/posts/8059d2f8.html</id>
+    <published>2025-10-18T02:58:00.000Z</published>
+    <updated>2025-11-22T02:38:26.694Z</updated>
+    
+    
+    <summary type="html">基于 Docker 搭建 Open-WebUI 服务，集成本地 Ollama 大模型，搭建私有的 ChatGPT 服务</summary>
+    
+    
+    
+    <category term="极客工具" scheme="https://lijiabao9.github.io/categories/%E6%9E%81%E5%AE%A2%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="Open WebUI" scheme="https://lijiabao9.github.io/tags/Open-WebUI/"/>
+    
+    <category term="Ollama" scheme="https://lijiabao9.github.io/tags/Ollama/"/>
+    
+    <category term="Docker" scheme="https://lijiabao9.github.io/tags/Docker/"/>
+    
+  </entry>
+  
+  <entry>
     <title>SpringBoot 中 MyBatis-Plus 的使用</title>
     <link href="https://lijiabao9.github.io/posts/9e4fe7fb.html"/>
     <id>https://lijiabao9.github.io/posts/9e4fe7fb.html</id>
     <published>2025-10-17T12:33:00.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">SpingBoot 中， MyBatis-Plus 的引入以及使用</summary>
@@ -44,7 +67,7 @@
     <link href="https://lijiabao9.github.io/posts/4ea93f30.html"/>
     <id>https://lijiabao9.github.io/posts/4ea93f30.html</id>
     <published>2025-10-16T15:40:08.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">SpringBoot 快速引入 Swagger 配置</summary>
@@ -69,7 +92,7 @@
     <link href="https://lijiabao9.github.io/posts/41c97312.html"/>
     <id>https://lijiabao9.github.io/posts/41c97312.html</id>
     <published>2025-10-15T02:01:28.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">Docker 的常用语法</summary>
@@ -88,7 +111,7 @@
     <link href="https://lijiabao9.github.io/posts/bc681fc7.html"/>
     <id>https://lijiabao9.github.io/posts/bc681fc7.html</id>
     <published>2025-10-13T17:34:29.000Z</published>
-    <updated>2025-11-06T14:49:44.030Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">在 Ubuntu 系统下安装 Docker</summary>
@@ -109,7 +132,7 @@
     <link href="https://lijiabao9.github.io/posts/f98e6bdc.html"/>
     <id>https://lijiabao9.github.io/posts/f98e6bdc.html</id>
     <published>2025-10-12T16:30:39.000Z</published>
-    <updated>2025-11-06T14:49:44.030Z</updated>
+    <updated>2025-11-22T02:38:26.693Z</updated>
     
     
     <summary type="html">Oracle 实例，防火墙配置</summary>
@@ -130,7 +153,7 @@
     <link href="https://lijiabao9.github.io/posts/130e73fe.html"/>
     <id>https://lijiabao9.github.io/posts/130e73fe.html</id>
     <published>2025-10-11T16:15:13.000Z</published>
-    <updated>2025-11-06T14:49:44.030Z</updated>
+    <updated>2025-11-22T02:38:26.693Z</updated>
     
     
     <summary type="html">创建的 Oracle 实例，如何重新安装系统</summary>
@@ -151,7 +174,7 @@
     <link href="https://lijiabao9.github.io/posts/a281d7c0.html"/>
     <id>https://lijiabao9.github.io/posts/a281d7c0.html</id>
     <published>2025-10-10T16:38:36.000Z</published>
-    <updated>2025-11-06T14:49:44.030Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">在 Ubuntu 系统上安装 JDK 的过程</summary>
@@ -172,7 +195,7 @@
     <link href="https://lijiabao9.github.io/posts/9786c4e2.html"/>
     <id>https://lijiabao9.github.io/posts/9786c4e2.html</id>
     <published>2025-10-10T08:05:25.000Z</published>
-    <updated>2025-11-06T14:49:44.030Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">常用的 Ubuntu 系统的命令手册</summary>
@@ -191,7 +214,7 @@
     <link href="https://lijiabao9.github.io/posts/9aade25f.html"/>
     <id>https://lijiabao9.github.io/posts/9aade25f.html</id>
     <published>2025-10-09T07:41:57.000Z</published>
-    <updated>2025-11-06T14:49:44.030Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">基于 PicGo 搭配 GitHub 实现图床，一键上传图片</summary>
@@ -214,7 +237,7 @@
     <link href="https://lijiabao9.github.io/posts/a30910d1.html"/>
     <id>https://lijiabao9.github.io/posts/a30910d1.html</id>
     <published>2025-10-08T10:55:32.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">Windows 安装 Zsh，用 Oh-My-Zsh 美化</summary>
@@ -237,7 +260,7 @@
     <link href="https://lijiabao9.github.io/posts/891810e3.html"/>
     <id>https://lijiabao9.github.io/posts/891810e3.html</id>
     <published>2025-10-07T07:55:32.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">Windows 安装 powershell7，用 Oh-My-Posh 美化</summary>
@@ -260,7 +283,7 @@
     <link href="https://lijiabao9.github.io/posts/b08af876.html"/>
     <id>https://lijiabao9.github.io/posts/b08af876.html</id>
     <published>2025-10-06T03:09:08.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">Intelij IDEA 2025 的安装破解，以及常用设置</summary>
@@ -281,7 +304,7 @@
     <link href="https://lijiabao9.github.io/posts/3fb3953a.html"/>
     <id>https://lijiabao9.github.io/posts/3fb3953a.html</id>
     <published>2025-10-04T17:27:05.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">Visual Code 的安装，与常用配置</summary>
@@ -302,7 +325,7 @@
     <link href="https://lijiabao9.github.io/posts/fe774eb4.html"/>
     <id>https://lijiabao9.github.io/posts/fe774eb4.html</id>
     <published>2025-10-03T17:04:36.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">Sublime Text 4 安装破解，以及自定义构建指令</summary>
@@ -323,7 +346,7 @@
     <link href="https://lijiabao9.github.io/posts/922d9e90.html"/>
     <id>https://lijiabao9.github.io/posts/922d9e90.html</id>
     <published>2025-10-03T07:55:32.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">PostgreSQL 服务，使用 .zip 压缩包方式的安装与配置</summary>
@@ -344,7 +367,7 @@
     <link href="https://lijiabao9.github.io/posts/8b39915a.html"/>
     <id>https://lijiabao9.github.io/posts/8b39915a.html</id>
     <published>2025-10-02T04:55:32.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">MySQL 服务，使用 .zip 压缩包方式的安装与配置</summary>
@@ -365,7 +388,7 @@
     <link href="https://lijiabao9.github.io/posts/e2b31524.html"/>
     <id>https://lijiabao9.github.io/posts/e2b31524.html</id>
     <published>2025-10-01T07:55:32.000Z</published>
-    <updated>2025-11-06T14:49:44.032Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">Navicat 软件的安装和破解</summary>
@@ -386,7 +409,7 @@
     <link href="https://lijiabao9.github.io/posts/3fdf137b.html"/>
     <id>https://lijiabao9.github.io/posts/3fdf137b.html</id>
     <published>2025-09-30T02:35:32.000Z</published>
-    <updated>2025-11-06T14:49:44.032Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">Internet Download Manager 软件的安装和破解</summary>
@@ -407,7 +430,7 @@
     <link href="https://lijiabao9.github.io/posts/ba5ff534.html"/>
     <id>https://lijiabao9.github.io/posts/ba5ff534.html</id>
     <published>2025-09-29T00:25:03.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
+    <updated>2025-11-22T02:38:26.694Z</updated>
     
     
     <summary type="html">Windows 系统上，开启 WSL2 功能</summary>
@@ -420,25 +443,6 @@
     <category term="Software" scheme="https://lijiabao9.github.io/tags/Software/"/>
     
     <category term="WSL" scheme="https://lijiabao9.github.io/tags/WSL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>开发软件安装</title>
-    <link href="https://lijiabao9.github.io/posts/28085396.html"/>
-    <id>https://lijiabao9.github.io/posts/28085396.html</id>
-    <published>2025-09-28T02:25:32.000Z</published>
-    <updated>2025-11-06T14:49:44.031Z</updated>
-    
-    
-    <summary type="html">记录个人开发软件的安装配置</summary>
-    
-    
-    
-    <category term="软件安装" scheme="https://lijiabao9.github.io/categories/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/"/>
-    
-    
-    <category term="Software" scheme="https://lijiabao9.github.io/tags/Software/"/>
     
   </entry>
   
