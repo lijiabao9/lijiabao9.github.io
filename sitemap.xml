@@ -2,24 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://lijiabao9.github.io/gallery/index.html</loc>
-    
-    <lastmod>2025-11-29</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lijiabao9.github.io/link/index.html</loc>
-    
-    <lastmod>2025-11-29</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://lijiabao9.github.io/shuoshuo/index.html</loc>
     
     <lastmod>2025-11-29</lastmod>
@@ -38,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/posts/4a17b156.html</loc>
+    <loc>https://lijiabao9.github.io/categories/index.html</loc>
     
     <lastmod>2025-11-29</lastmod>
     
@@ -56,6 +38,24 @@
   </url>
   
   <url>
+    <loc>https://lijiabao9.github.io/gallery/index.html</loc>
+    
+    <lastmod>2025-11-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/link/index.html</loc>
+    
+    <lastmod>2025-11-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://lijiabao9.github.io/gallery/example/index.html</loc>
     
     <lastmod>2025-11-29</lastmod>
@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/categories/index.html</loc>
+    <loc>https://lijiabao9.github.io/posts/4a17b156.html</loc>
     
     <lastmod>2025-11-29</lastmod>
     

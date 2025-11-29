@@ -5,3 +5,12 @@
 #footer {
     background: transparent !important;
 }
+
+/* 导航栏，彩色图标 */
+svg.icon {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
