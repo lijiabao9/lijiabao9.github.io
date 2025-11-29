@@ -1,0 +1,7 @@
+/* 一图流配置，隐藏 banner 和 footer 的图片 */
+#page-header {
+    background: transparent !important;
+}
+#footer {
+    background: transparent !important;
+}
