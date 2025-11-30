@@ -1,0 +1,457 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Markdown 语法速查手册：新手 5 分钟入门 | Gabriel的博客</title><meta name="author" content="Gabriel"><meta name="copyright" content="Gabriel"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本篇文档提供详尽的 Markdown 语法速查表，涵盖标题、引用、代码块、表格、图片及链接等核心用法。内容简洁明了，配合实时预览效果，助您快速掌握Markdown，提升写作与排版效率。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Markdown 语法速查手册：新手 5 分钟入门">
+<meta property="og:url" content="https://lijiabao9.github.io/posts/b973e285.html">
+<meta property="og:site_name" content="Gabriel的博客">
+<meta property="og:description" content="本篇文档提供详尽的 Markdown 语法速查表，涵盖标题、引用、代码块、表格、图片及链接等核心用法。内容简洁明了，配合实时预览效果，助您快速掌握Markdown，提升写作与排版效率。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp">
+<meta property="article:published_time" content="2025-11-30T06:06:46.000Z">
+<meta property="article:modified_time" content="2025-11-30T06:46:05.535Z">
+<meta property="article:author" content="Gabriel">
+<meta property="article:tag" content="Markdown">
+<meta property="article:tag" content="效率工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Markdown 语法速查手册：新手 5 分钟入门",
+  "url": "https://lijiabao9.github.io/posts/b973e285.html",
+  "image": "https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp",
+  "datePublished": "2025-11-30T06:06:46.000Z",
+  "dateModified": "2025-11-30T06:46:05.535Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Gabriel",
+      "url": "https://lijiabao9.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/favicon.webp"><link rel="canonical" href="https://lijiabao9.github.io/posts/b973e285.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3-b2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: Gabriel","link":"链接: ","source":"来源: Gabriel的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Markdown 语法速查手册：新手 5 分钟入门',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/assets/css/custom.css"><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@latest/css/all.min.css""><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="Gabriel的博客" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/site-background.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><!-- 默认动画效果，需要依赖 font-awesome-animation 样式--><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-recommend"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Gabriel的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Markdown 语法速查手册：新手 5 分钟入门</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><!-- 默认动画效果，需要依赖 font-awesome-animation 样式--><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-recommend"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Markdown 语法速查手册：新手 5 分钟入门</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-30T06:06:46.000Z" title="发表于 2025-11-30 14:06:46">2025-11-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-30T06:46:05.535Z" title="更新于 2025-11-30 14:46:05">2025-11-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Markdown/">Markdown</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://markdown.com.cn/">Markdown</a> 是一种轻量级标记语言，语法十分简单，常用的标记符号不超过十个。它能让你专注于写作内容，而非复杂的排版格式。</p>
+<h2 id="1-标题语法"><a href="#1-标题语法" class="headerlink" title="1. 标题语法"></a>1. 标题语法</h2><p>要创建标题，在单词或短语前面添加井号（<code>#</code>），并紧跟一个空格。</p>
+<p><code>#</code> 号的数量代表了标题的级别，Markdown 支持 <strong>1~6</strong> 级标题。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <div class="table-container"><table><thead><tr><th style="text-align:left">Markdown 语法</th><th style="text-align:left">效果预览</th></tr></thead><tbody><tr><td style="text-align:left"># 一级标题</td><td style="text-align:left"><font size="6">一级标题</font></td></tr><tr><td style="text-align:left">## 二级标题</td><td style="text-align:left"><font size="5">二级标题</font></td></tr><tr><td style="text-align:left">### 三级标题</td><td style="text-align:left"><font size="4">三级标题</font></td></tr><tr><td style="text-align:left">#### 四级标题</td><td style="text-align:left"><font size="3">四级标题</font></td></tr><tr><td style="text-align:left">##### 五级标题</td><td style="text-align:left"><font size="2">五级标题</font></td></tr><tr><td style="text-align:left">###### 六级标题</td><td style="text-align:left"><font size="1">六级标题</font></td></tr></tbody></table></div>
+              </div>
+            </details>
+<h2 id="2-强调语法"><a href="#2-强调语法" class="headerlink" title="2. 强调语法"></a>2. 强调语法</h2><p>Markdown 使用星号 <code>*</code> 或下划线 <code>_</code> 来标记需要强调的文本。</p>
+<ul>
+<li>要用 <em>斜体</em> 显示文本，在单词或短语前后添加一个星号 <code>*</code>。</li>
+<li>要 <strong>加粗</strong> 文本，在单词或短语的前后各添加两个星号 <code>**</code>。</li>
+<li>要同时用 <strong><em>粗体和斜体</em></strong> 突出显示文本，在单词或短语的前后各添加三个星号 <code>***</code>。</li>
+</ul>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <div class="table-container"><table><thead><tr><th style="text-align:left">Markdonwn 语法</th><th style="text-align:left">效果预览</th></tr></thead><tbody><tr><td style="text-align:left">Italicized text is the *cat’s meow*.</td><td style="text-align:left">Italicized text is the <em>cat’s meow</em>.</td></tr><tr><td style="text-align:left">I just love **bold text**.</td><td style="text-align:left">I just love <strong>bold text</strong>.</td></tr><tr><td style="text-align:left">This text is ***really important***.</td><td style="text-align:left">This text is <strong><em>really important</em></strong>.</td></tr></tbody></table></div>
+              </div>
+            </details>
+<h2 id="3-引用语法"><a href="#3-引用语法" class="headerlink" title="3. 引用语法"></a>3. 引用语法</h2><p>要创建块引用（Blockquotes），在段落前添加一个 <code>&gt;</code> 符号，后面紧跟一个空格。引用块可以嵌套，也可以包含其他 Markdown 元素。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="quote">&gt; I&#x27;ve got my heart set on reaching out to the world.</span></span><br><span class="line"><span class="quote">&gt; </span></span><br><span class="line"><span class="quote">&gt; I&#x27;m not in the mood to go back to the beginning.</span></span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><blockquote><p>I’ve got my heart set on reaching out to the world.</p><p>I’m not in the mood to go back to the beginning.</p></blockquote>
+              </div>
+            </details>
+<h2 id="4-列表语法"><a href="#4-列表语法" class="headerlink" title="4. 列表语法"></a>4. 列表语法</h2><p>可以将多个条目组织成有序或无序列表。</p>
+<ul>
+<li><strong>有序列表</strong>：在每个列表项前添加数字，并紧跟一个英文句点，再紧跟一个空格。数字不必按数学顺序排列，但列表将以数字 1 起始。</li>
+<li><strong>无序列表</strong>：在每个列表项前面添加破折号 <code>-</code>、星号 <code>*</code> 或加号 <code>+</code>，后面紧跟一个空格。</li>
+</ul>
+<details class="folding-tag" green><summary> 有序列表 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> First item</span><br><span class="line"><span class="bullet">2.</span> Second item</span><br><span class="line"><span class="bullet">3.</span> Third item</span><br><span class="line"><span class="bullet">    1.</span> Indented item</span><br><span class="line"><span class="bullet">    2.</span> Indented item</span><br><span class="line"><span class="bullet">4.</span> Fourth item</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><ol><li>First item</li><li>Second item</li><li>Third item<ol><li>Indented item</li><li>Indented item</li></ol></li><li>Fourth item</li></ol>
+              </div>
+            </details>
+<details class="folding-tag" green><summary> 无序列表 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> First item</span><br><span class="line"><span class="bullet">-</span> Second item</span><br><span class="line"><span class="bullet">-</span> Third item</span><br><span class="line"><span class="bullet">    -</span> Indented item</span><br><span class="line"><span class="bullet">    -</span> Indented item</span><br><span class="line"><span class="bullet">-</span> Fourth item</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><ul><li>First item</li><li>Second item</li><li>Third item<ul><li>Indented item</li><li>Indented item</li></ul></li><li>Fourth item</li></ul>
+              </div>
+            </details>
+<h2 id="5-代码语法"><a href="#5-代码语法" class="headerlink" title="5. 代码语法"></a>5. 代码语法</h2><ul>
+<li><strong>行内代码</strong>：要将单词或短语表示为代码，将其包裹在反引号 (<code>`</code>) 中。</li>
+<li><strong>代码块</strong>：在代码块前后行上使用三个反引号（<code>```</code>）。在首行的反引号后指定语言名称（如 <code>json</code>, <code>python</code>, <code>java</code>），可实现语法高亮。</li>
+</ul>
+<div class="note warning flat"><p><strong>注意：</strong><br>如果 <em>行内代码</em> 包含行内代码，最外层请使用双反引号 (<code>``</code>) 包裹；<br>如果 <em>代码块</em> 中包含代码块，最外层请使用四个反引号（<code>````</code>）包裹。</p>
+</div>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <div class="table-container"><table><thead><tr><th style="text-align:left">Markdonwn 语法</th><th style="text-align:left">效果预览</th></tr></thead><tbody><tr><td style="text-align:left">At the command prompt, type `nano`</td><td style="text-align:left">At the command prompt, type <code>nano</code>.</td></tr><tr><td style="text-align:left">``Use `code` in your Markdown file.``</td><td style="text-align:left"><code>Use `code` in your Markdown file.</code></td></tr></tbody></table></div><p>代码块书写源码：</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">```json</span></span><br><span class="line"><span class="code">&#123;</span></span><br><span class="line"><span class="code">  &quot;firstName&quot;: &quot;John&quot;,</span></span><br><span class="line"><span class="code">  &quot;lastName&quot;: &quot;Smith&quot;,</span></span><br><span class="line"><span class="code">  &quot;age&quot;: 25</span></span><br><span class="line"><span class="code">&#125;</span></span><br><span class="line"><span class="code">```</span></span><br></pre></td></tr></table></figure><p>代码块效果如下：</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;firstName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;John&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;lastName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Smith&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">25</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+              </div>
+            </details>
+<h2 id="6-分隔线语法"><a href="#6-分隔线语法" class="headerlink" title="6. 分隔线语法"></a>6. 分隔线语法</h2><p>要创建分隔线，在单独一行上使用三个或多个破折号 (<code>---</code>)、星号 (<code>***</code>) 或下划线 (<code>___</code>) ，并且行内不能包含其他内容。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Try to put a blank line before...</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">...and after a horizontal rule.</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><p>Try to put a blank line before…</p><hr><p>…and after a horizontal rule.</p>
+              </div>
+            </details>
+<h2 id="7-链接语法"><a href="#7-链接语法" class="headerlink" title="7. 链接语法"></a>7. 链接语法</h2><p>链接文本放在 <strong>方括号</strong> 内，链接地址放在后面的 <strong>圆括号</strong> 中，链接 title（鼠标悬停提示）为可选内容。</p>
+<p>语法格式：<code>[content](url title)</code></p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这是一个链接 [<span class="string">Markdown 语法</span>](<span class="link">https://markdown.com.cn &quot;最好的 markdown 教程&quot;</span>)。</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><p>这是一个链接 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://markdown.com.cn" title="最好的 markdown 教程">Markdown 语法</a>。</p>
+              </div>
+            </details>
+<h2 id="8-图片语法"><a href="#8-图片语法" class="headerlink" title="8. 图片语法"></a>8. 图片语法</h2><p>添加图片的语法与链接非常相似，只需在最前面多添加一个感叹号 (<code>!</code>)。</p>
+<p>语法格式：<code>![alt](url title)</code></p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![<span class="string">我的头像</span>](<span class="link">https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp &quot;这是我的头像&quot;</span>)</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><p><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" alt="我的头像" title="这是我的头像"></p>
+              </div>
+            </details>
+<h2 id="9-转义字符语法"><a href="#9-转义字符语法" class="headerlink" title="9. 转义字符语法"></a>9. 转义字符语法</h2><p>如果要显示 Markdown 语法中使用的特殊字符（如 <code>*</code>, <code>#</code>, <code>\</code> 等），需在字符前面添加反斜杠 <code>\</code> 进行转义。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\* Without the backslash, this would be a bullet in an unordered list.</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><p>* Without the backslash, this would be a bullet in an unordered list.</p>
+              </div>
+            </details>
+<h2 id="10-表格语法"><a href="#10-表格语法" class="headerlink" title="10. 表格语法"></a>10. 表格语法</h2><p>使用三个或多个连字符（<code>---</code>）创建表头分隔线，并使用管道符（<code>|</code>）分隔每一列。</p>
+<p><strong>对齐方式</strong>：</p>
+<ul>
+<li><code>:---</code> 左对齐</li>
+<li><code>:---:</code> 居中对齐</li>
+<li><code>---:</code> 右对齐</li>
+</ul>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">| 姓名  | 性别 |</span><br><span class="line">|:----|:---|</span><br><span class="line">| 李雷  | 男  |</span><br><span class="line">| 韩梅梅 | 女  |</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><div class="table-container"><table><thead><tr><th style="text-align:left">姓名</th><th style="text-align:left">性别</th></tr></thead><tbody><tr><td style="text-align:left">李雷</td><td style="text-align:left">男</td></tr><tr><td style="text-align:left">韩梅梅</td><td style="text-align:left">女</td></tr></tbody></table></div>
+              </div>
+            </details>
+<h2 id="11-删除线语法"><a href="#11-删除线语法" class="headerlink" title="11. 删除线语法"></a>11. 删除线语法</h2><p>要给文本添加删除线，请使用两个波浪号 <code>~~</code> 包裹文本。</p>
+<details class="folding-tag" green><summary> 语法效果 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~~世界是平坦的。~~ 我们现在知道世界是圆的。</span><br></pre></td></tr></table></figure><p>渲染效果如下所示：</p><p><del>世界是平坦的。</del> 我们现在知道世界是圆的。</p>
+              </div>
+            </details></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io">Gabriel</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io/posts/b973e285.html">https://lijiabao9.github.io/posts/b973e285.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lijiabao9.github.io" target="_blank">Gabriel的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Markdown/">Markdown</a><a class="post-meta__tags" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/">效率工具</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechat.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechat.webp" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/a9a95ebd.html" title="Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)</div></div><div class="info-2"><div class="info-item-1">一文掌握 Butterfly 主题所有强大的标签外挂功能。包含原生标签及 Tag Plugins Plus 增强插件的完整语法、效果预览与源码示例。</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Gabriel</div><div class="author-info-description">记录技术探索，也写人间烟火。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lijiabao9"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:ljiabao9@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #D14836;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">新手上路 | 这里记录着从 Hello World 到 Hello Universe 的每一步探索 🌌</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A0%87%E9%A2%98%E8%AF%AD%E6%B3%95"><span class="toc-text">1. 标题语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%BC%BA%E8%B0%83%E8%AF%AD%E6%B3%95"><span class="toc-text">2. 强调语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%BC%95%E7%94%A8%E8%AF%AD%E6%B3%95"><span class="toc-text">3. 引用语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%97%E8%A1%A8%E8%AF%AD%E6%B3%95"><span class="toc-text">4. 列表语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%BB%A3%E7%A0%81%E8%AF%AD%E6%B3%95"><span class="toc-text">5. 代码语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%88%86%E9%9A%94%E7%BA%BF%E8%AF%AD%E6%B3%95"><span class="toc-text">6. 分隔线语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E9%93%BE%E6%8E%A5%E8%AF%AD%E6%B3%95"><span class="toc-text">7. 链接语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%9B%BE%E7%89%87%E8%AF%AD%E6%B3%95"><span class="toc-text">8. 图片语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E8%AF%AD%E6%B3%95"><span class="toc-text">9. 转义字符语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E8%A1%A8%E6%A0%BC%E8%AF%AD%E6%B3%95"><span class="toc-text">10. 表格语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E5%88%A0%E9%99%A4%E7%BA%BF%E8%AF%AD%E6%B3%95"><span class="toc-text">11. 删除线语法</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/b973e285.html" title="Markdown 语法速查手册：新手 5 分钟入门"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Markdown 语法速查手册：新手 5 分钟入门"/></a><div class="content"><a class="title" href="/posts/b973e285.html" title="Markdown 语法速查手册：新手 5 分钟入门">Markdown 语法速查手册：新手 5 分钟入门</a><time datetime="2025-11-30T06:06:46.000Z" title="发表于 2025-11-30 14:06:46">2025-11-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/a9a95ebd.html" title="Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)"/></a><div class="content"><a class="title" href="/posts/a9a95ebd.html" title="Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)">Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)</a><time datetime="2025-11-29T16:11:51.000Z" title="发表于 2025-11-30 00:11:51">2025-11-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/2a3bd2c2.html" title="Hexo 博客进阶：Butterfly 主题深度美化与源码级魔改"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo 博客进阶：Butterfly 主题深度美化与源码级魔改"/></a><div class="content"><a class="title" href="/posts/2a3bd2c2.html" title="Hexo 博客进阶：Butterfly 主题深度美化与源码级魔改">Hexo 博客进阶：Butterfly 主题深度美化与源码级魔改</a><time datetime="2025-11-29T08:31:27.000Z" title="发表于 2025-11-29 16:31:27">2025-11-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Gabriel</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3-b2</a></span></div><div class="footer_custom_text">🚧 施工中 | 这是一个程序员用代码和咖啡构建的思维城堡 💻☕ | Bug和灵感同样欢迎！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3-b2"></script><script src="/js/main.js?v=5.5.3-b2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="2761236917" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="且听风吟" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3-b2"></script></div></div><!-- hexo injector body_end start --><script async src="/assets/js/ali/iconfont.js"></script><!-- hexo injector body_end end --></body></html>
