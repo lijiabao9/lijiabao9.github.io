@@ -1,0 +1,436 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>WSL2 全方位指南：安装、配置、迁移与网络优化 | Gabriel的博客</title><meta name="author" content="Gabriel"><meta name="copyright" content="Gabriel"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文详细介绍 Windows Subsystem for Linux (WSL2) 的安装步骤、常用管理命令。深入讲解如何迁移 Linux 子系统存储位置到非系统盘，以及如何配置环境变量隔离和 Mirrored 网络模式以解决代理问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WSL2 全方位指南：安装、配置、迁移与网络优化">
+<meta property="og:url" content="https://lijiabao9.github.io/posts/ce55e54a.html">
+<meta property="og:site_name" content="Gabriel的博客">
+<meta property="og:description" content="本文详细介绍 Windows Subsystem for Linux (WSL2) 的安装步骤、常用管理命令。深入讲解如何迁移 Linux 子系统存储位置到非系统盘，以及如何配置环境变量隔离和 Mirrored 网络模式以解决代理问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp">
+<meta property="article:published_time" content="2025-11-30T14:55:59.000Z">
+<meta property="article:modified_time" content="2025-11-30T15:53:28.554Z">
+<meta property="article:author" content="Gabriel">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="WSL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "WSL2 全方位指南：安装、配置、迁移与网络优化",
+  "url": "https://lijiabao9.github.io/posts/ce55e54a.html",
+  "image": "https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp",
+  "datePublished": "2025-11-30T14:55:59.000Z",
+  "dateModified": "2025-11-30T15:53:28.554Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Gabriel",
+      "url": "https://lijiabao9.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/favicon.webp"><link rel="canonical" href="https://lijiabao9.github.io/posts/ce55e54a.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3-b2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: Gabriel","link":"链接: ","source":"来源: Gabriel的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'WSL2 全方位指南：安装、配置、迁移与网络优化',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/assets/css/custom.css"><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@latest/css/all.min.css""><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="Gabriel的博客" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/site-background.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><div class="menus_items"><!-- 默认动画效果，需要依赖 font-awesome-animation 样式--><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-recommend"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Gabriel的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">WSL2 全方位指南：安装、配置、迁移与网络优化</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><!-- 默认动画效果，需要依赖 font-awesome-animation 样式--><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-recommend"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">WSL2 全方位指南：安装、配置、迁移与网络优化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-30T14:55:59.000Z" title="发表于 2025-11-30 22:55:59">2025-11-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-30T15:53:28.554Z" title="更新于 2025-11-30 23:53:28">2025-11-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">开发环境</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/Windows/">Windows</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>借助适用于 Linux 的 Windows 子系统（WSL2），开发人员可以在 Windows 计算机上直接运行 GNU/Linux 环境（包括大多数命令行工具、实用工具和应用程序），且不会产生传统虚拟机或双启动设置的开销。</p>
+<blockquote>
+<p>官方文档参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://learn.microsoft.com/zh-cn/windows/wsl/install">Microsoft Learn - 安装 WSL</a></p>
+</blockquote>
+<h2 id="基础：开启-WSL-功能"><a href="#基础：开启-WSL-功能" class="headerlink" title="基础：开启 WSL 功能"></a>基础：开启 WSL 功能</h2><h3 id="方法一：命令行一键安装（推荐）"><a href="#方法一：命令行一键安装（推荐）" class="headerlink" title="方法一：命令行一键安装（推荐）"></a>方法一：命令行一键安装（推荐）</h3><p>对于较新的 Windows 10 (2004+) 或 Windows 11，只需以 <strong>管理员身份</strong> 打开 PowerShell 并输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --install</span><br></pre></td></tr></table></figure>
+<p>此命令将自动启用所需的可选组件，下载最新的 Linux 内核，将 WSL 2 设置为默认值，并安装 Ubuntu 发行版。</p>
+<h3 id="方法二：手动启用"><a href="#方法二：手动启用" class="headerlink" title="方法二：手动启用"></a>方法二：手动启用</h3><p>如果你更习惯图形界面，可以在「Windows 功能」中手动开启。</p>
+<ol>
+<li>Win + s 搜索 “启用或关闭 Windows 功能”。</li>
+<li>勾选 <strong>“适用于 Linux 的 Windows 子系统”</strong>。</li>
+<li>点击确定并<strong>重启计算机</strong>。</li>
+</ol>
+<p>重启后，打开 PowerShell 输入 <code>wsl -v</code> 验证版本：</p>
+<blockquote>
+<p><strong>注</strong>：如果 <code>wsl -v</code> 报错，提示无法解析命令，可能需要先执行 <code>wsl --update</code> 进行内核更新。</p>
+</blockquote>
+<h2 id="管理：系统与更新"><a href="#管理：系统与更新" class="headerlink" title="管理：系统与更新"></a>管理：系统与更新</h2><h3 id="常用管理命令"><a href="#常用管理命令" class="headerlink" title="常用管理命令"></a>常用管理命令</h3><details class="folding-tag" cyan><summary> 点击查看常用命令速查表 </summary>
+              <div class='content'>
+              <div class="table-container"><table><thead><tr><th style="text-align:left">描述</th><th style="text-align:left">命令</th></tr></thead><tbody><tr><td style="text-align:left"><strong>检查更新</strong></td><td style="text-align:left"><code>wsl --update</code></td></tr><tr><td style="text-align:left"><strong>查看在线可用系统</strong></td><td style="text-align:left"><code>wsl --list --online</code> (或 <code>wsl -l -o</code>)</td></tr><tr><td style="text-align:left"><strong>查看已安装系统</strong></td><td style="text-align:left"><code>wsl --list --verbose</code> (或 <code>wsl -l -v</code>)</td></tr><tr><td style="text-align:left"><strong>关闭所有系统</strong></td><td style="text-align:left"><code>wsl --shutdown</code></td></tr><tr><td style="text-align:left"><strong>停止系统</strong></td><td style="text-align:left"><code>wsl --terminate &lt;DistroName&gt;</code></td></tr><tr><td style="text-align:left"><strong>注销(删除)系统</strong></td><td style="text-align:left"><code>wsl --unregister &lt;DistroName&gt;</code></td></tr><tr><td style="text-align:left"><strong>导出系统</strong></td><td style="text-align:left"><code>wsl --export &lt;DistroName&gt; &lt;FileName&gt;</code></td></tr><tr><td style="text-align:left"><strong>导入系统</strong></td><td style="text-align:left"><code>wsl --import &lt;DistroName&gt; &lt;InstallLocation&gt; &lt;FileName&gt;</code></td></tr></tbody></table></div><ul><li><strong>FileName</strong>：默认为 <code>.tar</code> 格式。</li><li><strong>更多命令</strong>：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://learn.microsoft.com/zh-cn/windows/wsl/basic-commands#update-wsl">基本 WSL 命令</a></li></ul>
+              </div>
+            </details>
+<h3 id="安装-Ubuntu"><a href="#安装-Ubuntu" class="headerlink" title="安装 Ubuntu"></a>安装 Ubuntu</h3><ol>
+<li><p><strong>查看可用列表</strong>：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --list --online</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>安装指定版本</strong>：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --install Ubuntu</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>设置默认系统</strong>（如果你安装了多个发行版）：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default Ubuntu</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="启动系统"><a href="#启动系统" class="headerlink" title="启动系统"></a>启动系统</h3><ul>
+<li><strong>默认系统</strong>：直接在命令行输入 <code>wsl</code>。</li>
+<li><strong>指定系统</strong>：输入 <code>wsl -d &lt;发行版名称&gt;</code>，例如 <code>wsl -d Ubuntu</code>。</li>
+</ul>
+<h2 id="进阶：存储位置迁移"><a href="#进阶：存储位置迁移" class="headerlink" title="进阶：存储位置迁移"></a>进阶：存储位置迁移</h2><p>WSL2 安装的 Linux 系统默认存储在 C 盘（<code>%LOCALAPPDATA%\Packages</code> 下）。随着开发环境的膨胀，C 盘空间可能告急。我们可以将其导出并迁移到其他磁盘。</p>
+<p><strong>操作步骤：</strong></p>
+<ol>
+<li><p><strong>停止 WSL 服务</strong>：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --shutdown</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>导出系统备份</strong>：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建临时目录</span></span><br><span class="line"><span class="built_in">mkdir</span> D:\tmp</span><br><span class="line"><span class="comment"># 导出 Ubuntu 到 tar 文件</span></span><br><span class="line">wsl --<span class="built_in">export</span> Ubuntu D:\tmp\Ubuntu.tar</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>注销当前系统</strong>（注意：这会删除 C 盘的原有系统）：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --unregister Ubuntu</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>导入到新位置</strong>：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建新的存储目录</span></span><br><span class="line"><span class="built_in">mkdir</span> D:\WslDistro</span><br><span class="line"><span class="comment"># 导入系统</span></span><br><span class="line">wsl --import Ubuntu D:\WslDistro D:\tmp\Ubuntu.tar</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p><strong>注意：用户身份重置问题</strong><br>使用 <code>--import</code> 恢复的系统，默认登录用户会变回 <code>root</code>。如果需要恢复默认登录为你的普通用户（例如 <code>gabriel</code>），</p>
+<ul>
+<li>需要在 Ubuntu 内部创建或修改 <code>/etc/wsl.conf</code> 文件（见下文配置）</li>
+<li>或者使用 <code>Ubuntu config --default-user gabriel</code> 命令设置默认用户</li>
+</ul>
+</blockquote>
+<h2 id="配置：环境隔离与网络"><a href="#配置：环境隔离与网络" class="headerlink" title="配置：环境隔离与网络"></a>配置：环境隔离与网络</h2><h3 id="环境变量独立"><a href="#环境变量独立" class="headerlink" title="环境变量独立"></a>环境变量独立</h3><p>默认情况下，WSL 会继承 Windows 的 PATH 环境变量（例如你可以直接在 Linux 里调用 <code>notepad.exe</code>）。但这可能导致 PATH 变量过长或命令冲突。</p>
+<p>若需隔离环境，请进入 Ubuntu 系统，编辑 <code>/etc/wsl.conf</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/wsl.conf</span><br></pre></td></tr></table></figure>
+<p>添加以下内容：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[boot]</span></span><br><span class="line"><span class="attr">systemd</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[user]</span></span><br><span class="line"><span class="comment"># 确保这里填写你迁移前创建的用户名，否则导入后默认是 root</span></span><br><span class="line"><span class="attr">default</span>=gabriel</span><br><span class="line"></span><br><span class="line"><span class="section">[interop]</span></span><br><span class="line"><span class="comment"># 禁止将 Windows PATH 添加到 WSL 中</span></span><br><span class="line"><span class="attr">appendWindowsPath</span>=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h3 id="应用宿主机代理-Mirrored-模式"><a href="#应用宿主机代理-Mirrored-模式" class="headerlink" title="应用宿主机代理 (Mirrored 模式)"></a>应用宿主机代理 (Mirrored 模式)</h3><p>在旧版 WSL2 中，Linux 子系统拥有独立的虚拟网卡，导致无法直接共享 Windows 的 VPN 代理，也难以访问局域网设备。</p>
+<p>Windows 11 (22H2 及以上) 引入了 <strong>Mirrored (镜像)</strong> 网络模式，完美解决了这个问题。</p>
+<h4 id="方法一：使用-GUI-设置（推荐）"><a href="#方法一：使用-GUI-设置（推荐）" class="headerlink" title="方法一：使用 GUI 设置（推荐）"></a>方法一：使用 GUI 设置（推荐）</h4><p>在 Windows 【开始】 菜单中找到 <strong>【WSL Settings】</strong> 应用，将网络模式修改为 <strong>Mirrored</strong>：</p>
+<h4 id="方法二：使用配置文件（通用）"><a href="#方法二：使用配置文件（通用）" class="headerlink" title="方法二：使用配置文件（通用）"></a>方法二：使用配置文件（通用）</h4><p>如果找不到 GUI 设置，可以直接修改全局配置文件。在 Windows 用户主目录（<code>C:\Users\&lt;你的用户名&gt;\</code>）下新建或编辑 <code>.wslconfig</code> 文件：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[wsl2]</span></span><br><span class="line"><span class="attr">networkingMode</span>=mirrored</span><br></pre></td></tr></table></figure>
+<p><strong>生效设置：</strong><br>配置修改后，必须完全重启 WSL 才能生效：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl <span class="literal">--shutdown</span></span><br></pre></td></tr></table></figure>
+<p>开启 Mirrored 模式后，WSL2 将直接复用宿主机的网络接口，此时宿主机的代理软件（如 Clash/V2Ray）开启 “TUN 模式” 或 “系统代理” 后，WSL2 即可直接通过代理联网，无需额外配置环境变量。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io">Gabriel</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io/posts/ce55e54a.html">https://lijiabao9.github.io/posts/ce55e54a.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lijiabao9.github.io" target="_blank">Gabriel的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/WSL/">WSL</a><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechat.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechat.webp" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/b973e285.html" title="Markdown 语法速查手册：新手 5 分钟入门"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Markdown 语法速查手册：新手 5 分钟入门</div></div><div class="info-2"><div class="info-item-1">本篇文档提供详尽的 Markdown 语法速查表，涵盖标题、引用、代码块、表格、图片及链接等核心用法。内容简洁明了，配合实时预览效果，助您快速掌握Markdown，提升写作与排版效率。</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Gabriel</div><div class="author-info-description">记录技术探索，也写人间烟火。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lijiabao9"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:ljiabao9@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #D14836;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">新手上路 | 这里记录着从 Hello World 到 Hello Universe 的每一步探索 🌌</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%80%E5%90%AF-WSL-%E5%8A%9F%E8%83%BD"><span class="toc-text">基础：开启 WSL 功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%80%E9%94%AE%E5%AE%89%E8%A3%85%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-text">方法一：命令行一键安装（推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E6%89%8B%E5%8A%A8%E5%90%AF%E7%94%A8"><span class="toc-text">方法二：手动启用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%EF%BC%9A%E7%B3%BB%E7%BB%9F%E4%B8%8E%E6%9B%B4%E6%96%B0"><span class="toc-text">管理：系统与更新</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="toc-text">常用管理命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Ubuntu"><span class="toc-text">安装 Ubuntu</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E7%B3%BB%E7%BB%9F"><span class="toc-text">启动系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%EF%BC%9A%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE%E8%BF%81%E7%A7%BB"><span class="toc-text">进阶：存储位置迁移</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%EF%BC%9A%E7%8E%AF%E5%A2%83%E9%9A%94%E7%A6%BB%E4%B8%8E%E7%BD%91%E7%BB%9C"><span class="toc-text">配置：环境隔离与网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%8B%AC%E7%AB%8B"><span class="toc-text">环境变量独立</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%AE%BF%E4%B8%BB%E6%9C%BA%E4%BB%A3%E7%90%86-Mirrored-%E6%A8%A1%E5%BC%8F"><span class="toc-text">应用宿主机代理 (Mirrored 模式)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E4%BD%BF%E7%94%A8-GUI-%E8%AE%BE%E7%BD%AE%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-text">方法一：使用 GUI 设置（推荐）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%88%E9%80%9A%E7%94%A8%EF%BC%89"><span class="toc-text">方法二：使用配置文件（通用）</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/ce55e54a.html" title="WSL2 全方位指南：安装、配置、迁移与网络优化"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WSL2 全方位指南：安装、配置、迁移与网络优化"/></a><div class="content"><a class="title" href="/posts/ce55e54a.html" title="WSL2 全方位指南：安装、配置、迁移与网络优化">WSL2 全方位指南：安装、配置、迁移与网络优化</a><time datetime="2025-11-30T14:55:59.000Z" title="发表于 2025-11-30 22:55:59">2025-11-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b973e285.html" title="Markdown 语法速查手册：新手 5 分钟入门"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Markdown 语法速查手册：新手 5 分钟入门"/></a><div class="content"><a class="title" href="/posts/b973e285.html" title="Markdown 语法速查手册：新手 5 分钟入门">Markdown 语法速查手册：新手 5 分钟入门</a><time datetime="2025-11-30T06:06:46.000Z" title="发表于 2025-11-30 14:06:46">2025-11-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/a9a95ebd.html" title="Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)"/></a><div class="content"><a class="title" href="/posts/a9a95ebd.html" title="Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)">Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)</a><time datetime="2025-11-29T16:11:51.000Z" title="发表于 2025-11-30 00:11:51">2025-11-30</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Gabriel</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3-b2</a></span></div><div class="footer_custom_text">🚧 施工中 | 这是一个程序员用代码和咖啡构建的思维城堡 💻☕ | Bug和灵感同样欢迎！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3-b2"></script><script src="/js/main.js?v=5.5.3-b2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="2761236917" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="且听风吟" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3-b2"></script></div></div><!-- hexo injector body_end start --><script async src="/assets/js/ali/iconfont.js"></script><!-- hexo injector body_end end --></body></html>
