@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lijiabao9.github.io/categories/index.html</loc>
+    
+    <lastmod>2025-12-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/gallery/index.html</loc>
+    
+    <lastmod>2025-12-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://lijiabao9.github.io/link/index.html</loc>
     
     <lastmod>2025-12-01</lastmod>
@@ -29,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/posts/59e74bb9.html</loc>
+    <loc>https://lijiabao9.github.io/gallery/example/index.html</loc>
     
     <lastmod>2025-12-01</lastmod>
     
@@ -57,33 +75,6 @@
   
   <url>
     <loc>https://lijiabao9.github.io/about/index.html</loc>
-    
-    <lastmod>2025-12-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lijiabao9.github.io/categories/index.html</loc>
-    
-    <lastmod>2025-12-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lijiabao9.github.io/gallery/index.html</loc>
-    
-    <lastmod>2025-12-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lijiabao9.github.io/gallery/example/index.html</loc>
     
     <lastmod>2025-12-01</lastmod>
     
@@ -129,6 +120,24 @@
   
   <url>
     <loc>https://lijiabao9.github.io/posts/ce55e54a.html</loc>
+    
+    <lastmod>2025-12-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/posts/7e710df8.html</loc>
+    
+    <lastmod>2025-12-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/posts/59e74bb9.html</loc>
     
     <lastmod>2025-12-01</lastmod>
     
@@ -216,14 +225,14 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/tags/Git/</loc>
+    <loc>https://lijiabao9.github.io/tags/PowerShell/</loc>
     <lastmod>2025-12-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/tags/Zsh/</loc>
+    <loc>https://lijiabao9.github.io/tags/Oh-My-Posh/</loc>
     <lastmod>2025-12-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -245,6 +254,20 @@
   
   <url>
     <loc>https://lijiabao9.github.io/tags/%E8%AF%AD%E6%B3%95%E6%89%8B%E5%86%8C/</loc>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/tags/Git/</loc>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/tags/Zsh/</loc>
     <lastmod>2025-12-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -274,14 +297,14 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</loc>
+    <loc>https://lijiabao9.github.io/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/Windows/</loc>
     <lastmod>2025-12-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/Windows/</loc>
+    <loc>https://lijiabao9.github.io/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</loc>
     <lastmod>2025-12-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
