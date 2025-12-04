@@ -1,0 +1,415 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Oracle Cloud 实例重装系统：利用替换引导卷 (Replace Boot Volume) 实现系统重置 | Gabriel的博客</title><meta name="author" content="Gabriel"><meta name="copyright" content="Gabriel"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="甲骨文云 (Oracle Cloud) 没有直接的重装系统按钮。本文详解如何通过“替换引导卷”的方式，使用官方镜像 OCID 快速重置 VPS 系统，无需删除重建实例。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle Cloud 实例重装系统：利用替换引导卷 (Replace Boot Volume) 实现系统重置">
+<meta property="og:url" content="https://lijiabao9.github.io/posts/e62f764.html">
+<meta property="og:site_name" content="Gabriel的博客">
+<meta property="og:description" content="甲骨文云 (Oracle Cloud) 没有直接的重装系统按钮。本文详解如何通过“替换引导卷”的方式，使用官方镜像 OCID 快速重置 VPS 系统，无需删除重建实例。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp">
+<meta property="article:published_time" content="2025-12-04T15:40:20.000Z">
+<meta property="article:modified_time" content="2025-12-04T18:40:05.513Z">
+<meta property="article:author" content="Gabriel">
+<meta property="article:tag" content="Oracle">
+<meta property="article:tag" content="云服务器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Oracle Cloud 实例重装系统：利用替换引导卷 (Replace Boot Volume) 实现系统重置",
+  "url": "https://lijiabao9.github.io/posts/e62f764.html",
+  "image": "https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp",
+  "datePublished": "2025-12-04T15:40:20.000Z",
+  "dateModified": "2025-12-04T18:40:05.513Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Gabriel",
+      "url": "https://lijiabao9.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/favicon.webp"><link rel="canonical" href="https://lijiabao9.github.io/posts/e62f764.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3-b2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: Gabriel","link":"链接: ","source":"来源: Gabriel的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Oracle Cloud 实例重装系统：利用替换引导卷 (Replace Boot Volume) 实现系统重置',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/assets/css/custom.css"><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@latest/css/all.min.css""><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="Gabriel的博客" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/site-background.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">40</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><!-- 默认动画效果，需要依赖 font-awesome-animation 样式--><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-recommend"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Gabriel的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Oracle Cloud 实例重装系统：利用替换引导卷 (Replace Boot Volume) 实现系统重置</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><!-- 默认动画效果，需要依赖 font-awesome-animation 样式--><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-recommend"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Oracle Cloud 实例重装系统：利用替换引导卷 (Replace Boot Volume) 实现系统重置</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-04T15:40:20.000Z" title="发表于 2025-12-04 23:40:20">2025-12-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-04T18:40:05.513Z" title="更新于 2025-12-05 02:40:05">2025-12-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">开发环境</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/Oracle-Cloud/">Oracle Cloud</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">729</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>与 AWS 或一般的 VPS 提供商不同，Oracle Cloud (OCI) 的控制台中并没有一个显眼的“重装系统”按钮。</p>
+<p>如果我们把系统玩坏了，或者想更换系统版本（例如从 Ubuntu 20.04 升级到 22.04），最优雅的方法不是删除实例重建（可能会丢 IP），而是使用 <strong>“替换引导卷” (Replace Boot Volume)</strong> 功能。</p>
+<h2 id="第一步：获取目标系统的映像-OCID"><a href="#第一步：获取目标系统的映像-OCID" class="headerlink" title="第一步：获取目标系统的映像 OCID"></a>第一步：获取目标系统的映像 OCID</h2><p>在开始操作前，我们需要知道要安装什么系统。OCI 使用 <strong>OCID</strong> (Oracle Cloud Identifier) 来标识每一个官方镜像。</p>
+<p>我们需要获取目标系统的 OCID，这里有两种方式：</p>
+<h3 id="方式一：使用当前实例同款镜像（最简单）"><a href="#方式一：使用当前实例同款镜像（最简单）" class="headerlink" title="方式一：使用当前实例同款镜像（最简单）"></a>方式一：使用当前实例同款镜像（最简单）</h3><p>如果你只是想把当前的系统“恢复出厂设置”，依旧使用之前的系统版本：</p>
+<ol>
+<li>在实例的 <strong>详细信息 (Instance Details)</strong> 页面。</li>
+<li>找到 <strong>映像详细信息 (Image)</strong> 部分。</li>
+<li>点击 <strong>映像名称</strong> 链接，进入详情页。</li>
+<li>复制 <strong>OCID</strong> 备用。</li>
+</ol>
+<h3 id="方式二：查阅官方文档（更换版本）"><a href="#方式二：查阅官方文档（更换版本）" class="headerlink" title="方式二：查阅官方文档（更换版本）"></a>方式二：查阅官方文档（更换版本）</h3><p>如果你想更换系统版本（例如安装最新的 Ubuntu 24.04），需要去官方文档查找。</p>
+<blockquote>
+<p><strong>官方镜像列表</strong>：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://docs.oracle.com/en-us/iaas/images/">https://docs.oracle.com/en-us/iaas/images/</a></p>
+</blockquote>
+<p><strong>⚠️ 关键注意点：</strong></p>
+<ul>
+<li><strong>区域 (Region)</strong>：必须选择你实例所在的区域（如 Japan East (Osaka) 或 US West (Phoenix)）。</li>
+<li><strong>架构 (Architecture)</strong>：<ul>
+<li>如果是 <strong>AMD</strong> 免费机，找 <code>x86_64</code> 架构的 OCID。</li>
+<li>如果是 <strong>ARM</strong> (4H24G) 机器，必须找 <code>aarch64</code> 架构的 OCID。</li>
+</ul>
+</li>
+</ul>
+<p>复制对应条目的 <strong>OCID</strong>，格式通常为 <code>ocid1.image.oc1.ap-osaka-1.xxxx...</code>。</p>
+<hr>
+<h2 id="第二步：执行替换引导卷"><a href="#第二步：执行替换引导卷" class="headerlink" title="第二步：执行替换引导卷"></a>第二步：执行替换引导卷</h2><p>拿到 OCID 后，就可以开始“重装”了。</p>
+<div class="note warning flat"><p><strong>高能预警</strong>：<br>此操作会<strong>销毁并删除</strong>当前的引导卷（系统盘）。请务必备份旧系统盘内的重要数据！<br>此操作<strong>不会</strong>改变实例的公网 IP 地址。</p>
+</div>
+<ol>
+<li>登录 Oracle 控制台，进入实例详情页面。</li>
+<li>在上方菜单点击 <strong>存储 (Storage)</strong> -&gt; <strong>引导卷 (Boot volume)</strong>。</li>
+<li>点击 <strong>替换引导卷 (Replace Boot Volume)</strong> 按钮。</li>
+<li>在弹出的配置窗口中填写信息：<ul>
+<li><strong>替换方式</strong>：选择 <strong>映像 (Image)</strong>。</li>
+<li><strong>映像应用方式</strong>：选择 <strong>输入 OCID (Enter image OCID)</strong>。</li>
+<li><strong>镜像 OCID</strong>：粘贴第一步中获取的字符串。</li>
+<li><strong>引导卷大小</strong>：输入 <strong>50 - 200</strong> GB（默认免费额度总共 200G，通常填 50 或 100）。</li>
+</ul>
+</li>
+<li>点击 <strong>替换 (Replace)</strong>。</li>
+</ol>
+<h2 id="第三步：等待与连接"><a href="#第三步：等待与连接" class="headerlink" title="第三步：等待与连接"></a>第三步：等待与连接</h2><p>提交后，实例的状态会变为 <strong>Stopping</strong>（停止中），然后是 <strong>Provisioning</strong>（配置中），最后变回 <strong>Running</strong>（运行中）。</p>
+<p>整个过程大约需要 5-10 分钟。</p>
+<p>待状态变绿后，使用 SSH 客户端重新连接：</p>
+<ul>
+<li><strong>IP 地址</strong>：保持不变。</li>
+<li><strong>用户名</strong>：根据系统而定（Ubuntu 镜像默认为 <code>ubuntu</code>，Oracle Linux 默认为 <code>opc</code>）。</li>
+<li><strong>密钥</strong>：使用你原本的私钥（或你刚才上传的新私钥）。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i <span class="string">&#x27;你的私钥文件&#x27;</span> ubuntu@你的公网IP</span><br></pre></td></tr></table></figure>
+<p>如果连接成功，恭喜你，系统重装完成！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io">Gabriel</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io/posts/e62f764.html">https://lijiabao9.github.io/posts/e62f764.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lijiabao9.github.io" target="_blank">Gabriel的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Oracle/">Oracle</a><a class="post-meta__tags" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">云服务器</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechat.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechat.webp" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/6128b66c.html" title="Oracle Cloud 实例网络配置全解：防火墙放行、IPTables 清空与 Root 登录"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Oracle Cloud 实例网络配置全解：防火墙放行、IPTables 清空与 Root 登录</div></div><div class="info-2"><div class="info-item-1">详解 Oracle Cloud 实例的“双重防火墙”机制。教你如何配置 OCI 安全列表放行端口，彻底清除 Ubuntu 默认的 IPTables 规则，并开启 Root 用户密码登录权限。</div></div></div></a><a class="pagination-related" href="/posts/3c32210.html" title="Ubuntu 系统 Docker 安装全指南：官方源与国内镜像加速"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Ubuntu 系统 Docker 安装全指南：官方源与国内镜像加速</div></div><div class="info-2"><div class="info-item-1">详解在 Ubuntu 系统（含 24.04 新版）下安装 Docker 的全流程。包含卸载旧版、配置 GPG 密钥、设置 APT 软件源（官方/阿里云）、免 Sudo 配置及镜像加速器设置。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/6128b66c.html" title="Oracle Cloud 实例网络配置全解：防火墙放行、IPTables 清空与 Root 登录"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-05</div><div class="info-item-2">Oracle Cloud 实例网络配置全解：防火墙放行、IPTables 清空与 Root 登录</div></div><div class="info-2"><div class="info-item-1">详解 Oracle Cloud 实例的“双重防火墙”机制。教你如何配置 OCI 安全列表放行端口，彻底清除 Ubuntu 默认的 IPTables 规则，并开启 Root 用户密码登录权限。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Gabriel</div><div class="author-info-description">记录技术探索，也写人间烟火。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">40</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lijiabao9"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:ljiabao9@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #D14836;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">新手上路 | 这里记录着从 Hello World 到 Hello Universe 的每一步探索 🌌</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E8%8E%B7%E5%8F%96%E7%9B%AE%E6%A0%87%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%98%A0%E5%83%8F-OCID"><span class="toc-text">第一步：获取目标系统的映像 OCID</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%BD%93%E5%89%8D%E5%AE%9E%E4%BE%8B%E5%90%8C%E6%AC%BE%E9%95%9C%E5%83%8F%EF%BC%88%E6%9C%80%E7%AE%80%E5%8D%95%EF%BC%89"><span class="toc-text">方式一：使用当前实例同款镜像（最简单）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E6%9F%A5%E9%98%85%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E6%9B%B4%E6%8D%A2%E7%89%88%E6%9C%AC%EF%BC%89"><span class="toc-text">方式二：查阅官方文档（更换版本）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E6%89%A7%E8%A1%8C%E6%9B%BF%E6%8D%A2%E5%BC%95%E5%AF%BC%E5%8D%B7"><span class="toc-text">第二步：执行替换引导卷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E7%AD%89%E5%BE%85%E4%B8%8E%E8%BF%9E%E6%8E%A5"><span class="toc-text">第三步：等待与连接</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/e94f4538.html" title="从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南"/></a><div class="content"><a class="title" href="/posts/e94f4538.html" title="从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南">从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南</a><time datetime="2025-12-04T16:32:58.000Z" title="发表于 2025-12-05 00:32:58">2025-12-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/6128b66c.html" title="Oracle Cloud 实例网络配置全解：防火墙放行、IPTables 清空与 Root 登录"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Oracle Cloud 实例网络配置全解：防火墙放行、IPTables 清空与 Root 登录"/></a><div class="content"><a class="title" href="/posts/6128b66c.html" title="Oracle Cloud 实例网络配置全解：防火墙放行、IPTables 清空与 Root 登录">Oracle Cloud 实例网络配置全解：防火墙放行、IPTables 清空与 Root 登录</a><time datetime="2025-12-04T16:01:53.000Z" title="发表于 2025-12-05 00:01:53">2025-12-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/e62f764.html" title="Oracle Cloud 实例重装系统：利用替换引导卷 (Replace Boot Volume) 实现系统重置"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Oracle Cloud 实例重装系统：利用替换引导卷 (Replace Boot Volume) 实现系统重置"/></a><div class="content"><a class="title" href="/posts/e62f764.html" title="Oracle Cloud 实例重装系统：利用替换引导卷 (Replace Boot Volume) 实现系统重置">Oracle Cloud 实例重装系统：利用替换引导卷 (Replace Boot Volume) 实现系统重置</a><time datetime="2025-12-04T15:40:20.000Z" title="发表于 2025-12-04 23:40:20">2025-12-04</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Gabriel</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3-b2</a></span></div><div class="footer_custom_text">🚧 施工中 | 这是一个程序员用代码和咖啡构建的思维城堡 💻☕ | Bug和灵感同样欢迎！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3-b2"></script><script src="/js/main.js?v=5.5.3-b2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="2761236917" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="且听风吟" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3-b2"></script></div></div><!-- hexo injector body_end start --><script async src="/assets/js/ali/iconfont.js"></script><!-- hexo injector body_end end --></body></html>
