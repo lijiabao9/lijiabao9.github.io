@@ -1,0 +1,458 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Ubuntu 系统运维手册：常用命令与配置速查 | Gabriel的博客</title><meta name="author" content="Gabriel"><meta name="copyright" content="Gabriel"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="全面的 Ubuntu 系统运维指南。涵盖 SSH 远程连接、时区设置、APT 国内源配置（含 24.04 新版格式）、用户权限管理及高频使用的文件与进程管理命令。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu 系统运维手册：常用命令与配置速查">
+<meta property="og:url" content="https://lijiabao9.github.io/posts/428aa18f.html">
+<meta property="og:site_name" content="Gabriel的博客">
+<meta property="og:description" content="全面的 Ubuntu 系统运维指南。涵盖 SSH 远程连接、时区设置、APT 国内源配置（含 24.04 新版格式）、用户权限管理及高频使用的文件与进程管理命令。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp">
+<meta property="article:published_time" content="2025-12-04T13:45:46.000Z">
+<meta property="article:modified_time" content="2025-12-04T14:54:56.366Z">
+<meta property="article:author" content="Gabriel">
+<meta property="article:tag" content="语法手册">
+<meta property="article:tag" content="运维">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Ubuntu 系统运维手册：常用命令与配置速查",
+  "url": "https://lijiabao9.github.io/posts/428aa18f.html",
+  "image": "https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp",
+  "datePublished": "2025-12-04T13:45:46.000Z",
+  "dateModified": "2025-12-04T14:54:56.366Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Gabriel",
+      "url": "https://lijiabao9.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/favicon.webp"><link rel="canonical" href="https://lijiabao9.github.io/posts/428aa18f.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3-b2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: Gabriel","link":"链接: ","source":"来源: Gabriel的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Ubuntu 系统运维手册：常用命令与配置速查',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/assets/css/custom.css"><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@latest/css/all.min.css""><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="Gabriel的博客" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/site-background.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">33</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><!-- 默认动画效果，需要依赖 font-awesome-animation 样式--><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-recommend"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Gabriel的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Ubuntu 系统运维手册：常用命令与配置速查</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><!-- 默认动画效果，需要依赖 font-awesome-animation 样式--><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-recommend"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Ubuntu 系统运维手册：常用命令与配置速查</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-04T13:45:46.000Z" title="发表于 2025-12-04 21:45:46">2025-12-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-04T14:54:56.366Z" title="更新于 2025-12-04 22:54:56">2025-12-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">开发环境</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/Ubuntu/">Ubuntu</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>Ubuntu 是目前最流行的 Linux 服务器发行版之一。熟练掌握其常用命令与配置，是运维与开发的必备技能。</p>
+<h2 id="Ubuntu-版本代号速查"><a href="#Ubuntu-版本代号速查" class="headerlink" title="Ubuntu 版本代号速查"></a>Ubuntu 版本代号速查</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">版本号</th>
+<th style="text-align:left">代号</th>
+<th style="text-align:left">状态</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>18.04 LTS</strong></td>
+<td style="text-align:left"><em>Bionic Beaver</em></td>
+<td style="text-align:left">⚠️ 停止维护</td>
+<td style="text-align:left">已于 2023 年停止免费支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>20.04 LTS</strong></td>
+<td style="text-align:left"><em>Focal Fossa</em></td>
+<td style="text-align:left">✅ 活跃</td>
+<td style="text-align:left">长期支持至 2025 年 4 月</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>22.04 LTS</strong></td>
+<td style="text-align:left"><em>Jammy Jellyfish</em></td>
+<td style="text-align:left">✅ 活跃</td>
+<td style="text-align:left">长期支持至 2027 年 4 月</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>24.04 LTS</strong></td>
+<td style="text-align:left"><em>Noble Numbat</em></td>
+<td style="text-align:left">🚀 最新</td>
+<td style="text-align:left">长期支持至 2029 年 4 月</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="一、SSH-远程连接配置"><a href="#一、SSH-远程连接配置" class="headerlink" title="一、SSH 远程连接配置"></a>一、SSH 远程连接配置</h2><p>新装的 Ubuntu 服务器通常默认未开启 SSH 密码登录，甚至未安装 SSH 服务。</p>
+<h3 id="1-安装-SSH-服务"><a href="#1-安装-SSH-服务" class="headerlink" title="1. 安装 SSH 服务"></a>1. 安装 SSH 服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install openssh-server -y</span><br><span class="line"><span class="built_in">sudo</span> systemctl status ssh  <span class="comment"># 检查运行状态</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-配置-SSH-访问权限"><a href="#2-配置-SSH-访问权限" class="headerlink" title="2. 配置 SSH 访问权限"></a>2. 配置 SSH 访问权限</h3><p>编辑配置文件 <code>/etc/ssh/sshd_config</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+<p>修改或确认以下核心配置：</p>
+<figure class="highlight text"><figcaption><span>sshd_config</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 允许密码验证登录</span><br><span class="line">PasswordAuthentication yes</span><br><span class="line"></span><br><span class="line"># 允许 root 用户直接登录（生产环境建议改为 no，仅用普通用户 sudo）</span><br><span class="line">PermitRootLogin yes</span><br></pre></td></tr></table></figure>
+<p>重启服务使配置生效：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart ssh</span><br></pre></td></tr></table></figure>
+<h3 id="3-防火墙放行-UFW"><a href="#3-防火墙放行-UFW" class="headerlink" title="3. 防火墙放行 (UFW)"></a>3. 防火墙放行 (UFW)</h3><p>如果开启了 <code>ufw</code> 防火墙，必须放行 SSH 端口（默认 22）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw allow ssh     <span class="comment"># 或 sudo ufw allow 22/tcp</span></span><br><span class="line"><span class="built_in">sudo</span> ufw <span class="built_in">enable</span>        <span class="comment"># 开启防火墙，disable 禁用防火墙</span></span><br><span class="line"><span class="built_in">sudo</span> ufw status        <span class="comment"># 查看状态</span></span><br></pre></td></tr></table></figure>
+<h2 id="二、APT-软件源配置-国内加速"><a href="#二、APT-软件源配置-国内加速" class="headerlink" title="二、APT 软件源配置 (国内加速)"></a>二、APT 软件源配置 (国内加速)</h2><p>默认的官方源在国内访问较慢，建议替换为阿里云、清华大学等镜像源。</p>
+<h3 id="场景-A：Ubuntu-23-10-及之前的版本-传统格式"><a href="#场景-A：Ubuntu-23-10-及之前的版本-传统格式" class="headerlink" title="场景 A：Ubuntu 23.10 及之前的版本 (传统格式)"></a>场景 A：Ubuntu 23.10 及之前的版本 (传统格式)</h3><p>编辑 <code>/etc/apt/sources.list</code>，将内容替换为（以 20.04 <code>focal</code> 为例）：</p>
+<figure class="highlight text"><figcaption><span>sources.list</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">deb https://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意</strong>：需将 <code>focal</code> 替换为你当前系统的代号（如 <code>jammy</code>）。</p>
+</blockquote>
+<h3 id="场景-B：Ubuntu-24-04-LTS-新版-DEB822-格式"><a href="#场景-B：Ubuntu-24-04-LTS-新版-DEB822-格式" class="headerlink" title="场景 B：Ubuntu 24.04 LTS (新版 DEB822 格式)"></a>场景 B：Ubuntu 24.04 LTS (新版 DEB822 格式)</h3><p>从 24.04 开始，源配置移至 <code>/etc/apt/sources.list.d/ubuntu.sources</code>。</p>
+<ol>
+<li><p><strong>备份原文件</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.bak</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>新建配置</strong> <code>/etc/apt/sources.list.d/aliyun.sources</code>：</p>
+<figure class="highlight text"><figcaption><span>aliyun.sources</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Types: deb</span><br><span class="line">URIs: https://mirrors.aliyun.com/ubuntu/</span><br><span class="line">Suites: noble noble-security noble-updates noble-proposed noble-backports</span><br><span class="line">Components: main restricted universe multiverse</span><br><span class="line">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>最后，切记更新缓存：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure>
+<h2 id="三、用户与权限管理"><a href="#三、用户与权限管理" class="headerlink" title="三、用户与权限管理"></a>三、用户与权限管理</h2><h3 id="1-基础操作"><a href="#1-基础操作" class="headerlink" title="1. 基础操作"></a>1. 基础操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">whoami</span>                  <span class="comment"># 查看当前用户</span></span><br><span class="line"><span class="built_in">id</span>                      <span class="comment"># 查看当前用户ID和组信息</span></span><br><span class="line">su - ubuntu             <span class="comment"># 切换到指定用户</span></span><br><span class="line"><span class="built_in">sudo</span> -i                 <span class="comment"># 使用 sudo 权限切换到 root 环境</span></span><br><span class="line">passwd                  <span class="comment"># 修改当前用户密码</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-用户增删-推荐使用-adduser"><a href="#2-用户增删-推荐使用-adduser" class="headerlink" title="2. 用户增删 (推荐使用 adduser)"></a>2. 用户增删 (推荐使用 adduser)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 新增用户 (自动创建家目录、设置 Shell)</span></span><br><span class="line"><span class="built_in">sudo</span> adduser testuser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除用户 (建议保留家目录，若需彻底删除加 --remove-home --remove-all-files)</span></span><br><span class="line"><span class="built_in">sudo</span> deluser testuser</span><br></pre></td></tr></table></figure>
+<h3 id="3-Sudo-提权"><a href="#3-Sudo-提权" class="headerlink" title="3. Sudo 提权"></a>3. Sudo 提权</h3><p>将普通用户加入 <code>sudo</code> 组，使其具备管理员权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> usermod -aG <span class="built_in">sudo</span> testuser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 对应的移除命令（需要谨慎使用，移除后自身没权限提权）</span></span><br><span class="line"><span class="built_in">sudo</span> gpasswd -d testuser <span class="built_in">sudo</span></span><br></pre></td></tr></table></figure>
+<p>或者编辑 <code>/etc/sudoers</code> 文件（需使用 <code>sudo vi</code> 命令安全编辑），添加：<code>testuser ALL=(ALL:ALL) ALL</code></p>
+<h2 id="四、系统设置与监控"><a href="#四、系统设置与监控" class="headerlink" title="四、系统设置与监控"></a>四、系统设置与监控</h2><h3 id="1-时区设置"><a href="#1-时区设置" class="headerlink" title="1. 时区设置"></a>1. 时区设置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">timedatectl set-timezone Asia/Shanghai  <span class="comment"># 设置为中国标准时间</span></span><br><span class="line">timedatectl                             <span class="comment"># 查看当前时间与时区</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-磁盘与资源监控"><a href="#2-磁盘与资源监控" class="headerlink" title="2. 磁盘与资源监控"></a>2. 磁盘与资源监控</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h                   <span class="comment"># 查看磁盘挂载与空间使用 (Disk Free)</span></span><br><span class="line"><span class="built_in">du</span> -h                   <span class="comment"># 查看当前目录下各文件夹的大小 (Disk Usage)</span></span><br><span class="line">free -m                 <span class="comment"># 查看内存使用情况 (MB)</span></span><br><span class="line">top                     <span class="comment"># 显示进程使用情况</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-网络与进程"><a href="#3-网络与进程" class="headerlink" title="3. 网络与进程"></a>3. 网络与进程</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ss -ntulp | grep 8080   <span class="comment"># 查看占用 8080 端口的进程</span></span><br><span class="line">ps -ef | grep java      <span class="comment"># 查看 Java 进程</span></span><br><span class="line"><span class="built_in">kill</span> -9 &lt;PID&gt;           <span class="comment"># 强制结束指定进程 ID</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-软件包管理-apt"><a href="#4-软件包管理-apt" class="headerlink" title="4. 软件包管理(apt)"></a>4. 软件包管理(apt)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apt update              <span class="comment"># 更新软件包</span></span><br><span class="line">apt list --upgradable   <span class="comment"># 列出可升级的包</span></span><br><span class="line">apt upgrade -y          <span class="comment"># 升级软件包</span></span><br><span class="line"></span><br><span class="line">apt install ufw         <span class="comment"># 安装 UFW</span></span><br><span class="line">apt remove ufw          <span class="comment"># 卸载 UFW</span></span><br><span class="line">apt purge ufw           <span class="comment"># 彻底卸载 UFW</span></span><br></pre></td></tr></table></figure>
+<h3 id="5-服务管理"><a href="#5-服务管理" class="headerlink" title="5. 服务管理"></a>5. 服务管理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">systemctl start/stop/restart ufw    <span class="comment"># 启动/停止/重启服务</span></span><br><span class="line">systemctl status ufw                <span class="comment"># 查看服务状态</span></span><br><span class="line">systemctl <span class="built_in">enable</span>/disable ufw        <span class="comment"># 设置/禁止服务 开机自启</span></span><br><span class="line"></span><br><span class="line">journalctl -f -u ufw                <span class="comment"># 实时滚动查看服务日志 --follow --unit</span></span><br><span class="line"></span><br><span class="line">dpkg -L ufw             <span class="comment"># 查看安装的包释放了哪些文件 --listfiles</span></span><br><span class="line">dpkg -l | grep ufw      <span class="comment"># 查看是否安装了某个包  --list</span></span><br></pre></td></tr></table></figure>
+<h2 id="五、文件操作与压缩"><a href="#五、文件操作与压缩" class="headerlink" title="五、文件操作与压缩"></a>五、文件操作与压缩</h2><h3 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1. 常用命令"></a>1. 常用命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /data/web        <span class="comment"># 递归创建目录</span></span><br><span class="line"><span class="built_in">touch</span> /file.txt           <span class="comment"># 创建文件</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">rm</span> -rf /data/temp         <span class="comment"># 强制递归删除目录 (慎用!)</span></span><br><span class="line"><span class="built_in">mv</span> old.txt new.txt        <span class="comment"># 重命名或移动</span></span><br><span class="line"><span class="built_in">ln</span> -s /src/file /dst/     <span class="comment"># 创建软链接 (快捷方式)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd     <span class="comment"># 显示文件内容</span></span><br><span class="line">less /etc/passwd    <span class="comment"># 分页显示文件内容</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-压缩与解压-Tar"><a href="#2-压缩与解压-Tar" class="headerlink" title="2. 压缩与解压 (Tar)"></a>2. 压缩与解压 (Tar)</h3><p><code>.tar.gz</code> 是 Linux 下最通用的压缩格式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 解压，可通过 -C 指定解压到</span></span><br><span class="line">tar -zxvf filename.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 压缩</span></span><br><span class="line">tar -zcvf filename.tar.gz /source/dir</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>z</code>: gzip 压缩</li>
+<li><code>x</code>: 解压 (extract)</li>
+<li><code>c</code>: 创建 (create)</li>
+<li><code>v</code>: 显示过程 (verbose)</li>
+<li><code>f</code>: 指定文件名 (file)</li>
+</ul>
+<h2 id="六、服务后台运行-Nohup"><a href="#六、服务后台运行-Nohup" class="headerlink" title="六、服务后台运行 (Nohup)"></a>六、服务后台运行 (Nohup)</h2><p>在断开 SSH 连接后继续运行程序（如 Java Jar 包）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 标准后台启动命令</span></span><br><span class="line"><span class="built_in">nohup</span> java -jar app.jar &gt; app.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>nohup</code>: 不挂断运行 (No Hang Up)。</li>
+<li><code>&gt; app.log</code>: 将标准输出重定向到 app.log。</li>
+<li><code>2&gt;&amp;1</code>: 将错误输出 (2) 重定向到标准输出 (1) 一并写入日志。</li>
+<li><code>&amp;</code>: 在后台运行。</li>
+</ul>
+<p>查看实时日志：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">tail</span> -f app.log</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io">Gabriel</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io/posts/428aa18f.html">https://lijiabao9.github.io/posts/428aa18f.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lijiabao9.github.io" target="_blank">Gabriel的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%BF%90%E7%BB%B4/">运维</a><a class="post-meta__tags" href="/tags/%E8%AF%AD%E6%B3%95%E6%89%8B%E5%86%8C/">语法手册</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechat.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechat.webp" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/3c893d60.html" title="Ubuntu 系统安装 JDK 全指南：OpenJDK 与 Oracle JDK 双方案"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Ubuntu 系统安装 JDK 全指南：OpenJDK 与 Oracle JDK 双方案</div></div><div class="info-2"><div class="info-item-1">详解在 Ubuntu 系统上安装 Java 开发环境的两种主流方式：通过 apt 包管理器安装 OpenJDK，以及手动部署 Oracle JDK，包含环境变量配置与多版本切换指南。</div></div></div></a><a class="pagination-related" href="/posts/b4f7cadb.html" title="SpringBoot 整合 MyBatis-Plus 全解：从入门到代码生成器"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">SpringBoot 整合 MyBatis-Plus 全解：从入门到代码生成器</div></div><div class="info-2"><div class="info-item-1">深度解析 SpringBoot 整合 MyBatis-Plus 的全流程。涵盖 Maven 依赖、CRUD 接口使用、Wrapper 条件构造器、自动填充、逻辑删除、分页插件及官方代码生成器的详细配置。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/bdbe2a9.html" title="Docker 核心语法速查：从容器管理到编排实战"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-30</div><div class="info-item-2">Docker 核心语法速查：从容器管理到编排实战</div></div><div class="info-2"><div class="info-item-1">本文系统梳理 Docker 常用语法，涵盖容器生命周期管理、数据卷挂载策略、Dockerfile 镜像构建指南、自定义网络配置以及 Docker Compose 服务编排实战。</div></div></div></a><a class="pagination-related" href="/posts/b973e285.html" title="Markdown 语法速查手册：新手 5 分钟入门"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-30</div><div class="info-item-2">Markdown 语法速查手册：新手 5 分钟入门</div></div><div class="info-2"><div class="info-item-1">本篇文档提供详尽的 Markdown 语法速查表，涵盖标题、引用、代码块、表格、图片及链接等核心用法。内容简洁明了，配合实时预览效果，助您快速掌握Markdown，提升写作与排版效率。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Gabriel</div><div class="author-info-description">记录技术探索，也写人间烟火。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">33</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lijiabao9"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:ljiabao9@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #D14836;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">新手上路 | 这里记录着从 Hello World 到 Hello Universe 的每一步探索 🌌</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ubuntu-%E7%89%88%E6%9C%AC%E4%BB%A3%E5%8F%B7%E9%80%9F%E6%9F%A5"><span class="toc-text">Ubuntu 版本代号速查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81SSH-%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5%E9%85%8D%E7%BD%AE"><span class="toc-text">一、SSH 远程连接配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85-SSH-%E6%9C%8D%E5%8A%A1"><span class="toc-text">1. 安装 SSH 服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE-SSH-%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90"><span class="toc-text">2. 配置 SSH 访问权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%98%B2%E7%81%AB%E5%A2%99%E6%94%BE%E8%A1%8C-UFW"><span class="toc-text">3. 防火墙放行 (UFW)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81APT-%E8%BD%AF%E4%BB%B6%E6%BA%90%E9%85%8D%E7%BD%AE-%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F"><span class="toc-text">二、APT 软件源配置 (国内加速)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF-A%EF%BC%9AUbuntu-23-10-%E5%8F%8A%E4%B9%8B%E5%89%8D%E7%9A%84%E7%89%88%E6%9C%AC-%E4%BC%A0%E7%BB%9F%E6%A0%BC%E5%BC%8F"><span class="toc-text">场景 A：Ubuntu 23.10 及之前的版本 (传统格式)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF-B%EF%BC%9AUbuntu-24-04-LTS-%E6%96%B0%E7%89%88-DEB822-%E6%A0%BC%E5%BC%8F"><span class="toc-text">场景 B：Ubuntu 24.04 LTS (新版 DEB822 格式)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%94%A8%E6%88%B7%E4%B8%8E%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="toc-text">三、用户与权限管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C"><span class="toc-text">1. 基础操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%A8%E6%88%B7%E5%A2%9E%E5%88%A0-%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8-adduser"><span class="toc-text">2. 用户增删 (推荐使用 adduser)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Sudo-%E6%8F%90%E6%9D%83"><span class="toc-text">3. Sudo 提权</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%B3%BB%E7%BB%9F%E8%AE%BE%E7%BD%AE%E4%B8%8E%E7%9B%91%E6%8E%A7"><span class="toc-text">四、系统设置与监控</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%97%B6%E5%8C%BA%E8%AE%BE%E7%BD%AE"><span class="toc-text">1. 时区设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%A3%81%E7%9B%98%E4%B8%8E%E8%B5%84%E6%BA%90%E7%9B%91%E6%8E%A7"><span class="toc-text">2. 磁盘与资源监控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%BD%91%E7%BB%9C%E4%B8%8E%E8%BF%9B%E7%A8%8B"><span class="toc-text">3. 网络与进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86-apt"><span class="toc-text">4. 软件包管理(apt)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="toc-text">5. 服务管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E4%B8%8E%E5%8E%8B%E7%BC%A9"><span class="toc-text">五、文件操作与压缩</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">1. 常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%8E%8B%E7%BC%A9%E4%B8%8E%E8%A7%A3%E5%8E%8B-Tar"><span class="toc-text">2. 压缩与解压 (Tar)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%9C%8D%E5%8A%A1%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C-Nohup"><span class="toc-text">六、服务后台运行 (Nohup)</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/3c32210.html" title="Ubuntu 系统 Docker 安装全指南：官方源与国内镜像加速"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu 系统 Docker 安装全指南：官方源与国内镜像加速"/></a><div class="content"><a class="title" href="/posts/3c32210.html" title="Ubuntu 系统 Docker 安装全指南：官方源与国内镜像加速">Ubuntu 系统 Docker 安装全指南：官方源与国内镜像加速</a><time datetime="2025-12-04T14:39:56.000Z" title="发表于 2025-12-04 22:39:56">2025-12-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3c893d60.html" title="Ubuntu 系统安装 JDK 全指南：OpenJDK 与 Oracle JDK 双方案"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu 系统安装 JDK 全指南：OpenJDK 与 Oracle JDK 双方案"/></a><div class="content"><a class="title" href="/posts/3c893d60.html" title="Ubuntu 系统安装 JDK 全指南：OpenJDK 与 Oracle JDK 双方案">Ubuntu 系统安装 JDK 全指南：OpenJDK 与 Oracle JDK 双方案</a><time datetime="2025-12-04T14:27:42.000Z" title="发表于 2025-12-04 22:27:42">2025-12-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/428aa18f.html" title="Ubuntu 系统运维手册：常用命令与配置速查"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu 系统运维手册：常用命令与配置速查"/></a><div class="content"><a class="title" href="/posts/428aa18f.html" title="Ubuntu 系统运维手册：常用命令与配置速查">Ubuntu 系统运维手册：常用命令与配置速查</a><time datetime="2025-12-04T13:45:46.000Z" title="发表于 2025-12-04 21:45:46">2025-12-04</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Gabriel</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3-b2</a></span></div><div class="footer_custom_text">🚧 施工中 | 这是一个程序员用代码和咖啡构建的思维城堡 💻☕ | Bug和灵感同样欢迎！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3-b2"></script><script src="/js/main.js?v=5.5.3-b2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="2761236917" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="且听风吟" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3-b2"></script></div></div><!-- hexo injector body_end start --><script async src="/assets/js/ali/iconfont.js"></script><!-- hexo injector body_end end --></body></html>
