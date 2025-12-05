@@ -1,0 +1,780 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Artalk 私有化部署全指南：Docker + Nginx + Cloudflare 打造独立评论系统 | Gabriel的博客</title><meta name="author" content="Gabriel"><meta name="copyright" content="Gabriel"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基于 Docker Compose 私有化部署 Artalk 评论系统，详解 Nginx 反代、HTTPS 配置、Cloudflare 避坑指南，以及邮件通知和 UpGit 图床集成的高级玩法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Artalk 私有化部署全指南：Docker + Nginx + Cloudflare 打造独立评论系统">
+<meta property="og:url" content="https://lijiabao9.github.io/posts/1b40d3bb.html">
+<meta property="og:site_name" content="Gabriel的博客">
+<meta property="og:description" content="基于 Docker Compose 私有化部署 Artalk 评论系统，详解 Nginx 反代、HTTPS 配置、Cloudflare 避坑指南，以及邮件通知和 UpGit 图床集成的高级玩法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp">
+<meta property="article:published_time" content="2025-12-05T13:04:00.000Z">
+<meta property="article:modified_time" content="2025-12-05T15:42:37.264Z">
+<meta property="article:author" content="Gabriel">
+<meta property="article:tag" content="Artalk">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="Nginx">
+<meta property="article:tag" content="UpGit">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Artalk 私有化部署全指南：Docker + Nginx + Cloudflare 打造独立评论系统",
+  "url": "https://lijiabao9.github.io/posts/1b40d3bb.html",
+  "image": "https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp",
+  "datePublished": "2025-12-05T13:04:00.000Z",
+  "dateModified": "2025-12-05T15:42:37.264Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Gabriel",
+      "url": "https://lijiabao9.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/favicon.webp"><link rel="canonical" href="https://lijiabao9.github.io/posts/1b40d3bb.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=5.5.3-b2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: Gabriel","link":"链接: ","source":"来源: Gabriel的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Artalk 私有化部署全指南：Docker + Nginx + Cloudflare 打造独立评论系统',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/assets/css/custom.css"><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@latest/css/all.min.css""><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="Gabriel的博客" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/site-background.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">24</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><!-- 默认动画效果，需要依赖 font-awesome-animation 样式--><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-recommend"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Gabriel的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Artalk 私有化部署全指南：Docker + Nginx + Cloudflare 打造独立评论系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><!-- 默认动画效果，需要依赖 font-awesome-animation 样式--><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 父菜单--><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><!-- 子菜单--><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-recommend"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 菜单项配置，额外增加 动画 参数--><!-- 给菜单项的父元素，即 a 标签，增加 css 动画类--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 判断是普通的 font-awesome 图标，还是阿里的 symbol 彩色图标--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Artalk 私有化部署全指南：Docker + Nginx + Cloudflare 打造独立评论系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-05T13:04:00.000Z" title="发表于 2025-12-05 21:04:00">2025-12-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-05T15:42:37.264Z" title="更新于 2025-12-05 23:42:37">2025-12-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%88%9B%E6%84%8F%E5%B7%A5%E5%9D%8A/">创意工坊</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%88%9B%E6%84%8F%E5%B7%A5%E5%9D%8A/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/">服务搭建</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>28分钟</span></span><span class="post-meta-separator">|</span><span id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="umamiPV" data-path="/posts/1b40d3bb.html"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://artalk.js.org/">Artalk</a> 是一款简洁、轻量且功能强大的自托管评论系统。相比于 Valine 或 Gitalk，它提供了更完善的管理后台和数据隐私掌控权。</p>
+<p>本文将演示如何通过 Docker Compose 部署 Artalk，并将其集成到 Hexo 博客（Butterfly 主题）中。</p>
+<h2 id="一、前置准备"><a href="#一、前置准备" class="headerlink" title="一、前置准备"></a>一、前置准备</h2><p>在开始之前，请确保你已经完成了以下基础环境的搭建：</p>
+<ol>
+<li><strong>服务器环境</strong>：已安装 Docker 和 Docker Compose。<ul>
+<li>参考：<a href="/posts/3c32210.html">Ubuntu 系统 Docker 安装全指南：官方源与国内镜像加速</a></li>
+</ul>
+</li>
+<li><strong>域名与证书</strong>：拥有一个域名并完成了 SSL 证书申请。<ul>
+<li>参考：<a href="/posts/e94f4538.html">从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南</a></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="二、服务端部署"><a href="#二、服务端部署" class="headerlink" title="二、服务端部署"></a>二、服务端部署</h2><h3 id="1-创建工作目录"><a href="#1-创建工作目录" class="headerlink" title="1. 创建工作目录"></a>1. 创建工作目录</h3><p>登录服务器，建立 Artalk 的数据存储目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /app/artalk</span><br><span class="line"><span class="built_in">cd</span> /app/artalk</span><br></pre></td></tr></table></figure>
+<h3 id="2-编写-Docker-Compose"><a href="#2-编写-Docker-Compose" class="headerlink" title="2. 编写 Docker Compose"></a>2. 编写 Docker Compose</h3><p>创建 <code>docker-compose.yml</code> 文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim docker-compose.yml</span><br></pre></td></tr></table></figure>
+<p>写入以下配置（<strong>注意修改 <code>ATK_SITE_URL</code> 为你的博客地址</strong>）：</p>
+<figure class="highlight yaml"><figcaption><span>docker-compose.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">artalk:</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">artalk</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">artalk/artalk-go</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">20001</span><span class="string">:23366</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/data</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ATK_LOCALE=zh-CN</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ATK_SITE_DEFAULT=Gabriel的博客</span>    <span class="comment"># 默认站点名称</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ATK_SITE_URL=https://lijiabao9.github.io</span>  <span class="comment"># 你的博客前端地址（用于跨域信任）</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-启动服务"><a href="#3-启动服务" class="headerlink" title="3. 启动服务"></a>3. 启动服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure>
+<p>等待容器启动后，创建管理员账号：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it artalk artalk admin</span><br></pre></td></tr></table></figure>
+<p><em>按提示输入管理员昵称、邮箱和密码。</em><br>账号信息后续可进行修改。</p>
+<p>此时，可以通过 <code>http://服务器IP:20001</code> 访问后台。但为了安全，我们接下配置 Nginx 反向代理。</p>
+<hr>
+<h2 id="三、Nginx-反向代理与-HTTPS"><a href="#三、Nginx-反向代理与-HTTPS" class="headerlink" title="三、Nginx 反向代理与 HTTPS"></a>三、Nginx 反向代理与 HTTPS</h2><p>为了启用 HTTPS 并隐藏非标准端口，我们需要配置 Nginx。</p>
+<h3 id="1-编写-Nginx-配置"><a href="#1-编写-Nginx-配置" class="headerlink" title="1. 编写 Nginx 配置"></a>1. 编写 Nginx 配置</h3><p>创建配置文件 <code>vi /etc/nginx/sites-available/artalk.131495.xyz</code>：</p>
+<figure class="highlight nginx"><figcaption><span>artalk.131495.xyz</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># HTTP 自动跳转 HTTPS</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">80</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># <span class="doctag">TODO:</span> 修改为对应的子域名</span></span><br><span class="line">    <span class="attribute">server_name</span> artalk.<span class="number">131495</span>.xyz;</span><br><span class="line">    </span><br><span class="line">    <span class="attribute">return</span> <span class="number">301</span> https://<span class="variable">$host</span><span class="variable">$request_uri</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTPS 配置</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># <span class="doctag">TODO:</span> 修改为对应的子域名</span></span><br><span class="line">    <span class="attribute">server_name</span> artalk.<span class="number">131495</span>.xyz;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 加密套件</span></span><br><span class="line">    <span class="attribute">ssl_ciphers</span> HIGH:!aNULL:!MD5;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 配置证书地址</span></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /cert/acme_131495.xyz/cert.pem;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /cert/acme_131495.xyz/key.pem;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># <span class="doctag">TODO:</span> 独立的日志配置</span></span><br><span class="line">    <span class="attribute">access_log</span> /var/log/nginx/artalk.access.log proxy_json;</span><br><span class="line">    <span class="attribute">error_log</span> /var/log/nginx/artalk.<span class="literal">error</span>.log;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 反向代理设置</span></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="comment"># <span class="doctag">TODO:</span> 修改为实际的服务地址</span></span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:20001;</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 代理参数</span></span><br><span class="line">        <span class="attribute">include</span> /etc/nginx/proxy_params;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-启用配置"><a href="#2-启用配置" class="headerlink" title="2. 启用配置"></a>2. 启用配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建软链接</span></span><br><span class="line"><span class="built_in">ln</span> -s /etc/nginx/sites-available/artalk.131495.xyz /etc/nginx/sites-enabled/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试并重启</span></span><br><span class="line">nginx -t &amp;&amp; systemctl reload nginx</span><br></pre></td></tr></table></figure>
+<h3 id="3-域名DNS记录"><a href="#3-域名DNS记录" class="headerlink" title="3. 域名DNS记录"></a>3. 域名DNS记录</h3><p>给域名添加对应的 A 记录，将 <code>artalk.131495.xyz</code> 解析到服务器的 IP 地址。</p>
+<p>现在，你可以通过 <code>https://artalk.131495.xyz</code> 访问 Artalk 控制中心了。</p>
+<hr>
+<h2 id="四、前端接入-Hexo-Butterfly"><a href="#四、前端接入-Hexo-Butterfly" class="headerlink" title="四、前端接入 (Hexo Butterfly)"></a>四、前端接入 (Hexo Butterfly)</h2><h3 id="1-修改主题配置"><a href="#1-修改主题配置" class="headerlink" title="1. 修改主题配置"></a>1. 修改主题配置</h3><p>编辑 Hexo 的主题配置文件 <code>_config.butterfly.yml</code>：</p>
+<figure class="highlight yaml"><figcaption><span>_config.butterfly.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">use:</span> <span class="string">Artalk</span></span><br><span class="line"></span><br><span class="line"><span class="attr">artalk:</span></span><br><span class="line">  <span class="attr">server:</span> <span class="string">https://artalk.131495.xyz</span>   <span class="comment"># 你的 Artalk 后端地址</span></span><br><span class="line">  <span class="attr">site:</span> <span class="string">Gabriel的博客</span>                  <span class="comment"># 必须与后台创建的站点名称一致</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-重新部署"><a href="#2-重新部署" class="headerlink" title="2. 重新部署"></a>2. 重新部署</h3><p>执行 <code>hexo s</code> 重新启动博客。</p>
+<p>访问博客文章页面，评论区应已正常加载。</p>
+<hr>
+<h2 id="五、故障排查-Troubleshooting"><a href="#五、故障排查-Troubleshooting" class="headerlink" title="五、故障排查 (Troubleshooting)"></a>五、故障排查 (Troubleshooting)</h2><p>在部署过程中，特别是配合 Cloudflare 使用时，可能会遇到以下问题：</p>
+<h3 id="1-跨域问题-CORS"><a href="#1-跨域问题-CORS" class="headerlink" title="1. 跨域问题 (CORS)"></a>1. 跨域问题 (CORS)</h3><ul>
+<li><strong>现象</strong>：F12 控制台报错 <code>No &#39;Access-Control-Allow-Origin&#39; header</code>。</li>
+<li><strong>原因</strong>：Artalk 默认开启跨域限制。</li>
+<li><strong>解决</strong>：登录 Artalk 后台 -> <strong>设置</strong> -> <strong>可信域名</strong>，添加你的博客域名（如 <code>https://localhost:4000</code>）。</li>
+</ul>
+<h3 id="2-混合内容错误-Mixed-Content"><a href="#2-混合内容错误-Mixed-Content" class="headerlink" title="2. 混合内容错误 (Mixed Content)"></a>2. 混合内容错误 (Mixed Content)</h3><ul>
+<li><strong>现象</strong>：GitHub Pages (HTTPS) 无法加载 Artalk (HTTP) 资源。</li>
+<li><strong>解决</strong>：确保 Artalk <strong>Server URL</strong> 填写的是 <code>https://</code> 开头的地址。</li>
+</ul>
+<h3 id="3-Cloudflare-特有坑点"><a href="#3-Cloudflare-特有坑点" class="headerlink" title="3. Cloudflare 特有坑点"></a>3. Cloudflare 特有坑点</h3><p>如果你开启了 Cloudflare 的小黄云（代理模式），请注意：</p>
+<div class="note warning flat"><p><strong>1. 端口限制</strong><br>CF 仅代理 443, 8443, 2053 等特定端口。如果直接使用 IP:20002 访问会失败。<strong>请务必使用 Nginx 反代后的 443 端口。</strong></p>
+</div>
+<div class="note warning flat"><p><strong>2. 控制台无法加载 (X-Frame-Options)</strong><br>CF 默认可能会添加安全标头，导致 Artalk iframe 加载失败。<br><strong>解决</strong>：在 CF 后台 -> 规则 -> 转换规则 -> HTTP 响应头 -> <strong>关闭</strong> <code>添加安全性标头</code>。</p>
+</div>
+<div class="note warning flat"><p><strong>3. IP 属地不显示</strong><br>CF 可能会隐藏真实 IP。<br><strong>解决</strong>：在 CF 后台 -> 规则 -> 转换规则 -> HTTP 请求头 -> <strong>关闭</strong> <code>删除访问者 IP 标头</code>。<br>同时，Artalk 后台 -> 设置 -> 服务器 -> 代理标头名，填入 <code>X-Forwarded-For</code>。</p>
+</div>
+<div class="note warning flat"><p><strong>4. 图片上传失败 (403 Forbidden)</strong><br><strong>解决</strong>：在 CF 后台 -> Scrape Shield -> <strong>关闭</strong> <code>Hotlink 保护</code>。</p>
+</div>
+<hr>
+<h2 id="六、高级功能定制"><a href="#六、高级功能定制" class="headerlink" title="六、高级功能定制"></a>六、高级功能定制</h2><h3 id="1-界面个性化"><a href="#1-界面个性化" class="headerlink" title="1. 界面个性化"></a>1. 界面个性化</h3><p>在 Artalk 后台 -&gt; <strong>设置</strong> -&gt; <strong>界面配置</strong>，可进行个性化配置。</p>
+<ul>
+<li>评论框占位文字：<code>让思绪在此停泊，或如风，或如诗…</code></li>
+<li>无评论显示文字：<code>此处静默，却等待你的第一笔心动。</code></li>
+<li>发送按钮文字；<code>寄往光的深处</code></li>
+<li><strong>表情包</strong>：<ul>
+<li>默认的是：<code>https://cdn.jsdelivr.net/gh/ArtalkJS/Emoticons/grps/default.json</code></li>
+<li>改用：<code>https://cdn.jsdelivr.net/gh/eryajf/emotion_generate/dist/artalk.json</code></li>
+</ul>
+</li>
+<li>默认勾选 <strong>投票按钮</strong>；</li>
+<li>默认不勾选 <strong>返回按钮</strong>；</li>
+<li>勾选 <strong>用户UA徽标</strong>；（勾选后，会显示比如 Edge137，Windows11）</li>
+</ul>
+<h3 id="2-IP-属地显示"><a href="#2-IP-属地显示" class="headerlink" title="2. IP 属地显示"></a>2. IP 属地显示</h3><ol>
+<li>下载 IP 数据库：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lionsoul2014/ip2region/tree/v2.12.0/data">ip2region.xdb</a><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O /app/artalk/data/ip2region.xdb https://raw.githubusercontent.com/lionsoul2014/ip2region/v2.12.0/data/ip2region.xdb</span><br></pre></td></tr></table></figure></li>
+<li>在 Artalk 后台 -&gt; <strong>设置</strong> -&gt; <strong>IP属地</strong>，勾选 <strong>开启 IP 属地展示</strong>。</li>
+<li>如果网站使用了 CDN 代理，在 Artalk 后台 -&gt; <strong>设置</strong> -&gt; <strong>服务器</strong> -&gt; <strong>代理标头名</strong>，填写 <code>X-Forwarded-For</code>。</li>
+</ol>
+<h3 id="3-UpGit-图片上传-GitHub-图床"><a href="#3-UpGit-图片上传-GitHub-图床" class="headerlink" title="3. UpGit 图片上传 (GitHub 图床)"></a>3. UpGit 图片上传 (GitHub 图床)</h3><p>Artalk 默认支持调用本地程序上传图片。<br>为了节省服务器磁盘空间，我们可以集成 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/pluveto/upgit">UpGit</a> 将图片转存 GitHub。</p>
+<h4 id="步骤-A-安装-UpGit"><a href="#步骤-A-安装-UpGit" class="headerlink" title="步骤 A: 安装 UpGit"></a>步骤 A: 安装 UpGit</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载 upgit 程序</span></span><br><span class="line">wget  -O /app/artalk/upgit https://github.com/pluveto/upgit/releases/download/v0.2.25/upgit_linux_arm64</span><br><span class="line"><span class="comment"># 设置可执行权限</span></span><br><span class="line"><span class="built_in">chmod</span> 775 /app/artalk/upgit</span><br></pre></td></tr></table></figure>
+<h4 id="步骤-B-配置-UpGit"><a href="#步骤-B-配置-UpGit" class="headerlink" title="步骤 B: 配置 UpGit"></a>步骤 B: 配置 UpGit</h4><p>创建 <code>vi /app/artalk/data/config.upgit.toml</code>，填入你的 GitHub Token 和仓库信息（详见<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/pluveto/upgit">UpGit文档</a>）。</p>
+<figure class="highlight toml"><figcaption><span>config.upgit.toml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># =============================================================================</span></span><br><span class="line"><span class="comment"># UPGIT 配置</span></span><br><span class="line"><span class="comment"># =============================================================================</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认上传器</span></span><br><span class="line"><span class="attr">default_uploader</span> = <span class="string">&quot;github&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 上传文件名的格式模板（仅特定上传器适配）</span></span><br><span class="line"><span class="comment">#   / 目录分隔符, 作用: 是区分目录</span></span><br><span class="line"><span class="comment">#   &#123;year&#125; 年份, 例如: 2022</span></span><br><span class="line"><span class="comment">#   &#123;month&#125; 月份, 例如: 02</span></span><br><span class="line"><span class="comment">#   &#123;day&#125; 天, 例如: 01</span></span><br><span class="line"><span class="comment">#   &#123;unix_ts&#125; 时间戳, 例如: 1643617626</span></span><br><span class="line"><span class="comment">#   &#123;fname&#125; 原始文件名，如 logo (不含后缀名)</span></span><br><span class="line"><span class="comment">#   &#123;fname_hash&#125; &#123;fname&#125;的 MD5 散列值</span></span><br><span class="line"><span class="comment">#   &#123;ext&#125; 文件后缀名, 例如.png</span></span><br><span class="line"><span class="comment">#   下面的例子生成的文件名预览: 2022/01/upgit_20220131_1643617626.png</span></span><br><span class="line"><span class="comment">#   如果目录不存在将会被程序自动创建</span></span><br><span class="line"><span class="attr">rename</span> = <span class="string">&quot;artalk/&#123;year&#125;/&#123;month&#125;/upgit_&#123;year&#125;&#123;month&#125;&#123;day&#125;_&#123;unix_ts&#125;&#123;ext&#125;&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 自定义输出格式</span></span><br><span class="line"><span class="comment"># -----------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">#   &#123;url&#125; 图片文件的网络URL地址</span></span><br><span class="line"><span class="section">[output_formats]</span></span><br><span class="line"><span class="attr">&quot;bbcode&quot;</span> = <span class="string">&quot;[img]&#123;url&#125;[/img]&quot;</span></span><br><span class="line"><span class="attr">&quot;html&quot;</span> = <span class="string">&#x27;&lt;img src=&quot;&#123;url&#125;&quot; /&gt;&#x27;</span></span><br><span class="line"><span class="attr">&quot;markdown-simple&quot;</span> = <span class="string">&quot;![](&#123;url&#125;)&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 直链替换规则 RawUrl -[replace]-&gt; Url</span></span><br><span class="line"><span class="comment"># -----------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果您的网络访问Github异常或者缓慢，您可以尝试下面的配置以开启CDN加速</span></span><br><span class="line"><span class="comment"># [replacements]</span></span><br><span class="line"><span class="attr">&quot;raw.githubusercontent.com&quot;</span> = <span class="string">&quot;cdn.jsdelivr.net/gh&quot;</span></span><br><span class="line"><span class="attr">&quot;/main&quot;</span> = <span class="string">&quot;@main&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># =============================================================================</span></span><br><span class="line"><span class="comment"># 以下为各个上传器的配置示例. 用不到的留空即可</span></span><br><span class="line"><span class="comment"># =============================================================================</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Github 上传器</span></span><br><span class="line"><span class="section">[uploaders.github]</span></span><br><span class="line"><span class="comment"># 保存文件的分支，例如 master 或 main</span></span><br><span class="line"><span class="attr">branch</span> = <span class="string">&quot;main&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 您的拥有&quot;repo&quot;权限的 Github 令牌</span></span><br><span class="line"><span class="comment"># 获取Github Token连接: https://github.com/settings/tokens</span></span><br><span class="line"><span class="attr">pat</span> = <span class="string">&quot;ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 您的公共Github存储库的名称</span></span><br><span class="line"><span class="comment"># 注意: 为了让您和他人可以访问到图片资源, 您的Github仓库一定要是公开的, </span></span><br><span class="line"><span class="comment">#       在私有仓库中Github会拦截未授权的请求,你将会得到一个404.</span></span><br><span class="line"><span class="attr">repo</span> = <span class="string">&quot;pic.cloud&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 您的 Gtihub 用户名 </span></span><br><span class="line"><span class="attr">username</span> = <span class="string">&quot;lijiabao9&quot;</span></span><br></pre></td></tr></table></figure>
+<h4 id="步骤-C-修改-Docker-Compose"><a href="#步骤-C-修改-Docker-Compose" class="headerlink" title="步骤 C: 修改 Docker Compose"></a>步骤 C: 修改 Docker Compose</h4><p>我们需要将宿主机上的 <code>upgit</code> 程序挂载到容器内部。</p>
+<figure class="highlight yaml"><figcaption><span>docker-compose.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">artalk:</span></span><br><span class="line">    <span class="comment"># ... 其他配置保持不变</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/data</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./upgit:/usr/bin/upgit</span>  <span class="comment"># 新增挂载</span></span><br></pre></td></tr></table></figure>
+<h4 id="步骤-D-启用集成"><a href="#步骤-D-启用集成" class="headerlink" title="步骤 D: 启用集成"></a>步骤 D: 启用集成</h4><ol>
+<li>重建容器：<code>docker compose down &amp;&amp; docker compose up -d</code></li>
+<li>Artalk 后台 -> 图片上传 -> -&gt; Upgit配置 -&gt; <strong>启用 Upgit</strong>。</li>
+<li>上传命令填写：<code>upgit -c /data/config.upgit.toml</code>。</li>
+</ol>
+<hr>
+<p>此时，上传的图片，会被上传到 GitHub。</p>
+<h3 id="4-精美邮件通知模板"><a href="#4-精美邮件通知模板" class="headerlink" title="4. 精美邮件通知模板"></a>4. 精美邮件通知模板</h3><p>Artalk 支持自定义邮件模板。以下是几款精选的模板代码，复制即可使用。</p>
+<div class="tabs"><div class="nav-tabs"><button type="button" class="tab">仿App聊天界面</button><button type="button" class="tab">左侧视觉分栏</button><button type="button" class="tab active">孟菲斯</button><button type="button" class="tab">故障票据</button><button type="button" class="tab">VSCode代码编辑器</button><button type="button" class="tab">复古打字机</button></div><div class="tab-contents"><div class="tab-item-content"><p><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/post/20251205223757537.webp" alt=""></p>
+<figure class="highlight html"><figcaption><span>./data/mail_tpl/Chat-UI.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #f2f2f7; padding: 40px 0; font-family: -apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;max-width: 400px; margin: 0 auto; background-color: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.15); border: 8px solid #1c1c1e;&quot;</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #f9f9f9; padding: 15px 20px; border-bottom: 1px solid #e5e5ea; display: flex; align-items: center; justify-content: space-between;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 12px; font-weight: 600; color: #000;&quot;</span>&gt;</span>&#123;&#123;site_name&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 10px; color: #8e8e93;&quot;</span>&gt;</span>刚刚<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;padding: 20px; background-color: #ffffff; min-height: 250px;&quot;</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center; margin-bottom: 20px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #f2f2f7; color: #8e8e93; font-size: 10px; padding: 4px 8px; border-radius: 4px;&quot;</span>&gt;</span>收到新回复<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">table</span> <span class="attr">width</span>=<span class="string">&quot;100%&quot;</span> <span class="attr">cellpadding</span>=<span class="string">&quot;0&quot;</span> <span class="attr">cellspacing</span>=<span class="string">&quot;0&quot;</span> <span class="attr">border</span>=<span class="string">&quot;0&quot;</span> <span class="attr">style</span>=<span class="string">&quot;margin-bottom: 20px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">td</span> <span class="attr">align</span>=<span class="string">&quot;right&quot;</span> <span class="attr">valign</span>=<span class="string">&quot;top&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;display: inline-block; text-align: left;&quot;</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #e5e5ea; color: #000; padding: 10px 14px; border-radius: 18px 18px 4px 18px; font-size: 13px; max-width: 240px; margin-bottom: 4px;&quot;</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;font-size:10px; color:#666; display:block; margin-bottom:2px;&quot;</span>&gt;</span>我<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">                                &#123;&#123;content&#125;&#125;</span><br><span class="line">                            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">td</span> <span class="attr">width</span>=<span class="string">&quot;40&quot;</span> <span class="attr">align</span>=<span class="string">&quot;right&quot;</span> <span class="attr">valign</span>=<span class="string">&quot;bottom&quot;</span> <span class="attr">style</span>=<span class="string">&quot;padding-left: 8px;&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;https://cravatar.cn/avatar/&#123;&#123;parent_comment.email_encrypted&#125;&#125;?d=monsterid&amp;s=80&quot;</span> <span class="attr">style</span>=<span class="string">&quot;width: 30px; height: 30px; border-radius: 50%; background: #ccc;&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">table</span> <span class="attr">width</span>=<span class="string">&quot;100%&quot;</span> <span class="attr">cellpadding</span>=<span class="string">&quot;0&quot;</span> <span class="attr">cellspacing</span>=<span class="string">&quot;0&quot;</span> <span class="attr">border</span>=<span class="string">&quot;0&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">td</span> <span class="attr">width</span>=<span class="string">&quot;40&quot;</span> <span class="attr">valign</span>=<span class="string">&quot;bottom&quot;</span> <span class="attr">style</span>=<span class="string">&quot;padding-right: 8px;&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;https://cravatar.cn/avatar/&#123;&#123;comment.email_encrypted&#125;&#125;?d=monsterid&amp;s=80&quot;</span> <span class="attr">style</span>=<span class="string">&quot;width: 36px; height: 36px; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">td</span> <span class="attr">align</span>=<span class="string">&quot;left&quot;</span> <span class="attr">valign</span>=<span class="string">&quot;top&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 12px; color: #8e8e93; margin-left: 4px; margin-bottom: 2px;&quot;</span>&gt;</span>&#123;&#123;reply_nick&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #007aff; color: #ffffff; padding: 12px 16px; border-radius: 18px 18px 18px 4px; font-size: 14px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,122,255,0.25);&quot;</span>&gt;</span></span><br><span class="line">                            &#123;&#123;reply_content&#125;&#125;</span><br><span class="line">                        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;padding: 12px 15px 20px 15px; background-color: #f9f9f9; border-top: 1px solid #e5e5ea;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;link_to_reply&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: block; text-decoration: none;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #ffffff; border: 1px solid #e5e5ea; border-radius: 20px; padding: 10px 15px; color: #007aff; font-size: 14px; text-align: center; font-weight: 500;&quot;</span>&gt;</span></span><br><span class="line">                    点击此处回复消息...</span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center; margin-top: 10px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;page_url&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 10px; color: #c7c7cc; text-decoration: none;&quot;</span>&gt;</span>来源文章: &#123;&#123;page_title&#125;&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></div><div class="tab-item-content"><p><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/post/20251205223949926.webp" alt=""></p>
+<figure class="highlight html"><figcaption><span>./data/mail_tpl/Magazine-Split.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #e9ecef; padding: 40px 0; font-family: &#x27;Helvetica Neue&#x27;, Helvetica, Arial, sans-serif;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 15px 30px rgba(0,0,0,0.1);&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">table</span> <span class="attr">width</span>=<span class="string">&quot;100%&quot;</span> <span class="attr">cellspacing</span>=<span class="string">&quot;0&quot;</span> <span class="attr">cellpadding</span>=<span class="string">&quot;0&quot;</span> <span class="attr">border</span>=<span class="string">&quot;0&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">td</span> <span class="attr">width</span>=<span class="string">&quot;35%&quot;</span> <span class="attr">valign</span>=<span class="string">&quot;top&quot;</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #212529; color: #ffffff; padding: 40px 20px; text-align: center;&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;https://cravatar.cn/avatar/&#123;&#123;comment.email_encrypted&#125;&#125;?d=monsterid&amp;s=120&quot;</span> <span class="attr">style</span>=<span class="string">&quot;width: 80px; height: 80px; border-radius: 50%; border: 3px solid #495057; margin-bottom: 15px;&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 18px; font-weight: bold; letter-spacing: 1px;&quot;</span>&gt;</span>&#123;&#123;reply_nick&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 10px; text-transform: uppercase; color: #adb5bd; margin-top: 5px; letter-spacing: 2px;&quot;</span>&gt;</span>Replied To You<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    </span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: 40px; border-top: 1px solid #343a40; padding-top: 20px;&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;link_to_reply&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #ffd43b; color: #212529; padding: 10px 20px; text-decoration: none; font-size: 12px; font-weight: bold; display: inline-block; border-radius: 2px;&quot;</span>&gt;</span></span><br><span class="line">                            查看详情 <span class="symbol">&amp;rarr;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                </span><br><span class="line">                <span class="tag">&lt;<span class="name">td</span> <span class="attr">width</span>=<span class="string">&quot;65%&quot;</span> <span class="attr">valign</span>=<span class="string">&quot;top&quot;</span> <span class="attr">style</span>=<span class="string">&quot;padding: 40px 30px; background-color: #ffffff;&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 10px; color: #868e96; letter-spacing: 1px; margin-bottom: 20px;&quot;</span>&gt;</span>IN ARTICLE: <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;page_url&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;color: #868e96; text-decoration: none; border-bottom: 1px dotted #ccc;&quot;</span>&gt;</span>&#123;&#123;page_title&#125;&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    </span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;border-left: 2px solid #dee2e6; padding-left: 15px; margin-bottom: 25px;&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 12px; color: #adb5bd; margin-bottom: 5px;&quot;</span>&gt;</span>YOU SAID:<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 13px; color: #868e96; font-style: italic;&quot;</span>&gt;</span>&quot;&#123;&#123;content&#125;&#125;&quot;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-family: Georgia, &#x27;Times New Roman&#x27;, serif; font-size: 16px; line-height: 1.6; color: #212529;&quot;</span>&gt;</span></span><br><span class="line">                        &#123;&#123;reply_content&#125;&#125;</span><br><span class="line">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: 50px; font-size: 10px; color: #ced4da; text-align: right;&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;site_url&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;color: #ced4da; text-decoration: none;&quot;</span>&gt;</span>&#123;&#123;site_name&#125;&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span> Notification System</span><br><span class="line">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></div><div class="tab-item-content active"><p><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/post/20251205224149287.webp" alt=""></p>
+<figure class="highlight html"><figcaption><span>./data/mail_tpl/Neo-Brutalism.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #fff4e0; padding: 50px 0; font-family: Helvetica, Arial, sans-serif;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;max-width: 500px; margin: 0 auto;&quot;</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #a388ee; border: 3px solid #000; box-shadow: 6px 6px 0px #000; padding: 15px; margin-bottom: 20px; text-align: center;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span> <span class="attr">style</span>=<span class="string">&quot;margin: 0; font-size: 28px; font-weight: 900; color: #000; text-transform: uppercase; font-style: italic;&quot;</span>&gt;</span></span><br><span class="line">                Hey! Wake Up!</span><br><span class="line">            <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #fff; border: 3px solid #000; box-shadow: 6px 6px 0px #000; padding: 30px;&quot;</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center; margin-top: -60px; margin-bottom: 20px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;https://cravatar.cn/avatar/&#123;&#123;comment.email_encrypted&#125;&#125;?d=monsterid&amp;s=100&quot;</span> <span class="attr">style</span>=<span class="string">&quot;width: 80px; height: 80px; border: 3px solid #000; background-color: #ff90e8; border-radius: 50%;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;font-weight: 700; font-size: 18px; text-align: center; margin: 0 0 20px 0;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #ff90e8; padding: 2px 5px; border: 1px solid #000;&quot;</span>&gt;</span>&#123;&#123;reply_nick&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span> 刚刚回复了你：</span><br><span class="line">            <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #f0f0f0; border: 2px solid #000; padding: 15px; font-size: 16px; font-weight: 500; line-height: 1.5; color: #000;&quot;</span>&gt;</span></span><br><span class="line">                &quot;&#123;&#123;reply_content&#125;&#125;&quot;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: 20px; font-size: 12px; color: #666; border-left: 4px solid #000; padding-left: 10px;&quot;</span>&gt;</span></span><br><span class="line">                Target: &quot;&#123;&#123;page_title&#125;&#125;&quot;<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                Your text: &#123;&#123;content&#125;&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: 30px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;link_to_reply&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: block; background-color: #000; color: #fff; text-decoration: none; text-align: center; padding: 15px; font-weight: 900; text-transform: uppercase; font-size: 16px; transition: all 0.2s;&quot;</span>&gt;</span></span><br><span class="line">                    Go To Reply -&gt;</span><br><span class="line">                <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center; margin-top: 20px; font-weight: 700; font-size: 12px;&quot;</span>&gt;</span></span><br><span class="line">            &#123;&#123;site_name&#125;&#125; // NO_SPAM</span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></div><div class="tab-item-content"><p><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/post/20251205224218660.webp" alt=""></p>
+<figure class="highlight html"><figcaption><span>./data/mail_tpl/Ticket.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #000000; padding: 40px 10px; font-family: &#x27;Courier New&#x27;, Courier, monospace;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;max-width: 480px; margin: 0 auto; background-color: #ffffff; position: relative;&quot;</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;height: 8px; background: repeating-linear-gradient(45deg, #000, #000 10px, #f4d03f 10px, #f4d03f 20px);&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;padding: 25px;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">table</span> <span class="attr">width</span>=<span class="string">&quot;100%&quot;</span> <span class="attr">style</span>=<span class="string">&quot;border-bottom: 2px dashed #000; padding-bottom: 15px; margin-bottom: 15px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">td</span> <span class="attr">align</span>=<span class="string">&quot;left&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;font-weight: 900; font-size: 24px; letter-spacing: -1px;&quot;</span>&gt;</span>NEW REPLY<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">td</span> <span class="attr">align</span>=<span class="string">&quot;right&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;background: #000; color: #fff; padding: 2px 6px; font-size: 12px;&quot;</span>&gt;</span>#ID_&#123;&#123;comment.id&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-bottom: 20px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 12px; color: #666; text-transform: uppercase;&quot;</span>&gt;</span>From / Sender<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;display: flex; align-items: center; margin-top: 5px;&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;https://cravatar.cn/avatar/&#123;&#123;comment.email_encrypted&#125;&#125;?d=monsterid&amp;s=80&quot;</span> <span class="attr">style</span>=<span class="string">&quot;width: 40px; height: 40px; border-radius: 0; border: 2px solid #000; margin-right: 15px;&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 18px; font-weight: 700;&quot;</span>&gt;</span>&#123;&#123;reply_nick&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;border: 2px solid #000; padding: 15px; margin-bottom: 20px; background-color: #f8f8f8;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;margin: 0; font-size: 14px; line-height: 1.5;&quot;</span>&gt;</span>&#123;&#123;reply_content&#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 12px; color: #666; margin-bottom: 20px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;background: #ccc; color: #000; padding: 0 4px;&quot;</span>&gt;</span>REF<span class="tag">&lt;/<span class="name">span</span>&gt;</span> Your comment in &quot;&#123;&#123;page_title&#125;&#125;&quot;:<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;font-style: italic;&quot;</span>&gt;</span>&quot;&#123;&#123;content&#125;&#125;&quot;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;border-top: 2px dashed #000; background-color: #f4d03f; padding: 20px; text-align: center;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;link_to_reply&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: block; width: 100%; text-decoration: none; color: #000; font-weight: 900; font-size: 16px; letter-spacing: 1px; text-transform: uppercase;&quot;</span>&gt;</span></span><br><span class="line">                [ CLICK TO VIEW REPLY ]</span><br><span class="line">            <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 10px; margin-top: 10px; opacity: 0.6;&quot;</span>&gt;</span></span><br><span class="line">                &#123;&#123;site_url&#125;&#125; // AUTO_GENERATED_MSG</span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></div><div class="tab-item-content"><p><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/post/20251205224319655.webp" alt=""></p>
+<figure class="highlight html"><figcaption><span>./data/mail_tpl/VSCode.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #1e1e1e; padding: 40px 0; font-family: Consolas, &#x27;Courier New&#x27;, monospace; color: #d4d4d4;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;max-width: 600px; margin: 0 auto; background-color: #252526; border-radius: 6px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.5); border: 1px solid #3c3c3c;&quot;</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #2d2d2d; padding: 10px 15px; display: flex; align-items: center; border-bottom: 1px solid #1e1e1e;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;display: flex; gap: 6px; margin-right: 15px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 10px; height: 10px; border-radius: 50%; background-color: #ff5f56;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 10px; height: 10px; border-radius: 50%; background-color: #ffbd2e;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 10px; height: 10px; border-radius: 50%; background-color: #27c93f;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #1e1e1e; padding: 5px 15px; border-radius: 4px 4px 0 0; font-size: 12px; color: #9cdcfe;&quot;</span>&gt;</span></span><br><span class="line">                reply_notification.js</span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;padding: 20px; font-size: 13px; line-height: 1.6;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">table</span> <span class="attr">width</span>=<span class="string">&quot;100%&quot;</span> <span class="attr">cellpadding</span>=<span class="string">&quot;0&quot;</span> <span class="attr">cellspacing</span>=<span class="string">&quot;0&quot;</span> <span class="attr">border</span>=<span class="string">&quot;0&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">td</span> <span class="attr">valign</span>=<span class="string">&quot;top&quot;</span> <span class="attr">width</span>=<span class="string">&quot;30&quot;</span> <span class="attr">style</span>=<span class="string">&quot;color: #858585; text-align: right; padding-right: 15px; border-right: 1px solid #404040; user-select: none;&quot;</span>&gt;</span></span><br><span class="line">                        1<span class="tag">&lt;<span class="name">br</span>&gt;</span>2<span class="tag">&lt;<span class="name">br</span>&gt;</span>3<span class="tag">&lt;<span class="name">br</span>&gt;</span>4<span class="tag">&lt;<span class="name">br</span>&gt;</span>5<span class="tag">&lt;<span class="name">br</span>&gt;</span>6<span class="tag">&lt;<span class="name">br</span>&gt;</span>7<span class="tag">&lt;<span class="name">br</span>&gt;</span>8<span class="tag">&lt;<span class="name">br</span>&gt;</span>9<span class="tag">&lt;<span class="name">br</span>&gt;</span>10<span class="tag">&lt;<span class="name">br</span>&gt;</span>11</span><br><span class="line">                    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">td</span> <span class="attr">valign</span>=<span class="string">&quot;top&quot;</span> <span class="attr">style</span>=<span class="string">&quot;padding-left: 15px;&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #c586c0;&quot;</span>&gt;</span>import<span class="tag">&lt;/<span class="name">span</span>&gt;</span> &#123; Notification &#125; <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #c586c0;&quot;</span>&gt;</span>from<span class="tag">&lt;/<span class="name">span</span>&gt;</span> <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #ce9178;&quot;</span>&gt;</span>&#x27;&#123;&#123;site_name&#125;&#125;&#x27;<span class="tag">&lt;/<span class="name">span</span>&gt;</span>;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #6a9955;&quot;</span>&gt;</span>// @Author: You (Original Comment)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #6a9955;&quot;</span>&gt;</span>// Content: &quot;&#123;&#123;content&#125;&#125;&quot;<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #569cd6;&quot;</span>&gt;</span>const<span class="tag">&lt;/<span class="name">span</span>&gt;</span> <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #9cdcfe;&quot;</span>&gt;</span>reply<span class="tag">&lt;/<span class="name">span</span>&gt;</span> = <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #c586c0;&quot;</span>&gt;</span>new<span class="tag">&lt;/<span class="name">span</span>&gt;</span> <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #4ec9b0;&quot;</span>&gt;</span>Message<span class="tag">&lt;/<span class="name">span</span>&gt;</span>(&#123;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;padding-left: 20px;&quot;</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #9cdcfe;&quot;</span>&gt;</span>from<span class="tag">&lt;/<span class="name">span</span>&gt;</span>: <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #ce9178;&quot;</span>&gt;</span>&quot;&#123;&#123;reply_nick&#125;&#125;&quot;<span class="tag">&lt;/<span class="name">span</span>&gt;</span>,</span><br><span class="line">                        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;padding-left: 20px;&quot;</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #9cdcfe;&quot;</span>&gt;</span>content<span class="tag">&lt;/<span class="name">span</span>&gt;</span>: <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #ce9178;&quot;</span>&gt;</span>`&#123;&#123;reply_content&#125;&#125;`<span class="tag">&lt;/<span class="name">span</span>&gt;</span>,</span><br><span class="line">                        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;padding-left: 20px;&quot;</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #9cdcfe;&quot;</span>&gt;</span>action<span class="tag">&lt;/<span class="name">span</span>&gt;</span>: () <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;color: #569cd6;&quot;</span>&gt;</span>=&gt;<span class="tag">&lt;/<span class="name">span</span>&gt;</span> &#123;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;padding-left: 40px;&quot;</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;link_to_reply&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;color: #ce9178; text-decoration: underline;&quot;</span>&gt;</span>window.open(url);<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;padding-left: 20px;&quot;</span>&gt;</span>&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#125;);<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #1e1e1e; border-top: 1px solid #3c3c3c; padding: 10px 15px;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 11px; color: #858585; margin-bottom: 8px;&quot;</span>&gt;</span>TERMINAL<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;link_to_reply&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: block; background-color: #0e639c; color: #fff; text-decoration: none; padding: 8px; text-align: center; font-size: 12px; font-weight: bold; font-family: sans-serif;&quot;</span>&gt;</span></span><br><span class="line">                &gt; npm run view-reply</span><br><span class="line">            <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></div><div class="tab-item-content"><p><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/post/20251205224351230.webp" alt=""></p>
+<figure class="highlight html"><figcaption><span>./data/mail_tpl/Typewriter.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: #fdfbf7; padding: 60px 0; font-family: Georgia, &#x27;Times New Roman&#x27;, serif; color: #4a4a4a;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;max-width: 560px; margin: 0 auto; border: 1px solid #e0dcd3; background-color: #ffffff; padding: 60px 50px;&quot;</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center; border-bottom: 2px solid #4a4a4a; padding-bottom: 20px; margin-bottom: 40px;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 24px; letter-spacing: 2px; text-transform: uppercase; font-weight: bold;&quot;</span>&gt;</span>&#123;&#123;site_name&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 16px; line-height: 1.8;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>Dear <span class="tag">&lt;<span class="name">strong</span>&gt;</span>&#123;&#123;nick&#125;&#125;<span class="tag">&lt;/<span class="name">strong</span>&gt;</span>,<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>You have received a new correspondence regarding your note on &quot;<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;page_url&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;color: #4a4a4a; text-decoration: underline;&quot;</span>&gt;</span>&#123;&#123;page_title&#125;&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span>&quot;.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin: 40px 0; text-align: center;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;font-style: italic; font-size: 18px; color: #000;&quot;</span>&gt;</span></span><br><span class="line">                    “ &#123;&#123;reply_content&#125;&#125; ”</span><br><span class="line">                <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: 15px; font-size: 14px; color: #888;&quot;</span>&gt;</span></span><br><span class="line">                    — Signed by &#123;&#123;reply_nick&#125;&#125;</span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 14px; color: #888;&quot;</span>&gt;</span></span><br><span class="line">                Reference to your original thought:<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;font-style: italic;&quot;</span>&gt;</span>&quot;&#123;&#123;content&#125;&#125;&quot;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center; margin-top: 50px;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;link_to_reply&#125;&#125;&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: inline-block; padding: 10px 30px; border: 1px solid #4a4a4a; color: #4a4a4a; text-decoration: none; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; hover: background-color: #4a4a4a; hover: color: #fff;&quot;</span>&gt;</span></span><br><span class="line">                Read Full Discussion</span><br><span class="line">            <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: 60px; text-align: center; font-size: 11px; color: #b0b0b0;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="symbol">&amp;copy;</span> &#123;&#123;site_name&#125;&#125;. All rights reserved.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+<h3 id="5-邮件通知"><a href="#5-邮件通知" class="headerlink" title="5. 邮件通知"></a>5. 邮件通知</h3><p>Artalk 支持通过 <strong>SMTP 协议</strong>、阿里云邮件推送、调用系统 Sendmail 命令等方式向用户发送邮件通知。</p>
+<p>在 Artalk 后台，<strong>设置 -&gt; 邮件通知</strong>，勾选 <strong>启用邮件通知</strong>。</p>
+<ul>
+<li><strong>发送方式</strong>：<code>smtp</code></li>
+<li><strong>发送人昵称</strong>：<code>&#123;&#123;reply_nick&#125;&#125;</code></li>
+<li><strong>发送人地址</strong>：<code>noreply@example.com</code></li>
+<li><strong>邮件标题</strong>：<code>[&#123;&#123;site_name&#125;&#125;] 您收到了来自 @&#123;&#123;reply_nick&#125;&#125; 的回复</code></li>
+<li><strong>邮件模板文件</strong>：<code>/data/mail_tpl/Neo-Brutalism.html</code></li>
+</ul>
+<p>在 <strong>SMTP 发送</strong>，配置用于发送邮件的账号授权信息：</p>
+<ul>
+<li>对于 <strong>QQ 邮箱</strong><ul>
+<li><strong>发件地址</strong>：<code>smtp.qq.com</code></li>
+<li><strong>发件端口</strong>：<code>587</code></li>
+<li><strong>用户名</strong>： <code>your_email@qq.com</code></li>
+<li><strong>密码</strong>：（注意：是额外生成的授权码，不是邮箱的登录密码） <code>your_email_authcode</code></li>
+</ul>
+</li>
+<li>对于 <strong>Microsoft 邮箱</strong><ul>
+<li><strong>发件地址</strong>：<code>smtp.office365.com</code></li>
+<li><strong>发件端口</strong>：<code>587</code></li>
+<li><strong>用户名</strong>： <code>your_email@xxx.onmicrosoft.com</code></li>
+<li><strong>密码</strong>：（注意：登录密码） <code>your_email_password</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="6-社交登录"><a href="#6-社交登录" class="headerlink" title="6. 社交登录"></a>6. 社交登录</h3><p>在 Artalk 后台，<strong>设置 -&gt; 社交登录</strong>，勾选 <strong>启用社交登录</strong>，<strong>允许匿名评论</strong>。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io">Gabriel</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io/posts/1b40d3bb.html">https://lijiabao9.github.io/posts/1b40d3bb.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lijiabao9.github.io" target="_blank">Gabriel的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Hexo/">Hexo</a><a class="post-meta__tags" href="/tags/Artalk/">Artalk</a><a class="post-meta__tags" href="/tags/Docker/">Docker</a><a class="post-meta__tags" href="/tags/Nginx/">Nginx</a><a class="post-meta__tags" href="/tags/UpGit/">UpGit</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechat.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechat.webp" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/fdad30aa.html" title="极简主义统计：Umami 私有化部署与 Hexo 博客集成指南"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">极简主义统计：Umami 私有化部署与 Hexo 博客集成指南</div></div><div class="info-2"><div class="info-item-1">摒弃 Google Analytics，拥抱隐私保护。本文详解如何通过 Docker Compose 部署 Umami 统计服务，配置 Nginx HTTPS 反代，并将其无缝集成到 Hexo Butterfly 主题中。</div></div></div></a><a class="pagination-related" href="/posts/e94f4538.html" title="从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南</div></div><div class="info-2"><div class="info-item-1">本文详细记录了从 SpaceShip 购买便宜域名，托管至 Cloudflare 进行 DNS 解析，利用 acme.sh 配合 Cloudflare API 自动申请泛域名证书，并最终配置 Nginx 实现全站 HTTPS 的完整流程。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/fdad30aa.html" title="极简主义统计：Umami 私有化部署与 Hexo 博客集成指南"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-05</div><div class="info-item-2">极简主义统计：Umami 私有化部署与 Hexo 博客集成指南</div></div><div class="info-2"><div class="info-item-1">摒弃 Google Analytics，拥抱隐私保护。本文详解如何通过 Docker Compose 部署 Umami 统计服务，配置 Nginx HTTPS 反代，并将其无缝集成到 Hexo Butterfly 主题中。</div></div></div></a><a class="pagination-related" href="/posts/a9a95ebd.html" title="Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-29</div><div class="info-item-2">Hexo Butterfly 标签外挂完全指南 (原生 + Plus增强版)</div></div><div class="info-2"><div class="info-item-1">一文掌握 Butterfly 主题所有强大的标签外挂功能。包含原生标签及 Tag Plugins Plus 增强插件的完整语法、效果预览与源码示例。</div></div></div></a><a class="pagination-related" href="/posts/9e5ea567.html" title="Hexo 博客入门：从零搭建"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-29</div><div class="info-item-2">Hexo 博客入门：从零搭建</div></div><div class="info-2"><div class="info-item-1">2025 保姆级教程：手把手教你搭建 Hexo 8.0 博客。涵盖环境配置、GitHub Pages 免费托管、GitHub Actions 自动流水线部署，以及必装的 SEO 插件推荐，打造高颜值的个人技术站点。</div></div></div></a><a class="pagination-related" href="/posts/2a3bd2c2.html" title="Hexo 博客进阶：Butterfly 主题深度美化与源码级魔改"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-29</div><div class="info-item-2">Hexo 博客进阶：Butterfly 主题深度美化与源码级魔改</div></div><div class="info-2"><div class="info-item-1">从零开始打造高颜值 Hexo 博客。深度解析 Butterfly 主题配置，涵盖一图流样式、特效插件安装，以及导航栏彩色图标、生肖时间轴等源码级定制教程。</div></div></div></a><a class="pagination-related" href="/posts/3c32210.html" title="Ubuntu 系统 Docker 安装全指南：官方源与国内镜像加速"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Ubuntu 系统 Docker 安装全指南：官方源与国内镜像加速</div></div><div class="info-2"><div class="info-item-1">详解在 Ubuntu 系统（含 24.04 新版）下安装 Docker 的全流程。包含卸载旧版、配置 GPG 密钥、设置 APT 软件源（官方/阿里云）、免 Sudo 配置及镜像加速器设置。</div></div></div></a><a class="pagination-related" href="/posts/c3ae7e15.html" title="Docker Desktop 最佳实践：自定义安装路径与镜像加速配置"><img class="cover" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-30</div><div class="info-item-2">Docker Desktop 最佳实践：自定义安装路径与镜像加速配置</div></div><div class="info-2"><div class="info-item-1">详解如何在 Windows 上安装 Docker Desktop 并强制修改默认安装路径至 D 盘，同时配置阿里云镜像加速以提升拉取速度。</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="artalk-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Gabriel</div><div class="author-info-description">记录技术探索，也写人间烟火。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">24</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lijiabao9"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:ljiabao9@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #D14836;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">新手上路 | 这里记录着从 Hello World 到 Hello Universe 的每一步探索 🌌</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87"><span class="toc-text">一、前置准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%83%A8%E7%BD%B2"><span class="toc-text">二、服务端部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95"><span class="toc-text">1. 创建工作目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BC%96%E5%86%99-Docker-Compose"><span class="toc-text">2. 编写 Docker Compose</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1"><span class="toc-text">3. 启动服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-HTTPS"><span class="toc-text">三、Nginx 反向代理与 HTTPS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%BC%96%E5%86%99-Nginx-%E9%85%8D%E7%BD%AE"><span class="toc-text">1. 编写 Nginx 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%90%AF%E7%94%A8%E9%85%8D%E7%BD%AE"><span class="toc-text">2. 启用配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%9F%9F%E5%90%8DDNS%E8%AE%B0%E5%BD%95"><span class="toc-text">3. 域名DNS记录</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%89%8D%E7%AB%AF%E6%8E%A5%E5%85%A5-Hexo-Butterfly"><span class="toc-text">四、前端接入 (Hexo Butterfly)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BF%AE%E6%94%B9%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE"><span class="toc-text">1. 修改主题配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%87%8D%E6%96%B0%E9%83%A8%E7%BD%B2"><span class="toc-text">2. 重新部署</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5-Troubleshooting"><span class="toc-text">五、故障排查 (Troubleshooting)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98-CORS"><span class="toc-text">1. 跨域问题 (CORS)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%B7%B7%E5%90%88%E5%86%85%E5%AE%B9%E9%94%99%E8%AF%AF-Mixed-Content"><span class="toc-text">2. 混合内容错误 (Mixed Content)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Cloudflare-%E7%89%B9%E6%9C%89%E5%9D%91%E7%82%B9"><span class="toc-text">3. Cloudflare 特有坑点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD%E5%AE%9A%E5%88%B6"><span class="toc-text">六、高级功能定制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%95%8C%E9%9D%A2%E4%B8%AA%E6%80%A7%E5%8C%96"><span class="toc-text">1. 界面个性化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-IP-%E5%B1%9E%E5%9C%B0%E6%98%BE%E7%A4%BA"><span class="toc-text">2. IP 属地显示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-UpGit-%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0-GitHub-%E5%9B%BE%E5%BA%8A"><span class="toc-text">3. UpGit 图片上传 (GitHub 图床)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-A-%E5%AE%89%E8%A3%85-UpGit"><span class="toc-text">步骤 A: 安装 UpGit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-B-%E9%85%8D%E7%BD%AE-UpGit"><span class="toc-text">步骤 B: 配置 UpGit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-C-%E4%BF%AE%E6%94%B9-Docker-Compose"><span class="toc-text">步骤 C: 修改 Docker Compose</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-D-%E5%90%AF%E7%94%A8%E9%9B%86%E6%88%90"><span class="toc-text">步骤 D: 启用集成</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%B2%BE%E7%BE%8E%E9%82%AE%E4%BB%B6%E9%80%9A%E7%9F%A5%E6%A8%A1%E6%9D%BF"><span class="toc-text">4. 精美邮件通知模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%82%AE%E4%BB%B6%E9%80%9A%E7%9F%A5"><span class="toc-text">5. 邮件通知</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%A4%BE%E4%BA%A4%E7%99%BB%E5%BD%95"><span class="toc-text">6. 社交登录</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/fdad30aa.html" title="极简主义统计：Umami 私有化部署与 Hexo 博客集成指南"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="极简主义统计：Umami 私有化部署与 Hexo 博客集成指南"/></a><div class="content"><a class="title" href="/posts/fdad30aa.html" title="极简主义统计：Umami 私有化部署与 Hexo 博客集成指南">极简主义统计：Umami 私有化部署与 Hexo 博客集成指南</a><time datetime="2025-12-05T15:15:49.000Z" title="发表于 2025-12-05 23:15:49">2025-12-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1b40d3bb.html" title="Artalk 私有化部署全指南：Docker + Nginx + Cloudflare 打造独立评论系统"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Artalk 私有化部署全指南：Docker + Nginx + Cloudflare 打造独立评论系统"/></a><div class="content"><a class="title" href="/posts/1b40d3bb.html" title="Artalk 私有化部署全指南：Docker + Nginx + Cloudflare 打造独立评论系统">Artalk 私有化部署全指南：Docker + Nginx + Cloudflare 打造独立评论系统</a><time datetime="2025-12-05T13:04:00.000Z" title="发表于 2025-12-05 21:04:00">2025-12-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/e94f4538.html" title="从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南"/></a><div class="content"><a class="title" href="/posts/e94f4538.html" title="从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南">从零开始：域名购买、Cloudflare 托管与 Nginx 自动化 HTTPS 配置全指南</a><time datetime="2025-12-04T16:32:58.000Z" title="发表于 2025-12-05 00:32:58">2025-12-05</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Gabriel</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3-b2</a></span></div><div class="footer_custom_text">🚧 施工中 | 这是一个程序员用代码和咖啡构建的思维城堡 💻☕ | Bug和灵感同样欢迎！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3-b2"></script><script src="/js/main.js?v=5.5.3-b2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script><script>(() => {
+  let artalkItem = null
+  const option = null
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const destroyArtalk = () => {
+    if (artalkItem) {
+      artalkItem.destroy()
+      artalkItem = null
+    }
+  }
+
+  const artalkChangeMode = theme => artalkItem && artalkItem.setDarkMode(theme === 'dark')
+
+  const initArtalk = (el = document, pageKey = location.pathname) => {
+    artalkItem = Artalk.init({
+      el: el.querySelector('#artalk-wrap'),
+      server: 'https://artalk.131495.xyz',
+      site: 'Gabriel的博客',
+      darkMode: document.documentElement.getAttribute('data-theme') === 'dark',
+      ...option,
+      pageKey: isShuoshuo ? pageKey : (option && option.pageKey) || pageKey
+    })
+
+    if (GLOBAL_CONFIG.lightbox === 'null') return
+    artalkItem.on('list-loaded', () => {
+      artalkItem.ctx.get('list').getCommentNodes().forEach(comment => {
+        const $content = comment.getRender().$content
+        btf.loadLightbox($content.querySelectorAll('img:not([atk-emoticon])'))
+      })
+    })
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyArtalk = () => {
+        destroyArtalk()
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    btf.addGlobalFn('pjaxSendOnce', destroyArtalk, 'destroyArtalk')
+    btf.addGlobalFn('themeChange', artalkChangeMode, 'artalk')
+  }
+
+  const loadArtalk = async (el, pageKey) => {
+    if (typeof Artalk === 'object') initArtalk(el, pageKey)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/artalk@2.9.1/dist/Artalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/artalk@2.9.1/dist/Artalk.min.js')
+      initArtalk(el, pageKey)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Artalk' === 'Artalk'
+      ? window.shuoshuoComment = { loadComment: loadArtalk }
+      : window.loadOtherComment = loadArtalk
+    return
+  }
+
+  if ('Artalk' === 'Artalk' || !false) {
+    if (false) btf.loadComment(document.getElementById('artalk-wrap'), loadArtalk)
+    else setTimeout(loadArtalk, 100)
+  } else {
+    window.loadOtherComment = loadArtalk
+  }
+})()</script></div><script>window.newestComments = {
+  changeContent: content => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<code>.*?<\/code>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g, "") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0, 150) + '...'
+    }
+    return content
+  },
+
+  generateHtml: (array, ele) => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class="aside-list-item">'
+
+        if (true && array[i].avatar) {
+          const imgAttr = 'src'
+          const lazyloadNative = ''
+          result += `<a href="${array[i].url}" class="thumbnail"><img ${imgAttr}="${array[i].avatar}" alt="${array[i].nick}" ${lazyloadNative}></a>`
+        }
+
+        result += `<div class="content">
+        <a class="comment" href="${array[i].url}" title="${array[i].content}">${array[i].content}</a>
+        <div class="name"><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '暂无评论'
+    }
+
+    ele.innerHTML = result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh(ele)
+  },
+
+  newestCommentInit: (name, getComment) => {
+    const $dom = document.querySelector('#card-newest-comments .aside-list')
+    if ($dom) {
+      const data = btf.saveToLocal.get(name)
+      if (data) {
+        newestComments.generateHtml(JSON.parse(data), $dom)
+      } else {
+        getComment($dom)
+      }
+    }
+  },
+
+  run: (name, getComment) => {
+    newestComments.newestCommentInit(name, getComment)
+    btf.addGlobalFn('pjaxComplete', () => newestComments.newestCommentInit(name, getComment), name)
+  }
+}</script><script>window.addEventListener('load', () => {
+  const keyName = 'artalk-newest-comments'
+  const { changeContent, generateHtml, run } = window.newestComments
+
+  const getAvatarValue = async () => {
+    const predefinedAvatarCdn = ''
+    const predefinedAvatarDefault = ''
+
+    const avatarDefaultFormat = e => e.startsWith('d=') ? e : `d=${e}`
+
+    if (predefinedAvatarCdn && predefinedAvatarDefault) {
+      return { avatarCdn: predefinedAvatarCdn, avatarDefault: avatarDefaultFormat(predefinedAvatarDefault) }
+    }
+
+    try {
+      const res = await fetch('https://artalk.131495.xyz/api/v2/conf')
+      const result = await res.json()
+      const { mirror, params, default: defaults } = result.frontend_conf.gravatar
+      const avatarCdn = predefinedAvatarCdn || mirror
+      let avatarDefault = avatarDefaultFormat(predefinedAvatarDefault || params || defaults)
+      return { avatarCdn, avatarDefault}
+    } catch (e) {
+      console.error(e)
+      return { avatarCdn: predefinedAvatarCdn, avatarDefault: avatarDefaultFormat(predefinedAvatarDefault) }
+    }
+  }
+
+  const searchParams = new URLSearchParams({
+    'site_name': 'Gabriel的博客',
+    'limit': '6', // Fetch more comments to filter pending comments
+  })
+
+  const getComment = async (ele) => {
+    try {
+      const res = await fetch(`https://artalk.131495.xyz/api/v2/stats/latest_comments?${searchParams}`)
+      const result = await res.json()
+      const { avatarCdn, avatarDefault } = await getAvatarValue()
+      const artalk = result.data
+        .filter(e => !e.is_pending) // Filter pending comments
+        .slice(0, 3) // Limit the number of comments
+        .map(e => {
+          const avatar = avatarCdn && e.email_encrypted ? `${avatarCdn}${e.email_encrypted}?${avatarDefault}` : ''
+          return {
+            'avatar': avatar,
+            'content': changeContent(e.content_marked),
+            'nick': e.nick,
+            'url': e.page_url,
+            'date': e.date,
+          }
+        })
+      btf.saveToLocal.set(keyName, JSON.stringify(artalk), 10/(60*24))
+      generateHtml(artalk, ele)
+    } catch (e) {
+      console.log(e)
+      ele.textContent= "无法获取评论，请确认相关配置是否正确"
+    }
+  }
+
+  run(keyName, getComment)
+})</script><div class="aplayer no-destroy" data-id="2761236917" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><script>(() => {
+  const option = null
+  const config = {"site_uv":true,"site_pv":true,"page_pv":true,"token":"Fs8T8QB0mviDW+o4NpLRZHUEFsC4NSebuakIuGFkTw7Hi6SQ/GfzYi2cMdVGFCmxIBho0sCb2uTgV7BL99QGu+8BUvC+QfAp4qk9kfKrm9B3itJyIwyvu/ovBxCXPItnKrvicyNPlxb8lrRBBC/Tj/DY4htvtvxpLW6iMwR/RqwIxxL3zKNQrYntLLlZi5m+/+6FJYHh8qxA05b/Z9lHJnHWPF9qq4iIGe77g6PpKb5LIeEkPQTMmJ7zA6Gn5IsV4lrpncsROXw6gc//M2i/B/M1pHfhvlHQc79xMaA9UdcY3AEMBdkNufnQdkPaG24sMTBnMOjl39o63lxuiz3/Csq6QApviXJ+unfrhjDQHMZb9kpy1IGfcpq51Qkd"}
+
+  const runTrack = () => {
+    if (typeof umami !== 'undefined' && typeof umami.track === 'function') {
+      umami.track(props => ({ ...props, url: window.location.pathname, title: GLOBAL_CONFIG_SITE.title }))
+    } else {
+      console.warn('Umami Analytics: umami.track is not available')
+    }
+  }
+
+  const loadUmamiJS = () => {
+    btf.getScript('https://umami.131495.xyz/script.js', {
+      'data-website-id': '91f4f44e-0780-49b2-8be4-a778721e985a',
+      'data-auto-track': 'false',
+      ...option
+    }).then(() => {
+      runTrack()
+    }).catch(error => {
+      console.error('Umami Analytics: Error loading script', error)
+    })
+  }
+
+  const getData = async (isPost) => {
+    try {
+      const now = Date.now()
+      const keyUrl = isPost ? `&url=${window.location.pathname}&path=${window.location.pathname}` : ''
+      const headerList = { 'Accept': 'application/json' }
+
+      if (true) {
+        headerList['Authorization'] = `Bearer ${config.token}`
+      } else {
+        headerList['x-umami-api-key'] = config.token
+      }
+
+      const res = await fetch(`https://umami.131495.xyz/api/websites/91f4f44e-0780-49b2-8be4-a778721e985a/stats?startAt=0000000000&endAt=${now}${keyUrl}`, {
+        method: "GET",
+        headers: headerList
+      })
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`)
+      }
+
+      return await res.json()
+    } catch (error) {
+      console.error('Umami Analytics: Failed to fetch data', error)
+      throw error
+    }
+  }
+
+  const insertData = async () => {
+    try {
+      if (GLOBAL_CONFIG_SITE.pageType === 'post' && config.page_pv) {
+        const pagePV = document.getElementById('umamiPV')
+        if (pagePV) {
+          const data = await getData(true)
+          if (data && data.pageviews) {
+            pagePV.textContent = typeof data.pageviews.value !== 'undefined' ? data.pageviews.value : data.pageviews
+          } else {
+            console.warn('Umami Analytics: Invalid page view data received')
+          }
+        }
+      }
+
+      if (config.site_uv || config.site_pv) {
+        const data = await getData(false)
+
+        if (config.site_uv) {
+          const siteUV = document.getElementById('umami-site-uv')
+          if (siteUV && data && data.visitors) {
+            siteUV.textContent = typeof data.visitors.value !== 'undefined' ? data.visitors.value : data.visitors
+          } else if (siteUV) {
+            console.warn('Umami Analytics: Invalid site UV data received')
+          }
+        }
+
+        if (config.site_pv) {
+          const sitePV = document.getElementById('umami-site-pv')
+          if (sitePV && data && data.pageviews) {
+            sitePV.textContent = typeof data.pageviews.value !== 'undefined' ? data.pageviews.value : data.pageviews
+          } else if (sitePV) {
+            console.warn('Umami Analytics: Invalid site PV data received')
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Umami Analytics: Failed to insert data', error)
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', runTrack, 'umami_analytics_run_track')
+  btf.addGlobalFn('pjaxComplete', insertData, 'umami_analytics_insert')
+
+
+  loadUmamiJS()
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', insertData)
+  } else {
+    setTimeout(insertData, 100)
+  }
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="且听风吟" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3-b2"></script></div></div><!-- hexo injector body_end start --><script async src="/assets/js/ali/iconfont.js"></script><!-- hexo injector body_end end --></body></html>
