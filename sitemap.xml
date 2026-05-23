@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/tags/index.html</loc>
+    <loc>https://lijiabao9.github.io/shuoshuo/index.html</loc>
     
     <lastmod>2026-05-23</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/shuoshuo/index.html</loc>
+    <loc>https://lijiabao9.github.io/tags/index.html</loc>
     
     <lastmod>2026-05-23</lastmod>
     
@@ -47,7 +47,16 @@
   </url>
   
   <url>
-    <loc>https://lijiabao9.github.io/posts/2aa669e4.html</loc>
+    <loc>https://lijiabao9.github.io/posts/4203c146.html</loc>
+    
+    <lastmod>2026-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/posts/ee74dfb3.html</loc>
     
     <lastmod>2026-05-23</lastmod>
     
@@ -57,6 +66,15 @@
   
   <url>
     <loc>https://lijiabao9.github.io/posts/9e5ea567.html</loc>
+    
+    <lastmod>2026-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/posts/2aa669e4.html</loc>
     
     <lastmod>2026-05-23</lastmod>
     
@@ -91,15 +109,6 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://lijiabao9.github.io/posts/ee74dfb3.html</loc>
-    
-    <lastmod>2026-05-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   <url>
     <loc>https://lijiabao9.github.io/</loc>
@@ -108,6 +117,20 @@
     <priority>1.0</priority>
   </url>
 
+  
+  <url>
+    <loc>https://lijiabao9.github.io/tags/MySQL/</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
   <url>
     <loc>https://lijiabao9.github.io/tags/Hexo/</loc>
@@ -140,7 +163,21 @@
 
   
   <url>
+    <loc>https://lijiabao9.github.io/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://lijiabao9.github.io/categories/%E5%88%9B%E6%84%8F%E5%B7%A5%E5%9D%8A/</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://lijiabao9.github.io/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/Windows/</loc>
     <lastmod>2026-05-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

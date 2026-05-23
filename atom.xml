@@ -10,7 +10,28 @@
   <rights>All rights reserved 2026, Gabriel</rights>
   <subtitle>在代码与文字之间</subtitle>
   <title>Gabriel的博客</title>
-  <updated>2026-05-23T03:22:36.530Z</updated>
+  <updated>2026-05-23T03:38:27.377Z</updated>
+  <entry>
+    <author>
+      <name>Gabriel</name>
+    </author>
+    <category term="开发环境" scheme="https://lijiabao9.github.io/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    <category term="Windows" scheme="https://lijiabao9.github.io/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/Windows/"/>
+    <category term="MySQL" scheme="https://lijiabao9.github.io/tags/MySQL/"/>
+    <category term="数据库" scheme="https://lijiabao9.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    <content>
+      <![CDATA[<p>相比于传统的 MSI 安装包，使用 <strong>ZIP 压缩包</strong>（Archive）方式部署 MySQL 具有明显的优势：<strong>系统侵入性极低、配置高度灵活、且卸载时干净无残留</strong>。</p><p>本文将为你完整记录在 Windows 环境下从零开始部署 <code>MySQL 9.7.0</code> 绿色版的标准流程。</p><hr><h2 id="一、-下载与解压"><a href="#一、-下载与解压" class="headerlink" title="一、 下载与解压"></a>一、 下载与解压</h2><h3 id="1-获取官方压缩包"><a href="#1-获取官方压缩包" class="headerlink" title="1. 获取官方压缩包"></a>1. 获取官方压缩包</h3><p>前往 MySQL 官方下载页面，选择 <strong>Windows (x86, 64-bit), ZIP Archive</strong> 版本进行下载。</p><blockquote><p><strong>官方下载地址</strong>：<a href="https://dev.mysql.com/downloads/mysql/">https://dev.mysql.com/downloads/mysql/</a></p></blockquote><h3 id="2-解压与部署"><a href="#2-解压与部署" class="headerlink" title="2. 解压与部署"></a>2. 解压与部署</h3><p>将下载好的压缩包解压到你指定的非系统盘目录下（路径中尽量避免包含中文或空格）。</p><ul><li><strong>示例路径</strong>：<code>D:\App\MySQL\mysql-9.7.0\</code></li></ul><hr><h2 id="二、-核心配置-my-ini"><a href="#二、-核心配置-my-ini" class="headerlink" title="二、 核心配置 (my.ini)"></a>二、 核心配置 (my.ini)</h2><p>MySQL 在初始化和启动时需要读取核心配置文件。</p><p>请在你的安装根目录下（与 <code>bin</code> 目录同级）新建一个文本文件，并重命名为 <strong><code>my.ini</code></strong>（请务必检查并确保隐藏的后缀名已正确修改）。</p><p>将以下配置内容写入文件中。**注意：请根据你的实际解压路径，修改 <code>basedir</code> 和 <code>datadir</code>。</p><figure class="highlight ini"><figcaption><span>my.ini</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysql]</span></span><br><span class="line"><span class="comment"># 设置 mysql 客户端的默认字符集</span></span><br><span class="line"><span class="attr">default-character-set</span>=utf8mb4</span><br><span class="line"></span><br><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="comment"># 设置服务监听端口</span></span><br><span class="line"><span class="attr">port</span>=<span class="number">3306</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># MySQL 的安装根目录（Windows 下路径分隔符建议使用双斜杠 \\）</span></span><br><span class="line"><span class="attr">basedir</span>=D:\\App\\MySQL\\mysql-<span class="number">9.7</span>.<span class="number">0</span>\\mysql-<span class="number">9.7</span>.<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据库的数据存放目录（data 目录在初始化时会自动生成，切勿手动创建）</span></span><br><span class="line"><span class="attr">datadir</span>=D:\\App\\MySQL\\mysql-<span class="number">9.7</span>.<span class="number">0</span>\\mysql-<span class="number">9.7</span>.<span class="number">0</span>\\data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 允许的最大连接数</span></span><br><span class="line"><span class="attr">max_connections</span>=<span class="number">200</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务端字符集与排序规则设置</span></span><br><span class="line"><span class="attr">character-set-server</span>=utf8mb4</span><br><span class="line"><span class="attr">collation-server</span>=utf8mb4_general_ci</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建新表时默认使用的存储引擎</span></span><br><span class="line"><span class="attr">default-storage-engine</span>=InnoDB</span><br></pre></td></tr></table></figure><hr><h2 id="三、-初始化与服务注册"><a href="#三、-初始化与服务注册" class="headerlink" title="三、 初始化与服务注册"></a>三、 初始化与服务注册</h2><blockquote><p>⚠️ <strong>重要提示</strong>：以下步骤中的所有命令行操作，均需要以 <strong>管理员身份</strong> 运行命令提示符（CMD）或 PowerShell，否则会导致权限不足而失败。</p></blockquote><h3 id="1-初始化数据目录"><a href="#1-初始化数据目录" class="headerlink" title="1. 初始化数据目录"></a>1. 初始化数据目录</h3><p>打开管理员终端，切换到 MySQL 的 <code>bin</code> 目录下，执行初始化命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 切换到安装目录下的 bin 文件夹</span></span><br><span class="line"><span class="built_in">cd</span> /d <span class="string">&quot;D:\App\MySQL\mysql-9.7.0\bin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行初始化并直接在控制台输出日志</span></span><br><span class="line">mysqld.exe --initialize --console</span><br></pre></td></tr></table></figure><blockquote><p>💡 <strong>核心注意点</strong>：<br>执行完毕后，请仔细观察控制台输出的最后几行日志。你会看到类似于 <code>root@localhost: xxxxxxx</code> 的信息。<br>其中 <strong><code>xxxxxxx</code> 即为系统自动生成的初始临时密码</strong>，请立即复制并妥善保存，后续第一次登录时必须使用它。</p></blockquote><h3 id="2-注册-Windows-系统服务"><a href="#2-注册-Windows-系统服务" class="headerlink" title="2. 注册 Windows 系统服务"></a>2. 注册 Windows 系统服务</h3><p>将 MySQL 注册为 Windows 的系统服务，方便后续进行后台运行与开机自启管理：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 注册服务，其中 &quot;MySQL&quot; 为服务名称，可根据需要自定义</span></span><br><span class="line">mysqld.exe --install MySQL</span><br></pre></td></tr></table></figure><hr><h2 id="四、-启动与管理服务"><a href="#四、-启动与管理服务" class="headerlink" title="四、 启动与管理服务"></a>四、 启动与管理服务</h2><p>服务注册成功后，你可以选择以下任意一种方式来控制 MySQL 服务的启停：</p><h3 id="方式一：命令行快捷管理（推荐）"><a href="#方式一：命令行快捷管理（推荐）" class="headerlink" title="方式一：命令行快捷管理（推荐）"></a>方式一：命令行快捷管理（推荐）</h3><p>在管理员终端中输入以下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动 MySQL 服务</span></span><br><span class="line">net start MySQL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止 MySQL 服务</span></span><br><span class="line">net stop MySQL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置服务为开机自动启动（可选）</span></span><br><span class="line">sc config MySQL start=auto</span><br></pre></td></tr></table></figure><h3 id="方式二：图形化任务管理器"><a href="#方式二：图形化任务管理器" class="headerlink" title="方式二：图形化任务管理器"></a>方式二：图形化任务管理器</h3><ol><li>按下快捷键 <code>Ctrl + Shift + Esc</code> 打开 <strong>任务管理器</strong>。</li><li>切换到 <strong>服务</strong> 选项卡。</li><li>在列表中找到 <code>MySQL</code> 服务，右键点击选择 <strong>开始</strong> 或 <strong>停止</strong>。</li></ol><hr><h2 id="五、-修改初始临时密码"><a href="#五、-修改初始临时密码" class="headerlink" title="五、 修改初始临时密码"></a>五、 修改初始临时密码</h2><p>服务成功启动后，需要使用刚刚保存的临时密码登录数据库，并将其修改为便于日常记忆的个人密码（以 <code>123456</code> 为例）。</p><p>继续在 <code>bin</code> 目录下执行以下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 命令行登录（回车后，粘贴或输入刚才记录的临时密码，输入时密码不可见）</span></span><br><span class="line">mysql.exe -u root -p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 成功进入 MySQL 终端后，执行 SQL 语句修改密码（注意末尾的分号）</span></span><br><span class="line">ALTER USER <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED BY <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 刷新权限使配置立即生效</span></span><br><span class="line">FLUSH PRIVILEGES;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 退出 MySQL 终端</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure><hr><h2 id="六、-进阶建议：配置全局环境变量"><a href="#六、-进阶建议：配置全局环境变量" class="headerlink" title="六、 进阶建议：配置全局环境变量"></a>六、 进阶建议：配置全局环境变量</h2><p>为了避免每次使用 <code>mysql</code> 命令都必须繁琐地进入 <code>bin</code> 目录，强烈建议将其配置到系统的环境变量中：</p><ol><li>右键点击 <strong>此电脑</strong> -&gt; 选择 <strong>属性</strong> -&gt; 点击 <strong>高级系统设置</strong> -&gt; 点击 <strong>环境变量</strong>。</li><li>在 <strong>系统变量</strong> 区域中找到并选中 <code>Path</code> 变量，点击 <strong>编辑</strong>。</li><li>点击 <strong>新建</strong>，将你的 MySQL <code>bin</code> 目录完整路径添加进去：<code>D:\App\MySQL\mysql-9.7.0\bin</code>。</li><li>一路点击 <strong>确定</strong> 保存退出。</li></ol><p>配置完成后，打开任意一个新的终端窗口，你都可以直接输入 <code>mysql -u root -p</code> 随时随地登录数据库。</p><hr><h2 id="七、-彻底卸载与清理"><a href="#七、-彻底卸载与清理" class="headerlink" title="七、 彻底卸载与清理"></a>七、 彻底卸载与清理</h2><p>如果未来因为迁移或升级需要卸载该版本的 MySQL，压缩包版的卸载流程极为纯粹和干净，只需简单四步：</p><ol><li>服务清理 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 以管理员权限打开终端，停止当前运行的 MySQL 服务</span></span><br><span class="line">net stop MySQL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 从系统中彻底移除该 Windows 服务</span></span><br><span class="line">mysqld.exe --remove MySQL  <span class="comment"># 或者使用 sc delete MySQL</span></span><br></pre></td></tr></table></figure></li><li><strong>物理删除</strong>：直接将整个 <code>mysql-9.7.0</code> 安装文件夹从磁盘上彻底删除。</li><li><strong>清理环境</strong>：如果你配置了步骤六中的 <code>Path</code> 环境变量，回到设置中将该条路径删掉即可。</li></ol><p>至此，你的操作系统将不留任何残留，干净如初。</p>]]>
+    </content>
+    <id>https://lijiabao9.github.io/posts/4203c146.html</id>
+    <link href="https://lijiabao9.github.io/posts/4203c146.html"/>
+    <published>2026-05-23T03:26:43.000Z</published>
+    <summary>
+      <![CDATA[<p>相比于传统的 MSI 安装包，使用 <strong>ZIP 压缩包</strong>（Archive）方式部署 MySQL 具有明显的优势：<strong>系统侵入性极低、配置高度灵活、且卸载时干净无残留</strong>。</p>
+<p>本文将为你完整记录在 Window]]>
+    </summary>
+    <title>Windows 环境下 MySQL 绿色压缩包版安装与配置指南</title>
+    <updated>2026-05-23T03:38:27.377Z</updated>
+  </entry>
   <entry>
     <author>
       <name>Gabriel</name>
@@ -30,7 +51,7 @@
       <![CDATA[<div class="tip info"><p>本文整合了 <strong>Butterfly 主题原生标签</strong> 与 <strong>Tag Plugins Plus 增强插件</strong> 的所有用法。<br>通过这些标签外挂，你可以轻松在 Markdown]]>
     </summary>
     <title>Hexo Butterfly 标签外挂完全版指南</title>
-    <updated>2026-05-23T03:22:36.530Z</updated>
+    <updated>2026-05-23T03:38:27.377Z</updated>
   </entry>
   <entry>
     <author>
@@ -51,7 +72,7 @@
 <p>本文将分享如何通过引入高颜值插件、扩展外挂标签（Tag Plugins），甚至直接深入底层的 Pug 模板进行<strong>源码级魔改</strong>，让你的 Hex]]>
     </summary>
     <title>Hexo 进阶：Butterfly 主题增强与源码魔改</title>
-    <updated>2026-05-23T03:22:36.531Z</updated>
+    <updated>2026-05-23T03:38:27.377Z</updated>
   </entry>
   <entry>
     <author>
@@ -72,7 +93,7 @@
 <p>本文将系统记录我如何将 Butterfly 主题应用到极致，打造一个集美观与交互]]>
     </summary>
     <title>Hexo 进阶：Butterfly 主题应用</title>
-    <updated>2026-05-23T03:22:36.531Z</updated>
+    <updated>2026-05-23T03:38:27.377Z</updated>
   </entry>
   <entry>
     <author>
@@ -93,6 +114,6 @@
 <p>本文将手把手带你从零开始搭建一个属于自己的静态博客， 涵盖本地环境配置、GitHub Pages 免费托管、GitHub Actions 自动流水线部署以及必装的 SEO 插件推荐， 助你打造高颜值的个人技术站]]>
     </summary>
     <title>Hexo 博客入门：从零搭建</title>
-    <updated>2026-05-23T03:22:36.531Z</updated>
+    <updated>2026-05-23T03:38:27.377Z</updated>
   </entry>
 </feed>
