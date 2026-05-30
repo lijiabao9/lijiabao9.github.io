@@ -1,0 +1,1099 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>基于 Cloudflare Workers 与 GitHub Actions 自动化部署自建临时邮件系统（Cloud-Mail） | Gabriel的博客</title><meta name="author" content="Gabriel"><meta name="copyright" content="Gabriel"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在日常开发或测试中，我们经常需要用到临时邮箱（捕获所有邮件）。 利用 Cloudflare 强大的边缘计算能力和完全免费的 D1、KV 数据库，结合 maillab&#x2F;cloud-mail 开源项目，我们可以极其轻松地搭建一个专属于自己的邮件系统。 本文将详细介绍如何通过 GitHub Actions 实现自动化部署，并完美绕过由于 Cloudflare WAF 拦截导致初始化失败的坑。  ⚙️ 第">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于 Cloudflare Workers 与 GitHub Actions 自动化部署自建临时邮件系统（Cloud-Mail）">
+<meta property="og:url" content="https://lijiabao9.github.io/posts/9a71701c.html">
+<meta property="og:site_name" content="Gabriel的博客">
+<meta property="og:description" content="在日常开发或测试中，我们经常需要用到临时邮箱（捕获所有邮件）。 利用 Cloudflare 强大的边缘计算能力和完全免费的 D1、KV 数据库，结合 maillab&#x2F;cloud-mail 开源项目，我们可以极其轻松地搭建一个专属于自己的邮件系统。 本文将详细介绍如何通过 GitHub Actions 实现自动化部署，并完美绕过由于 Cloudflare WAF 拦截导致初始化失败的坑。  ⚙️ 第">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp">
+<meta property="article:published_time" content="2026-05-30T18:26:26.000Z">
+<meta property="article:modified_time" content="2026-05-30T19:02:27.742Z">
+<meta property="article:author" content="Gabriel">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="Workers">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "基于 Cloudflare Workers 与 GitHub Actions 自动化部署自建临时邮件系统（Cloud-Mail）",
+  "url": "https://lijiabao9.github.io/posts/9a71701c.html",
+  "image": "https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp",
+  "datePublished": "2026-05-30T18:26:26.000Z",
+  "dateModified": "2026-05-30T19:02:27.742Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Gabriel",
+      "url": "https://lijiabao9.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/favicon.webp"><link rel="canonical" href="https://lijiabao9.github.io/posts/9a71701c.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=5.5.5-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: Gabriel","link":"链接: ","source":"来源: Gabriel的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '基于 Cloudflare Workers 与 GitHub Actions 自动化部署自建临时邮件系统（Cloud-Mail）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/assets/css/custom.css"><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@latest/css/all.min.css""><script src="/assets/js/ali/iconfont.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Gabriel的博客" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/site-background.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">43</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">56</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><div class="menus_items"><!-- 默认的图标动画效果--><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page faa-parent animated-hover" href="/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 span 添加父元素动画效果 .faa-parent.animated-hover--><span class="site-page group faa-parent animated-hover"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><li><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page child faa-parent animated-hover" href="/archives/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><li><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page child faa-parent animated-hover" href="/tags/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><li><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page child faa-parent animated-hover" href="/categories/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 span 添加父元素动画效果 .faa-parent.animated-hover--><span class="site-page group faa-parent animated-hover"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><li><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page child faa-parent animated-hover" href="/gallery/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><li><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page child faa-parent animated-hover" href="/link/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-link"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Gabriel的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">基于 Cloudflare Workers 与 GitHub Actions 自动化部署自建临时邮件系统（Cloud-Mail）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><!-- 默认的图标动画效果--><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page faa-parent animated-hover" href="/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 span 添加父元素动画效果 .faa-parent.animated-hover--><span class="site-page group faa-parent animated-hover"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><li><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page child faa-parent animated-hover" href="/archives/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><li><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page child faa-parent animated-hover" href="/tags/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><li><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page child faa-parent animated-hover" href="/categories/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 span 添加父元素动画效果 .faa-parent.animated-hover--><span class="site-page group faa-parent animated-hover"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><li><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page child faa-parent animated-hover" href="/gallery/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><li><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page child faa-parent animated-hover" href="/link/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-link"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page faa-parent animated-hover" href="/comments/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><!-- 支持配置动画效果参数--><!-- 合并计算最终的动画效果--><!-- 给 a 添加父元素动画效果 .faa-parent.animated-hover--><a class="site-page faa-parent animated-hover" href="/about/"><!-- 增加判断，图标名称如果是以 icon 开头的，则认为是 svg--><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">基于 Cloudflare Workers 与 GitHub Actions 自动化部署自建临时邮件系统（Cloud-Mail）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-30T18:26:26.000Z" title="发表于 2026-05-31 02:26:26">2026-05-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-30T19:02:27.742Z" title="更新于 2026-05-31 03:02:27">2026-05-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/DevOps/">DevOps</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/DevOps/%E5%9F%9F%E5%90%8D%E7%AE%A1%E7%90%86/">域名管理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="umamiPV" data-path="/posts/9a71701c.html"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>在日常开发或测试中，我们经常需要用到临时邮箱（捕获所有邮件）。</p>
+<p>利用 Cloudflare 强大的边缘计算能力和完全免费的 D1、KV 数据库，结合 <strong>maillab/cloud-mail</strong> 开源项目，我们可以极其轻松地搭建一个专属于自己的邮件系统。</p>
+<p>本文将详细介绍如何通过 <strong>GitHub Actions</strong> 实现自动化部署，并完美绕过由于 Cloudflare WAF 拦截导致初始化失败的坑。</p>
+<hr>
+<h2 id="⚙️-第一阶段：Cloudflare-侧的准备工作"><a href="#⚙️-第一阶段：Cloudflare-侧的准备工作" class="headerlink" title="⚙️ 第一阶段：Cloudflare 侧的准备工作"></a>⚙️ 第一阶段：Cloudflare 侧的准备工作</h2><h3 id="1-创建数据库"><a href="#1-创建数据库" class="headerlink" title="1. 创建数据库"></a>1. 创建数据库</h3><p>登录 Cloudflare 控制台，依次创建以下数据库。</p>
+<p><strong>强烈建议命名与项目名称保持一致（即 cloud-mail）</strong>，这样 GitHub 部署脚本会自动识别，无需额外配置 ID。</p>
+<ul>
+<li><p><strong>D1 数据库</strong>：命名为 <code>cloud-mail</code>。</p>
+<blockquote>
+<p><strong>免费额度</strong>：总容量 5GB，读 500w 次/天，写 10w 次/天。</p>
+</blockquote>
+</li>
+<li><p><strong>KV 命名空间</strong>：命名为 <code>cloud-mail</code>。</p>
+<blockquote>
+<p><strong>免费额度</strong>：总容量 1GB，读 10w 次/天，写、删、列出 1k 次/天。</p>
+</blockquote>
+</li>
+</ul>
+<p><em>(注：如果需要更大容量，可选择切换到 R2 存储，但需要绑定信用卡验证开启，且超出免费额度会扣费，个人使用建议直接使用 KV 即可。)</em></p>
+<h3 id="2-创建账户-API-令牌"><a href="#2-创建账户-API-令牌" class="headerlink" title="2. 创建账户 API 令牌"></a>2. 创建账户 API 令牌</h3><p>GitHub Actions 需要权限来帮你操作 Cloudflare 资源。</p>
+<ol>
+<li>主页左侧导航栏，点击 <strong>管理账户</strong> -&gt; <strong>账户 API 令牌</strong> -&gt; <strong>创建令牌</strong>。</li>
+<li>令牌名称：例如 <strong>用于 GitHub 上 cloud-mail 部署 Worker 的令牌</strong>。</li>
+<li>权限策略：<ul>
+<li>选择模板里的 <strong>Edit Cloudflare workers</strong>（默认包含 11 个权限，2 个策略）。</li>
+<li><strong>必须手动增加一个策略</strong>：选择 <strong>D1</strong>，并在右侧勾选 <strong>读</strong> 和 <strong>写</strong>。</li>
+</ul>
+</li>
+<li>令牌过期时间：选择 <strong>永不过期</strong>。</li>
+<li>点击审核并创建，<strong>复制保存好生成的 <code>Token</code></strong>（它只出现一次）。</li>
+</ol>
+<h3 id="3-获取账户-ID"><a href="#3-获取账户-ID" class="headerlink" title="3. 获取账户 ID"></a>3. 获取账户 ID</h3><p>回到账号主页，在页面右侧（或点击账户名旁边的三个点），复制并保存 <strong>账户 ID（<code>Account ID</code>）</strong>。</p>
+<hr>
+<h2 id="🛠️-第二阶段：GitHub-侧的配置与部署"><a href="#🛠️-第二阶段：GitHub-侧的配置与部署" class="headerlink" title="🛠️ 第二阶段：GitHub 侧的配置与部署"></a>🛠️ 第二阶段：GitHub 侧的配置与部署</h2><h3 id="1-Fork-仓库与配置变量"><a href="#1-Fork-仓库与配置变量" class="headerlink" title="1. Fork 仓库与配置变量"></a>1. Fork 仓库与配置变量</h3><ol>
+<li>前往开源项目地址 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/maillab/cloud-mail">maillab/cloud-mail</a> 并 <strong>Fork</strong> 到你的个人仓库。</li>
+<li>进入你 Fork 后的仓库，点击 <strong>Settings</strong> → <strong>Secrets and variables</strong> → <strong>Actions</strong>。</li>
+</ol>
+<p>请根据下表配置相应的 <strong>Secrets（配置后值不可见）</strong> 和 <strong>Variables（配置后值可见）</strong>：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>变量类型</th>
+<th>变量名称</th>
+<th>示例/说明</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Secrets</strong></td>
+<td><code>CLOUDFLARE_API_TOKEN</code></td>
+<td>刚才生成的 CF Token</td>
+<td>敏感信息，不可见</td>
+</tr>
+<tr>
+<td><strong>Secrets</strong></td>
+<td><code>CLOUDFLARE_ACCOUNT_ID</code></td>
+<td>刚才复制的 CF 账户 ID</td>
+<td>敏感信息，不可见</td>
+</tr>
+<tr>
+<td><strong>Variables</strong></td>
+<td><code>DOMAIN</code></td>
+<td><code>[&quot;example.com&quot;]</code></td>
+<td>字符串数组格式，你管理的邮箱域名</td>
+</tr>
+<tr>
+<td><strong>Variables</strong></td>
+<td><code>ADMIN</code></td>
+<td><code>admin@example.com</code></td>
+<td>管理员账号（后缀必须在 DOMAIN 中）</td>
+</tr>
+<tr>
+<td><strong>Variables</strong></td>
+<td><code>JWT_SECRET</code></td>
+<td><code>MyCustomSecret123</code></td>
+<td>随意输入一串长字符串，不要带特殊字符</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>⚠️ <strong>避坑指南（关于 <code>CUSTOM_DOMAIN</code>）：</strong><br>核心脚本在部署时，如果填写了 <strong>CUSTOM_DOMAIN</strong>，GitHub Actions 会尝试使用 <strong>curl</strong> 请求去初始化数据库。<br>由于 GitHub 服务器的 IP 属于数据中心 IP，极易触发 Cloudflare 的 WAF（五秒盾/人机验证），导致返回 <strong>HTTP 403 Just a moment…</strong> 报错。<br><strong>因此，请不要配置 </strong>CUSTOM_DOMAIN<strong> 变量！</strong> 稍后我们在 Cloudflare 的 Worker 中手动绑定自定义域名。</p>
+</blockquote>
+<h3 id="2-执行手动部署"><a href="#2-执行手动部署" class="headerlink" title="2. 执行手动部署"></a>2. 执行手动部署</h3><ol>
+<li>点击仓库顶部的 <strong>Actions</strong> 标签页。</li>
+<li>在左侧选择工作流 <strong>🚀 Deploy cloud-mail to Cloudflare Workers</strong>。</li>
+<li>点击右侧的 <strong>Run workflow</strong> 按钮，等待其执行完毕。</li>
+<li>部署成功后，Cloudflare 侧会自动生成名为 <strong>cloud-mail</strong> 的 Worker，并分配一个原生域名（例如 <code>https://cloud-mail.&lt;你的用户名&gt;.workers.dev</code>）。</li>
+</ol>
+<hr>
+<h2 id="🚀-第三阶段：手动初始化与域名绑定"><a href="#🚀-第三阶段：手动初始化与域名绑定" class="headerlink" title="🚀 第三阶段：手动初始化与域名绑定"></a>🚀 第三阶段：手动初始化与域名绑定</h2><h3 id="1-手动初始化数据库（可选）"><a href="#1-手动初始化数据库（可选）" class="headerlink" title="1. 手动初始化数据库（可选）"></a>1. 手动初始化数据库（可选）</h3><p>如果由于是在 GitHub 仓库中配置了 <strong>Custom Domain</strong>，导致 Actions 工作流的初始化数据库步骤失败，可以手动初始化数据库。</p>
+<p>在浏览器中拼接并访问以下 URL：<code>https://&lt;你的Worker原生域名&gt;/api/init/&lt;你的JWT_SECRET&gt;</code></p>
+<blockquote>
+<p><strong>示例：</strong> <code>https://cloud-mail.myusername.workers.dev/api/init/MyCustomSecret123</code></p>
+</blockquote>
+<p>如果页面返回初始化成功的 JSON 数据，说明数据库结构已准备就绪。</p>
+<h3 id="2-绑定自定义域名（可选）"><a href="#2-绑定自定义域名（可选）" class="headerlink" title="2. 绑定自定义域名（可选）"></a>2. 绑定自定义域名（可选）</h3><p>如果你希望使用自己的域名访问管理后台：</p>
+<ol>
+<li>登录 Cloudflare，进入刚才创建的 <code>cloud-mail</code> Worker 详情页。</li>
+<li>选择 <strong>域 (Domain)</strong> -&gt; <strong>添加域名（Add Domain）</strong>，选择要绑定的域名（如 <code>example.com</code>）。</li>
+<li>在 <strong>自定义域 (Custom Domains)</strong> 下，输入你想使用的子域名（如 <code>cloud-mail.example.com</code>）并确认。</li>
+</ol>
+<hr>
+<h2 id="📧-第四阶段：邮件路由与注册"><a href="#📧-第四阶段：邮件路由与注册" class="headerlink" title="📧 第四阶段：邮件路由与注册"></a>📧 第四阶段：邮件路由与注册</h2><h3 id="1-配置-Cloudflare-邮件转发"><a href="#1-配置-Cloudflare-邮件转发" class="headerlink" title="1. 配置 Cloudflare 邮件转发"></a>1. 配置 Cloudflare 邮件转发</h3><p>想要让域名接收入站邮件，需要开启 Cloudflare 的邮件路由功能：</p>
+<ol>
+<li>在 CF 主页，点击进入你的域名详情页。</li>
+<li>选择 <strong>电子邮件</strong> -&gt; <strong>电子邮件路由</strong>。</li>
+<li>系统会提示你需要配置 3 个 MX 记录和 2 个 TXT 记录，直接点击 <strong>添加记录并启用</strong>。</li>
+<li>启用后，点击 <strong>路由规则</strong> 标签页，找到 <code>Catch-all 规则</code>。</li>
+<li>将其状态设置为 <strong>激活</strong>，点击编辑，将操作设置为 <code>发送到 Worker</code>，目标选择我们创建的 <code>cloud-mail</code>。</li>
+</ol>
+<h3 id="2-注册管理员账号"><a href="#2-注册管理员账号" class="headerlink" title="2. 注册管理员账号"></a>2. 注册管理员账号</h3><ol>
+<li>访问你的 Worker 域名（原生或自定义域名均可）。</li>
+<li>点击 <strong>注册账号</strong>，输入你在 GitHub 变量中配置的管理员账号（如 <code>admin@example.com</code>）并设置密码。</li>
+<li>登录成功后，为了安全起见，强烈建议进入 <strong>系统设置</strong>，关闭 <strong>用户注册</strong> 功能。</li>
+</ol>
+<hr>
+<h2 id="📤-第五阶段：配置邮件发送（整合-Resend）"><a href="#📤-第五阶段：配置邮件发送（整合-Resend）" class="headerlink" title="📤 第五阶段：配置邮件发送（整合 Resend）"></a>📤 第五阶段：配置邮件发送（整合 Resend）</h2><p>Cloudflare Workers 默认封禁了 25 端口，不支持直接对外发送邮件。我们需要借助第三方服务 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://resend.com">Resend</a> 来实现发件功能。</p>
+<h3 id="1-Resend-侧的配置"><a href="#1-Resend-侧的配置" class="headerlink" title="1. Resend 侧的配置"></a>1. Resend 侧的配置</h3><ol>
+<li>注册并登录 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://resend.com">Resend</a>。<em>(免费计划额度为每天 100 封，每月 3000 封，足够个人使用)</em>。</li>
+<li>左侧导航栏，选择 <strong>Domains</strong> -&gt; <strong>Add Domain</strong>：<ul>
+<li>输入你的域名</li>
+<li>验证方式，建议选择 <strong>Auto configure</strong>，系统会引导你登录 Cloudflare 并自动添加所需的 DNS 记录</li>
+<li>等待其变为 <code>Verified</code> 状态</li>
+</ul>
+</li>
+<li>左侧导航栏，选择  <strong>API Keys</strong> → <strong>Create API Key</strong>：<ul>
+<li>Name: <code>cloud-mail</code></li>
+<li>Permission: <code>Full access</code></li>
+<li>Domain: <code>All domains</code></li>
+</ul>
+</li>
+<li>复制并保存生成的 <strong>API Key</strong>。</li>
+</ol>
+<h3 id="2-设置状态回调（Webhook）"><a href="#2-设置状态回调（Webhook）" class="headerlink" title="2. 设置状态回调（Webhook）"></a>2. 设置状态回调（Webhook）</h3><p>为了让你的邮件系统能实时得知邮件是否发送成功、被退信或被标记为垃圾邮件，我们需要在 Resend 中配置 Webhook：</p>
+<p>在 Resend 左侧导航栏，选择 <strong>Webhooks</strong> -&gt; <strong>Add webhook</strong>：</p>
+<ul>
+<li><strong>Endpoint URL</strong> 填写：<code>https://&lt;你的Worker域名&gt;/api/webhooks</code>。</li>
+<li><strong>Select events to listen</strong> 勾选以下事件：<ul>
+<li><code>email.bounced</code>（被退信）</li>
+<li><code>email.complained</code>（被投诉/标记垃圾）</li>
+<li><code>email.delivered</code>（成功送达）</li>
+<li><code>email.delivery_delayed</code>（发送延迟）</li>
+<li><code>email.failed</code>（发送失败）</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-回填至-Cloud-Mail-后台"><a href="#3-回填至-Cloud-Mail-后台" class="headerlink" title="3. 回填至 Cloud-Mail 后台"></a>3. 回填至 Cloud-Mail 后台</h3><ol>
+<li>登录你的 <code>cloud-mail</code> 后台管理界面。</li>
+<li>进入 <strong>系统设置</strong> -&gt; <strong>邮件设置</strong>。</li>
+<li>找到 <strong>Resend Token</strong>，点击添加，为你对应的域名填入刚才在 Resend 生成的 <strong>API Key</strong>。</li>
+</ol>
+<hr>
+<h2 id="🎯-总结与对比：为什么要用-Cloud-Mail？"><a href="#🎯-总结与对比：为什么要用-Cloud-Mail？" class="headerlink" title="🎯 总结与对比：为什么要用 Cloud-Mail？"></a>🎯 总结与对比：为什么要用 Cloud-Mail？</h2><p>看到这里，你可能会想：Cloudflare 官方的邮件路由本来就自带 <strong>Catch-all（捕获所有）</strong> 并直接转发到我个人邮箱（如 Gmail）的功能。</p>
+<p>那我为什么还要大费周折地搭建一个 <code>cloud-mail</code> 系统呢？</p>
+<p>相比于单纯的 CF 官方盲目转发，<code>cloud-mail</code> 配合其强大的管理后台，带来了以下<strong>降维打击式</strong>的优势：</p>
+<h3 id="1-更强大的多渠道分发（支持多邮箱与-Telegram）"><a href="#1-更强大的多渠道分发（支持多邮箱与-Telegram）" class="headerlink" title="1. 更强大的多渠道分发（支持多邮箱与 Telegram）"></a>1. 更强大的多渠道分发（支持多邮箱与 Telegram）</h3><ul>
+<li><strong>CF 官方转发</strong>： 只能单线联系，或者一条条规则手动维护。</li>
+<li><strong>Cloud-Mail 处理</strong>： 在通过 Catch-all 接收到邮件后，不仅可以将其存储在你的 D1 数据库中供网页端查看，还支持二次转发！ 你可以自由配置将其<strong>转发给指定的多个邮箱</strong>。</li>
+<li><strong>无缝集成 Telegram 机器人</strong>： 它原生支持配置 Telegram Bot。 当你的域名收到新邮件时，Telegram 会瞬间弹出消息提醒，你直接在聊天软件里就能完成邮件的<strong>即时预览</strong>，体验极其流畅。</li>
+</ul>
+<h3 id="2-完美的“收发独立”与多身份隔离管理"><a href="#2-完美的“收发独立”与多身份隔离管理" class="headerlink" title="2. 完美的“收发独立”与多身份隔离管理"></a>2. 完美的“收发独立”与多身份隔离管理</h3><p>如果你使用官方转发，所有的垃圾邮件、注册验证码都会一股脑地塞进你的主力邮箱，久而久之主力邮箱就会被污染。</p>
+<ul>
+<li><strong>独立的前缀管理</strong>：<code>cloud-mail</code> 会对不同前缀（例如 <code>netflix@你的域名.com</code>、<code>github@你的域名.com</code>）的邮件进行<strong>完全独立的收件和发件管理</strong>。</li>
+<li><strong>完美的业务隔离</strong>： 你可以在后台清晰地看到每个前缀收到了哪些信。 在需要对外沟通或注册服务时，能够有效保护主邮箱隐私，还能极其方便地对不同业务进行分类和溯源（谁泄露了你的邮箱，一目了然）。</li>
+</ul>
+<h3 id="3-接入-Resend，实现完美的“真·双向收发”"><a href="#3-接入-Resend，实现完美的“真·双向收发”" class="headerlink" title="3. 接入 Resend，实现完美的“真·双向收发”"></a>3. 接入 Resend，实现完美的“真·双向收发”</h3><ul>
+<li><strong>CF 官方转发</strong>：<strong>只能收信，无法发信</strong>。 一旦你需要用这个域名邮箱给别人回复邮件，官方转发就彻底无能为力了。</li>
+<li><strong>Cloud-Mail ＋ Resend</strong>：系统完美接入了 Resend 第三方服务，彻底打破了 Cloudflare 25 端口封禁的限制。你不仅可以作为后台管理员给别人发信，更厉害的是，你还可以<strong>针对不同的邮箱前缀，使用各自独立的身份和签名进行回信与主动发送</strong>。 每一个前缀都变成了一个功能完整的独立邮箱！</li>
+</ul>
+<h3 id="4-一体化的-Web-客户端与超低成本"><a href="#4-一体化的-Web-客户端与超低成本" class="headerlink" title="4. 一体化的 Web 客户端与超低成本"></a>4. 一体化的 Web 客户端与超低成本</h3><ul>
+<li><p>拥有一个轻量、美观的 Web UI，你可以随时随地登录它来收发邮件、管理用户、查看日志。</p>
+</li>
+<li><p>结合前文提到的 Resend 服务，它不仅解决了 Cloudflare 无法发件的痛点，还利用免费额度实现了一套<strong>完全由你掌控、多渠道提醒、收发兼备</strong>的现代化 Serverless 临时/全功能邮件系统。</p>
+</li>
+<li><p>在个人低频使用的场景下，这一切依然是<strong>完全免费</strong>的！</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io">Gabriel</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lijiabao9.github.io/posts/9a71701c.html">https://lijiabao9.github.io/posts/9a71701c.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lijiabao9.github.io" target="_blank">Gabriel的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Workers/">Workers</a><a class="post-meta__tags" href="/tags/GitHub/">GitHub</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechatpay.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/wechatpay.webp" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/alipay.webp" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/e9f1634f.html" title="Android 设备 Root 进阶指南：Magisk 刷入获取权限与 Shamiko 强力防检测配置"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Android 设备 Root 进阶指南：Magisk 刷入获取权限与 Shamiko 强力防检测配置</div></div><div class="info-2"><div class="info-item-1">在 Android 玩机圈中，获取 Root 权限只是第一步。如何完美隐藏 Root 权限以绕过金融、游戏等 App 的检测，是提升设备日常实用性的关键。 本文将为你整理一份完整的实操指南，涵盖 Magisk（面具）刷入以及 Shamiko 强力防检测配置。  一、 核心步骤：Magisk 刷入与 Root 获取本教程以 LineageOS 等类原生系统为例，通过修补系统 boot.img 的方式安全刷入 Magisk。  官方参考教程：Magisk Installation  1. 下载并安装 Magisk App 官方下载地址：Magisk v30.7 APK  安装命令：   打开 PC 终端，确保手机已开启「USB 调试」，执行以下命令安装：   1adb install Magisk-v30.7.apk   2. 获取并提取 boot.img前往你当前手机所刷的 LineageOS 对应机型的官方下载页面，下载同版本的 ROM 包，从中解压提取出 boot.img 文件。 然后将其推送到手机存储中： 1adb push boot.img /sdcard/Download...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/9e5ea567.html" title="Hexo 博客入门：从零搭建"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-22</div><div class="info-item-2">Hexo 博客入门：从零搭建</div></div><div class="info-2"><div class="info-item-1">Hexo 是一款快速、简洁且高效的静态博客框架。 本文将手把手带你从零开始搭建一个属于自己的静态博客， 涵盖本地环境配置、GitHub Pages 免费托管、GitHub Actions 自动流水线部署以及必装的 SEO 插件推荐， 助你打造高颜值的个人技术站点。 本文基于最新版本的 Hexo 8.1.2 进行演示。  💡 官方资源：  官方网站：https://hexo.io/zh-cn/ GitHub 仓库：https://github.com/hexojs/hexo    环境要求在开始之前，请确保你的电脑已安装以下基础环境：  Git  版本要求：无特殊要求 演示版本：git version 2.54.0.windows.1   Node.js  版本要求：Hexo 7.0+ 版本要求 Node.js &gt;= 14.0.0 演示版本：v24.15.0     1. 安装 Hexo推荐直接使用 npm 全局安装 hexo-cli，方便在任意目录下调用。 1npm install -g hexo-cli 安装完成后，输入以下命令检查是否成功： 1hexo -v 若屏幕输...</div></div></div></a><a class="pagination-related" href="/posts/c6974d12.html" title="基于 GitHub + jsDelivr + PicGo 搭建完全免费、极速、稳定的个人独立图床指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-23</div><div class="info-item-2">基于 GitHub + jsDelivr + PicGo 搭建完全免费、极速、稳定的个人独立图床指南</div></div><div class="info-2"><div class="info-item-1">在 Markdown 写作、跨平台分发或独立博客（如 Hexo、Hugo）的搭建过程中，图片的存储、托管与引用一直是创作者的痛点。 将图片直接存放在本地会导致分发困难（别人无法直接读取本地路径），而使用商业图床又随时面临收费、限流甚至运营商“跑路”的潜在风险。 本文将带你手把手搭建一套业内公认的 “GitHub（云端存储） + jsDelivr（全球加速） + PicGo（一键上传）” 黄金组合，彻底实现免费、去中心化、且国内访问极速的终身图床服务。  第一步：创建 GitHub 远程存储仓库所谓的“图床”，本质上就是一个用来公开托管多媒体文件的云端容器。我们首先需要在 GitHub 上开辟这个空间。  登录 GitHub 官网，点击右上角的 + 号，选择 New repository（新建仓库）。 Repository name：填写你的图床仓库名（例如：pic.cloud）。 Visibility：必须选择 Public（公开）。如果错选为 Private（私有），后续外部的 CDN 加速节点将彻底无法读取和抓取其中的图片。  此时，你已经拥有了一个无限容量的云端存储空间。 ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="artalk-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/lijiabao9/pic.cloud@main/hexo/info/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Gabriel</div><div class="author-info-description">这是我的个人博客，欢迎来到我的小破站。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">43</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">56</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lijiabao9"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:ljiabao9@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">新手上路 | 这里记录着从 Hello World 到 Hello Universe 的每一步探索 🌌</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%9ACloudflare-%E4%BE%A7%E7%9A%84%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-text">⚙️ 第一阶段：Cloudflare 侧的准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">1. 创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E8%B4%A6%E6%88%B7-API-%E4%BB%A4%E7%89%8C"><span class="toc-text">2. 创建账户 API 令牌</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96%E8%B4%A6%E6%88%B7-ID"><span class="toc-text">3. 获取账户 ID</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9B%A0%EF%B8%8F-%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9AGitHub-%E4%BE%A7%E7%9A%84%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2"><span class="toc-text">🛠️ 第二阶段：GitHub 侧的配置与部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Fork-%E4%BB%93%E5%BA%93%E4%B8%8E%E9%85%8D%E7%BD%AE%E5%8F%98%E9%87%8F"><span class="toc-text">1. Fork 仓库与配置变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%89%A7%E8%A1%8C%E6%89%8B%E5%8A%A8%E9%83%A8%E7%BD%B2"><span class="toc-text">2. 执行手动部署</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9A%80-%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%89%8B%E5%8A%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E5%9F%9F%E5%90%8D%E7%BB%91%E5%AE%9A"><span class="toc-text">🚀 第三阶段：手动初始化与域名绑定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%89%8B%E5%8A%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-text">1. 手动初始化数据库（可选）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BB%91%E5%AE%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-text">2. 绑定自定义域名（可选）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%A7-%E7%AC%AC%E5%9B%9B%E9%98%B6%E6%AE%B5%EF%BC%9A%E9%82%AE%E4%BB%B6%E8%B7%AF%E7%94%B1%E4%B8%8E%E6%B3%A8%E5%86%8C"><span class="toc-text">📧 第四阶段：邮件路由与注册</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AE-Cloudflare-%E9%82%AE%E4%BB%B6%E8%BD%AC%E5%8F%91"><span class="toc-text">1. 配置 Cloudflare 邮件转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%B3%A8%E5%86%8C%E7%AE%A1%E7%90%86%E5%91%98%E8%B4%A6%E5%8F%B7"><span class="toc-text">2. 注册管理员账号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%A4-%E7%AC%AC%E4%BA%94%E9%98%B6%E6%AE%B5%EF%BC%9A%E9%85%8D%E7%BD%AE%E9%82%AE%E4%BB%B6%E5%8F%91%E9%80%81%EF%BC%88%E6%95%B4%E5%90%88-Resend%EF%BC%89"><span class="toc-text">📤 第五阶段：配置邮件发送（整合 Resend）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Resend-%E4%BE%A7%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">1. Resend 侧的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%AE%BE%E7%BD%AE%E7%8A%B6%E6%80%81%E5%9B%9E%E8%B0%83%EF%BC%88Webhook%EF%BC%89"><span class="toc-text">2. 设置状态回调（Webhook）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%9B%9E%E5%A1%AB%E8%87%B3-Cloud-Mail-%E5%90%8E%E5%8F%B0"><span class="toc-text">3. 回填至 Cloud-Mail 后台</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8E%AF-%E6%80%BB%E7%BB%93%E4%B8%8E%E5%AF%B9%E6%AF%94%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8-Cloud-Mail%EF%BC%9F"><span class="toc-text">🎯 总结与对比：为什么要用 Cloud-Mail？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%9B%B4%E5%BC%BA%E5%A4%A7%E7%9A%84%E5%A4%9A%E6%B8%A0%E9%81%93%E5%88%86%E5%8F%91%EF%BC%88%E6%94%AF%E6%8C%81%E5%A4%9A%E9%82%AE%E7%AE%B1%E4%B8%8E-Telegram%EF%BC%89"><span class="toc-text">1. 更强大的多渠道分发（支持多邮箱与 Telegram）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%8C%E7%BE%8E%E7%9A%84%E2%80%9C%E6%94%B6%E5%8F%91%E7%8B%AC%E7%AB%8B%E2%80%9D%E4%B8%8E%E5%A4%9A%E8%BA%AB%E4%BB%BD%E9%9A%94%E7%A6%BB%E7%AE%A1%E7%90%86"><span class="toc-text">2. 完美的“收发独立”与多身份隔离管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%8E%A5%E5%85%A5-Resend%EF%BC%8C%E5%AE%9E%E7%8E%B0%E5%AE%8C%E7%BE%8E%E7%9A%84%E2%80%9C%E7%9C%9F%C2%B7%E5%8F%8C%E5%90%91%E6%94%B6%E5%8F%91%E2%80%9D"><span class="toc-text">3. 接入 Resend，实现完美的“真·双向收发”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E4%B8%80%E4%BD%93%E5%8C%96%E7%9A%84-Web-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8E%E8%B6%85%E4%BD%8E%E6%88%90%E6%9C%AC"><span class="toc-text">4. 一体化的 Web 客户端与超低成本</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/9a71701c.html" title="基于 Cloudflare Workers 与 GitHub Actions 自动化部署自建临时邮件系统（Cloud-Mail）">基于 Cloudflare Workers 与 GitHub Actions 自动化部署自建临时邮件系统（Cloud-Mail）</a><time datetime="2026-05-30T18:26:26.000Z" title="发表于 2026-05-31 02:26:26">2026-05-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/e9f1634f.html" title="Android 设备 Root 进阶指南：Magisk 刷入获取权限与 Shamiko 强力防检测配置">Android 设备 Root 进阶指南：Magisk 刷入获取权限与 Shamiko 强力防检测配置</a><time datetime="2026-05-30T05:39:21.000Z" title="发表于 2026-05-30 13:39:21">2026-05-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/3d34af35.html" title="小米8（dipper）解锁及刷入 LineageOS 完整教程">小米8（dipper）解锁及刷入 LineageOS 完整教程</a><time datetime="2026-05-29T12:30:40.000Z" title="发表于 2026-05-29 20:30:40">2026-05-29</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2026 By Gabriel</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5-b1</a></span></div><div class="footer_custom_text">🚧 施工中 | 这是一个程序员用代码和咖啡构建的思维城堡 💻☕ | Bug和灵感同样欢迎！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5-b1"></script><script src="/js/main.js?v=5.5.5-b1"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.9/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script><script>(() => {
+  let artalkItem = null
+  const option = null
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const destroyArtalk = () => {
+    if (artalkItem) {
+      artalkItem.destroy()
+      artalkItem = null
+    }
+  }
+
+  const artalkChangeMode = theme => artalkItem && artalkItem.setDarkMode(theme === 'dark')
+
+  const initArtalk = (el = document, pageKey = location.pathname) => {
+    artalkItem = Artalk.init({
+      el: el.querySelector('#artalk-wrap'),
+      server: 'https://artalk.131495.xyz',
+      site: 'Gabriel的博客',
+      darkMode: document.documentElement.getAttribute('data-theme') === 'dark',
+      ...option,
+      pageKey: isShuoshuo ? pageKey : (option && option.pageKey) || pageKey
+    })
+
+    if (GLOBAL_CONFIG.lightbox === 'null') return
+    artalkItem.on('list-loaded', () => {
+      artalkItem.ctx.get('list').getCommentNodes().forEach(comment => {
+        const $content = comment.getRender().$content
+        btf.loadLightbox($content.querySelectorAll('img:not([atk-emoticon])'))
+      })
+    })
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyArtalk = () => {
+        destroyArtalk()
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    btf.addGlobalFn('pjaxSendOnce', destroyArtalk, 'destroyArtalk')
+    btf.addGlobalFn('themeChange', artalkChangeMode, 'artalk')
+  }
+
+  const loadArtalk = async (el, pageKey) => {
+    if (typeof Artalk === 'object') initArtalk(el, pageKey)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/artalk@2.9.1/dist/Artalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/artalk@2.9.1/dist/Artalk.min.js')
+      initArtalk(el, pageKey)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Artalk' === 'Artalk'
+      ? window.shuoshuoComment = { loadComment: loadArtalk }
+      : window.loadOtherComment = loadArtalk
+    return
+  }
+
+  if ('Artalk' === 'Artalk' || !false) {
+    if (false) btf.loadComment(document.getElementById('artalk-wrap'), loadArtalk)
+    else setTimeout(loadArtalk, 100)
+  } else {
+    window.loadOtherComment = loadArtalk
+  }
+})()</script></div><script>window.newestComments = {
+  changeContent: content => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<code>.*?<\/code>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g, "") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0, 150) + '...'
+    }
+    return content
+  },
+
+  generateHtml: (array, ele) => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class="aside-list-item">'
+
+        if (true && array[i].avatar) {
+          const imgAttr = 'src'
+          const lazyloadNative = ''
+          result += `<a href="${array[i].url}" class="thumbnail"><img ${imgAttr}="${array[i].avatar}" alt="${array[i].nick}" ${lazyloadNative}></a>`
+        }
+
+        result += `<div class="content">
+        <a class="comment" href="${array[i].url}" title="${array[i].content}">${array[i].content}</a>
+        <div class="name"><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '暂无评论'
+    }
+
+    ele.innerHTML = result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh(ele)
+  },
+
+  newestCommentInit: (name, getComment) => {
+    const $dom = document.querySelector('#card-newest-comments .aside-list')
+    if ($dom) {
+      const data = btf.saveToLocal.get(name)
+      if (data) {
+        newestComments.generateHtml(JSON.parse(data), $dom)
+      } else {
+        getComment($dom)
+      }
+    }
+  },
+
+  run: (name, getComment) => {
+    newestComments.newestCommentInit(name, getComment)
+    btf.addGlobalFn('pjaxComplete', () => newestComments.newestCommentInit(name, getComment), name)
+  }
+}</script><script>window.addEventListener('load', () => {
+  const keyName = 'artalk-newest-comments'
+  const { changeContent, generateHtml, run } = window.newestComments
+
+  const getAvatarValue = async () => {
+    const predefinedAvatarCdn = ''
+    const predefinedAvatarDefault = ''
+
+    const avatarDefaultFormat = e => e.startsWith('d=') ? e : `d=${e}`
+
+    if (predefinedAvatarCdn && predefinedAvatarDefault) {
+      return { avatarCdn: predefinedAvatarCdn, avatarDefault: avatarDefaultFormat(predefinedAvatarDefault) }
+    }
+
+    try {
+      const res = await fetch('https://artalk.131495.xyz/api/v2/conf')
+      const result = await res.json()
+      const { mirror, params, default: defaults } = result.frontend_conf.gravatar
+      const avatarCdn = predefinedAvatarCdn || mirror
+      let avatarDefault = avatarDefaultFormat(predefinedAvatarDefault || params || defaults)
+      return { avatarCdn, avatarDefault}
+    } catch (e) {
+      console.error(e)
+      return { avatarCdn: predefinedAvatarCdn, avatarDefault: avatarDefaultFormat(predefinedAvatarDefault) }
+    }
+  }
+
+  const searchParams = new URLSearchParams({
+    'site_name': 'Gabriel的博客',
+    'limit': '6', // Fetch more comments to filter pending comments
+  })
+
+  const getComment = async (ele) => {
+    try {
+      const res = await fetch(`https://artalk.131495.xyz/api/v2/stats/latest_comments?${searchParams}`)
+      const result = await res.json()
+      const { avatarCdn, avatarDefault } = await getAvatarValue()
+      const artalk = result.data
+        .filter(e => !e.is_pending) // Filter pending comments
+        .slice(0, 3) // Limit the number of comments
+        .map(e => {
+          const avatar = avatarCdn && e.email_encrypted ? `${avatarCdn}${e.email_encrypted}?${avatarDefault}` : ''
+          return {
+            'avatar': avatar,
+            'content': changeContent(e.content_marked),
+            'nick': e.nick,
+            'url': e.page_url,
+            'date': e.date,
+          }
+        })
+      btf.saveToLocal.set(keyName, JSON.stringify(artalk), 10/(60*24))
+      generateHtml(artalk, ele)
+    } catch (e) {
+      console.log(e)
+      ele.textContent= "无法获取评论，请确认相关配置是否正确"
+    }
+  }
+
+  run(keyName, getComment)
+})</script><div class="aplayer no-destroy" data-id="2761236917" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script>(() => {
+  const option = null
+  const config = {"site_uv":true,"site_pv":true,"page_pv":true,"token":"N9GtIEI3WMNL12vT5WaIAkompCKN63w7XfNQmdtS2x2HAjagPxs2Dbcb4aJ43y0Fs3xikyvIlmZBTntHj/VUCCXc1CUmYd6zYBjsCaq9MqKpRGt/eMcsS464xEq4azjb3vUtP+ZUO49uGntUn8M5dlf2YBsrk1Oi5FKFHuUVCnKa2zXW0EiunelCvuc3P9KYqUND54Cpcttx3iakFW5V0NPXfJ+uuRb+HLbabpsmp+WUwfq2ImkP5pC4hSsK0G0ddXcfmpJsSGb6qaUxaQdn6dnj5qtgrTlO5Ngc6ii4ySQdQBSisZWTrC6YU3NLKABXQNcu49Vf3yKoKwh4iw0kbClEr1chw1MPRmOzDHW4q7QmC+eVSPAC2Sous0ZL"}
+
+  const runTrack = () => {
+    if (typeof umami !== 'undefined' && typeof umami.track === 'function') {
+      umami.track(props => ({ ...props, url: window.location.pathname, title: GLOBAL_CONFIG_SITE.title }))
+    } else {
+      console.warn('Umami Analytics: umami.track is not available')
+    }
+  }
+
+  const loadUmamiJS = () => {
+    btf.getScript('https://umami.131495.xyz/script.js', {
+      'data-website-id': 'f37b3965-9705-4046-acb0-71575fa79f52',
+      'data-auto-track': 'false',
+      ...option
+    }).then(() => {
+      runTrack()
+    }).catch(error => {
+      console.error('Umami Analytics: Error loading script', error)
+    })
+  }
+
+  const getData = async (isPost) => {
+    try {
+      const now = Date.now()
+      const keyUrl = isPost ? `&url=${window.location.pathname}&path=${window.location.pathname}` : ''
+      const headerList = { 'Accept': 'application/json' }
+
+      if (true) {
+        headerList['Authorization'] = `Bearer ${config.token}`
+      } else {
+        headerList['x-umami-api-key'] = config.token
+      }
+
+      const res = await fetch(`https://umami.131495.xyz/api/websites/f37b3965-9705-4046-acb0-71575fa79f52/stats?startAt=0000000000&endAt=${now}${keyUrl}`, {
+        method: "GET",
+        headers: headerList
+      })
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`)
+      }
+
+      return await res.json()
+    } catch (error) {
+      console.error('Umami Analytics: Failed to fetch data', error)
+      throw error
+    }
+  }
+
+  const insertData = async () => {
+    try {
+      if (GLOBAL_CONFIG_SITE.pageType === 'post' && config.page_pv) {
+        const pagePV = document.getElementById('umamiPV')
+        if (pagePV) {
+          const data = await getData(true)
+          if (data && data.pageviews) {
+            pagePV.textContent = typeof data.pageviews.value !== 'undefined' ? data.pageviews.value : data.pageviews
+          } else {
+            console.warn('Umami Analytics: Invalid page view data received')
+          }
+        }
+      }
+
+      if (config.site_uv || config.site_pv) {
+        const data = await getData(false)
+
+        if (config.site_uv) {
+          const siteUV = document.getElementById('umami-site-uv')
+          if (siteUV && data && data.visitors) {
+            siteUV.textContent = typeof data.visitors.value !== 'undefined' ? data.visitors.value : data.visitors
+          } else if (siteUV) {
+            console.warn('Umami Analytics: Invalid site UV data received')
+          }
+        }
+
+        if (config.site_pv) {
+          const sitePV = document.getElementById('umami-site-pv')
+          if (sitePV && data && data.pageviews) {
+            sitePV.textContent = typeof data.pageviews.value !== 'undefined' ? data.pageviews.value : data.pageviews
+          } else if (sitePV) {
+            console.warn('Umami Analytics: Invalid site PV data received')
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Umami Analytics: Failed to insert data', error)
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', runTrack, 'umami_analytics_run_track')
+  btf.addGlobalFn('pjaxComplete', insertData, 'umami_analytics_insert')
+
+
+  loadUmamiJS()
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', insertData)
+  } else {
+    setTimeout(insertData, 100)
+  }
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="且听风吟" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5-b1"></script></div></div></body></html>
