@@ -10,7 +10,29 @@
   <rights>All rights reserved 2026, Gabriel</rights>
   <subtitle>在代码与文字之间</subtitle>
   <title>Gabriel的博客</title>
-  <updated>2026-05-30T19:02:27.742Z</updated>
+  <updated>2026-05-31T03:23:23.341Z</updated>
+  <entry>
+    <author>
+      <name>Gabriel</name>
+    </author>
+    <category term="玩机折腾" scheme="https://lijiabao9.github.io/categories/%E7%8E%A9%E6%9C%BA%E6%8A%98%E8%85%BE/"/>
+    <category term="安卓刷机" scheme="https://lijiabao9.github.io/categories/%E7%8E%A9%E6%9C%BA%E6%8A%98%E8%85%BE/%E5%AE%89%E5%8D%93%E5%88%B7%E6%9C%BA/"/>
+    <category term="TikTok" scheme="https://lijiabao9.github.io/tags/TikTok/"/>
+    <category term="Shizuku" scheme="https://lijiabao9.github.io/tags/Shizuku/"/>
+    <category term="Nrfr" scheme="https://lijiabao9.github.io/tags/Nrfr/"/>
+    <content>
+      <![CDATA[<p>由于 TikTok 官方对 SIM 卡的运营商国家码（MCC）有严格的区域限制，国内用户即便开启了“魔法”，也常常会遇到黑屏或无法加载内容的情况。</p><p>本文将教大家如何利用 <strong>Shizuku</strong> 调用系统级 API，并配合 <strong>Nrfr</strong> 工具直接修改手机底层的 SIM 卡国家码与运营商信息，从而完美解锁 TikTok。</p><p>本方法支持<strong>免 Root（无线调试）</strong>与 <strong>Root（Magisk）</strong> 两种环境，且修改后<strong>重启手机不失效</strong>。</p><hr><h2 id="准备工作与软件下载"><a href="#准备工作与软件下载" class="headerlink" title="准备工作与软件下载"></a>准备工作与软件下载</h2><p>首先，我们需要下载所需的两个核心工具：</p><ul><li><strong>Shizuku</strong>（用于获取系统级 Shell 权限）：<br><a href="https://github.com/RikkaApps/Shizuku/releases/download/v13.6.0/shizuku-v13.6.0.r1086.2650830c-release.apk">点击下载 Shizuku v13.6.0</a></li><li><strong>Nrfr</strong>（用于修改 SIM 卡国家码）：<br><a href="https://github.com/Ackites/Nrfr/releases/download/v1.0.3/nrfr-v1.0.3-release.zip">点击下载 Nrfr v1.0.3</a></li></ul><blockquote><p><strong>安装提示：</strong> 下载完成后，在电脑端使用 ADB 工具执行以下命令将它们安装到手机上：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb install shizuku-v13.6.0.r1086.2650830c-release.apk</span><br><span class="line">adb install nrfr-v1.0.3-release.apk</span><br></pre></td></tr></table></figure></p></blockquote><hr><h2 id="第一步：开启手机的开发者模式与无线调试"><a href="#第一步：开启手机的开发者模式与无线调试" class="headerlink" title="第一步：开启手机的开发者模式与无线调试"></a>第一步：开启手机的开发者模式与无线调试</h2><p>如果你打算使用<strong>免 Root 方案</strong>，需要借助无线调试来激活 Shizuku。</p><ol><li><strong>开启开发者模式</strong>：进入手机的 <code>设置</code> -&gt; <code>关于设备</code> -&gt; <code>操作系统/版本号</code>，连续点击多次，直到系统提示“您已处于开发者模式”。</li><li><strong>开启无线调试</strong>：进入 <code>设置</code> -&gt; <code>更多设置（或系统设置）</code> -&gt; <code>开发者选项</code> -&gt; <code>调试</code>，找到并打开 <strong>无线调试</strong> 开关。</li><li><strong>连接 Wi-Fi</strong>：由于无线调试的限制，手机必须连接到一个 Wi-Fi 网络（任意可连通的 Wi-Fi 即可，无特殊要求）。</li></ol><hr><h2 id="第二步：配对并启动-Shizuku"><a href="#第二步：配对并启动-Shizuku" class="headerlink" title="第二步：配对并启动 Shizuku"></a>第二步：配对并启动 Shizuku</h2><h3 id="方案-A：免-Root-环境（无线调试启动）"><a href="#方案-A：免-Root-环境（无线调试启动）" class="headerlink" title="方案 A：免 Root 环境（无线调试启动）"></a>方案 A：免 Root 环境（无线调试启动）</h3><ol><li>打开 <strong>Shizuku</strong> 软件，找到 <strong>通过无线调试启动</strong> 选项，点击 <strong>配对</strong>。</li><li>根据系统提示，点击“开发者选项”跳转按钮。跳转后再次回到设置的开发者选项中（此步骤是为了确保 Shizuku 已经在后台保持运行）。</li><li>在开发者选项中点击 <strong>无线调试</strong>，选择 <strong>使用配对码配对设备</strong>。此时屏幕上会弹出 <strong>6 位数的配对码</strong> 和 <strong>IP地址</strong>。</li><li>下拉手机通知栏，找到 Shizuku 的通知（提示“已找到配对服务”），点击并在通知框内输入刚才记下的 6 位配对码完成配对。</li><li>配对成功后，在系统的无线调试“配对设备”列表中，可以看到多了一个名为 <code>shizuku</code> 的设备。</li><li>返回 Shizuku 软件主界面，找到 <strong>通过无线调试启动</strong>，点击 <strong>启动</strong>。</li><li>稍等几秒，软件主界面最顶部显示 <strong>Shizuku 正在运行</strong>，即表示免 Root 激活成功。</li></ol><hr><h2 id="第三步：使用-Nrfr-修改-SIM-卡国家码"><a href="#第三步：使用-Nrfr-修改-SIM-卡国家码" class="headerlink" title="第三步：使用 Nrfr 修改 SIM 卡国家码"></a>第三步：使用 Nrfr 修改 SIM 卡国家码</h2><ol><li>打开 <strong>Nrfr</strong> 软件，首次启动请同意所有必要的权限申请。</li><li>在软件界面中进行如下配置：<ul><li><strong>选择SIM卡</strong>：选择你需要伪装的对应卡槽。</li><li><strong>选择国家码</strong>：选择 TikTok 支持的国家，例如美国（<code>US</code>）。</li><li><strong>选择运营商</strong>：选择该国家对应的任意运营商，例如美国 AT&amp;T（<code>AT&amp;T</code>）。</li></ul></li><li>点击 <strong>保存生效</strong>。</li></ol><hr><h2 id="⚠️-常见报错与-Root-解决方案"><a href="#⚠️-常见报错与-Root-解决方案" class="headerlink" title="⚠️ 常见报错与 Root 解决方案"></a>⚠️ 常见报错与 Root 解决方案</h2><p>如果在 Nrfr 中点击保存时遇到如下报错：</p><blockquote><p><strong>保存失败，Override config can not be invoked by shell</strong> (来自 shizuku 的提示)</p></blockquote><p>这是因为在某些定制系统（或未完全解锁的免 Root 环境）下，纯 Shell 权限无法调用修改底层的 API。</p><p>对于<strong>已经安装了 Magisk 并获取了 Root 权限</strong>的手机，请改用以下方案：</p><h3 id="方案-B：Root-环境（通过-Root-直接启动）"><a href="#方案-B：Root-环境（通过-Root-直接启动）" class="headerlink" title="方案 B：Root 环境（通过 Root 直接启动）"></a>方案 B：Root 环境（通过 Root 直接启动）</h3><ol><li>回到 <strong>Shizuku</strong> 软件主界面，停止当前的无线调试。</li><li>找到 <strong>Start (for rooted devices)</strong> 选项，点击启动。</li><li>在系统弹出的 Magisk Root 权限申请提示中，点击 <strong>同意/允许</strong>。</li><li>等待几秒后，Shizuku 主界面顶部会显示：<blockquote><p><strong>shizuku is running (Version 13.5, root)</strong><br>这代表 Shizuku 已经成功以最高权限（Root）运行。</p></blockquote></li><li>再次回到 <strong>Nrfr</strong> 软件，重新配置国家码并点击保存。</li><li>此时软件会弹出 <strong>设置已保存</strong> 提示，代表修改成功！</li></ol><hr><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这种修改方式是直接修改 Android 手机底层的系统配置数据。<strong>手机关机、重启都不需要重新配置</strong>，一劳永逸。</p><p>唯一的失效场景是手机进行大版本的<strong>系统升级</strong>，届时只需按照本教程重新配置一次即可。</p><p>现在，你可以开启你的“魔法”网络代理，打开 TikTok 愉快的刷视频了！</p>]]>
+    </content>
+    <id>https://lijiabao9.github.io/posts/7160d7f0.html</id>
+    <link href="https://lijiabao9.github.io/posts/7160d7f0.html"/>
+    <published>2026-05-31T03:15:47.000Z</published>
+    <summary>
+      <![CDATA[<p>由于 TikTok 官方对 SIM 卡的运营商国家码（MCC）有严格的区域限制，国内用户即便开启了“魔法”，也常常会遇到黑屏或无法加载内容的情况。</p>
+<p>本文将教大家如何利用 <strong>Shizuku</strong> 调用系统级 API，并配合 <stron]]>
+    </summary>
+    <title>Android 免 Root/Root 环境下使用 Shizuku + Nrfr 修改 SIM 卡国家码突破 TikTok 区域限制</title>
+    <updated>2026-05-31T03:23:23.341Z</updated>
+  </entry>
   <entry>
     <author>
       <name>Gabriel</name>
@@ -30,7 +52,7 @@
 <p>利用 Cloudflare 强大的边缘计算能力和完全免费的 D1、KV 数据库，结合 <strong>maillab/cloud-mail</strong> 开源项目，我们可以极其轻松地搭建一个专]]>
     </summary>
     <title>基于 Cloudflare Workers 与 GitHub Actions 自动化部署自建临时邮件系统（Cloud-Mail）</title>
-    <updated>2026-05-30T19:02:27.742Z</updated>
+    <updated>2026-05-31T03:23:23.338Z</updated>
   </entry>
   <entry>
     <author>
@@ -51,7 +73,7 @@
 <p>本文将为你整理一份完整的实操指南，涵盖 <strong>Magisk（面具）刷入</strong>以及]]>
     </summary>
     <title>Android 设备 Root 进阶指南：Magisk 刷入获取权限与 Shamiko 强力防检测配置</title>
-    <updated>2026-05-30T19:02:27.745Z</updated>
+    <updated>2026-05-31T03:23:23.341Z</updated>
   </entry>
   <entry>
     <author>
@@ -73,7 +95,7 @@
 <h2 id="一、-手机解]]>
     </summary>
     <title>小米8（dipper）解锁及刷入 LineageOS 完整教程</title>
-    <updated>2026-05-30T19:02:27.745Z</updated>
+    <updated>2026-05-31T03:23:23.342Z</updated>
   </entry>
   <entry>
     <author>
@@ -95,7 +117,7 @@
 <p>本文将带你搭建一套既方便管理]]>
     </summary>
     <title>3X-UI 进阶搭建指南：兼顾高隐蔽性与极致性能的代理系统</title>
-    <updated>2026-05-30T19:02:27.744Z</updated>
+    <updated>2026-05-31T03:23:23.340Z</updated>
   </entry>
   <entry>
     <author>
@@ -117,7 +139,7 @@
       <![CDATA[<p><strong>VLESS</strong> 是 Xray 内核的专属核心协议，也是一种无状态的轻量级传输协议。<br>与传统的 VMess 不同，VLESS 协议层<strong>不对数据进行二次加密</strong>（它完全依赖外层包裹的 TLS 提供安全性），因此其协]]>
     </summary>
     <title>纵横破局：Xray-VLESS 三大主流隐蔽架构（Vision直连、Nginx反代、Reality）跨代部署指南</title>
-    <updated>2026-05-30T19:02:27.744Z</updated>
+    <updated>2026-05-31T03:23:23.341Z</updated>
   </entry>
   <entry>
     <author>
@@ -139,7 +161,7 @@
 <p>本文将带你一步步搭建最稳健、最适合生产环境长期]]>
     </summary>
     <title>稳健伪装：VMess + WebSocket + TLS + Nginx 终极生产环境部署指南</title>
-    <updated>2026-05-30T19:02:27.744Z</updated>
+    <updated>2026-05-31T03:23:23.341Z</updated>
   </entry>
   <entry>
     <author>
@@ -161,7 +183,7 @@
 <p>它的核心防御逻辑]]>
     </summary>
     <title>强力抗封锁：Trojan-Go 高性能代理服务器部署与 Nginx 完美回落指南</title>
-    <updated>2026-05-30T19:02:27.744Z</updated>
+    <updated>2026-05-31T03:23:23.340Z</updated>
   </entry>
   <entry>
     <author>
@@ -185,7 +207,7 @@
 <li><strong>缺点</strong>：在]]>
     </summary>
     <title>隐形斗篷：从零部署 Shadowsocks 及其流量伪装终极指南</title>
-    <updated>2026-05-30T19:02:27.744Z</updated>
+    <updated>2026-05-31T03:23:23.341Z</updated>
   </entry>
   <entry>
     <author>
@@ -206,7 +228,7 @@
 <p>它集成了强大的 <a href="https://github.com/caronc/apprise">Appri]]>
     </summary>
     <title>轻量级消息聚合神器：基于 Docker 搭建 MIND 统一通知管理服务</title>
-    <updated>2026-05-30T19:02:27.744Z</updated>
+    <updated>2026-05-31T03:23:23.340Z</updated>
   </entry>
   <entry>
     <author>
@@ -214,8 +236,8 @@
     </author>
     <category term="创意工坊" scheme="https://lijiabao9.github.io/categories/%E5%88%9B%E6%84%8F%E5%B7%A5%E5%9D%8A/"/>
     <category term="服务搭建" scheme="https://lijiabao9.github.io/categories/%E5%88%9B%E6%84%8F%E5%B7%A5%E5%9D%8A/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/"/>
-    <category term="LunaTV" scheme="https://lijiabao9.github.io/tags/LunaTV/"/>
     <category term="Docker Compose" scheme="https://lijiabao9.github.io/tags/Docker-Compose/"/>
+    <category term="LunaTV" scheme="https://lijiabao9.github.io/tags/LunaTV/"/>
     <category term="Cloudflare Workers" scheme="https://lijiabao9.github.io/tags/Cloudflare-Workers/"/>
     <content>
       <![CDATA[<p><strong><a href="https://github.com/MoonTechLab/LunaTV">LunaTV</a></strong> 是一款高颜值的个人媒体库聚合开源项目，完美支持 IPTV 直播源管理、影视点播等功能。</p><p>相比于传统的重客户端播放器，LunaTV 提供了一个极其优雅的 Web 界面，并且支持通过统一的管理后台进行多端配置的维护与同步。</p><p>本文将带你通过 Docker Compose 高效部署 LunaTV，并结合 Cloudflare Workers 实现流媒体的跨域代理，彻底解决外网播放受阻的问题。</p><hr><h2 id="一、-环境准备与-Docker-部署"><a href="#一、-环境准备与-Docker-部署" class="headerlink" title="一、 环境准备与 Docker 部署"></a>一、 环境准备与 Docker 部署</h2><p>我们将使用 Docker Compose 来编排服务，其中包括 LunaTV 的核心 Web 服务 (<code>moontv-core</code>) 以及高性能的持久化键值存储服务 (<code>kvrocks</code>)。</p><h3 id="1-创建工作目录"><a href="#1-创建工作目录" class="headerlink" title="1. 创建工作目录"></a>1. 创建工作目录</h3><p>首先，在服务器上创建用于存放数据与配置文件的目录：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /app/moontv &amp;&amp; <span class="built_in">cd</span> /app/moontv</span><br></pre></td></tr></table></figure><h3 id="2-初始化挂载目录与配置文件"><a href="#2-初始化挂载目录与配置文件" class="headerlink" title="2. 初始化挂载目录与配置文件"></a>2. 初始化挂载目录与配置文件</h3><p>为了让宿主机更方便地管理持久化数据，我们不使用匿名的 Docker 数据卷，而是采用本地目录挂载（Bind Mounts）。</p><p>由于 <code>apache/kvrocks</code> 容器内部以特定权限运行，我们需要通过一个临时容器来正确初始化配置文件和目录权限：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 创建本地数据持久化目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ./kvrocks-data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 启动一个临时容器</span></span><br><span class="line">docker create --name temp apache/kvrocks</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 获取其内部生成的默认配置文件</span></span><br><span class="line">docker <span class="built_in">cp</span> temp:/var/lib/kvrocks/kvrocks.conf ./kvrocks-data/kvrocks.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 获取容器内 kvrocks 进程的运行用户 ID (通常为 999)</span></span><br><span class="line">docker inspect -f <span class="string">&#x27;&#123;&#123;.Config.User&#125;&#125;&#x27;</span> temp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 严格修正宿主机挂载目录的权限，避免容器启动时遭遇 Permission denied</span></span><br><span class="line"><span class="built_in">chown</span> -R 999:999 ./kvrocks-data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 删除临时容器并移除无效的数据卷</span></span><br><span class="line">docker <span class="built_in">rm</span> temp &amp;&amp; docker volume prune</span><br><span class="line"></span><br></pre></td></tr></table></figure><h3 id="3-编写-Docker-Compose-编排文件"><a href="#3-编写-Docker-Compose-编排文件" class="headerlink" title="3. 编写 Docker Compose 编排文件"></a>3. 编写 Docker Compose 编排文件</h3><p>创建并编辑 <code>docker-compose.yml</code> 文件，请务必修改默认的管理凭证：</p><figure class="highlight yaml"><figcaption><span>docker-compose.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">moontv-core:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/moontechlab/lunatv:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">moontv-core</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;8080:3000&#x27;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="comment"># 【必须修改】管理后台的登录账号与强密码</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">USERNAME=admin@example.com</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=your_secure_password</span></span><br><span class="line">      <span class="comment"># 持久化存储配置 (使用配套的 kvrocks)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">NEXT_PUBLIC_STORAGE_TYPE=kvrocks</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KVROCKS_URL=redis://moontv-kvrocks:6666</span></span><br><span class="line">      <span class="comment"># 站点基础信息配置</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SITE_BASE=https://your-domain.com</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">NEXT_PUBLIC_SITE_NAME=LunaTV</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ANNOUNCEMENT=👋</span> <span class="string">欢迎回家！这里是</span> <span class="string">LunaTV</span> <span class="string">个人媒体库，祝您今晚观影愉快！🍿</span></span><br><span class="line">      <span class="comment"># 豆瓣元数据代理配置（防止国内服务器接口被墙或限流）</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">NEXT_PUBLIC_DOUBAN_PROXY_TYPE=cmliussss-cdn-tencent</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE=cmliussss-cdn-tencent</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">moontv-network</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">moontv-kvrocks</span></span><br><span class="line">  </span><br><span class="line">  <span class="attr">moontv-kvrocks:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">apache/kvrocks</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">moontv-kvrocks</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./kvrocks-data:/var/lib/kvrocks</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">moontv-network</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">moontv-network:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br><span class="line"></span><br></pre></td></tr></table></figure><h3 id="4-一键启动服务"><a href="#4-一键启动服务" class="headerlink" title="4. 一键启动服务"></a>4. 一键启动服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure><h3 id="💡-核心环境变量解析"><a href="#💡-核心环境变量解析" class="headerlink" title="💡 核心环境变量解析"></a>💡 核心环境变量解析</h3><div class="table-container"><table><thead><tr><th>变量名</th><th>示例值</th><th>说明</th></tr></thead><tbody><tr><td><strong><code>USERNAME</code></strong></td><td><code>admin@example.com</code></td><td>管理后台的登录账号</td></tr><tr><td><strong><code>PASSWORD</code></strong></td><td><code>your_secure_password</code></td><td><strong>【安全隐患】</strong> 必须修改的高强度管理密码</td></tr><tr><td><strong><code>SITE_BASE</code></strong></td><td><code>https://your-domain.com</code></td><td>你的外部访问域名，用于反代和回调</td></tr><tr><td><strong><code>KVROCKS_URL</code></strong></td><td><code>redis://moontv-kvrocks:6666</code></td><td>数据库连接串，保持容器间默认通信即可</td></tr></tbody></table></div><hr><h2 id="二、-配置视频订阅源"><a href="#二、-配置视频订阅源" class="headerlink" title="二、 配置视频订阅源"></a>二、 配置视频订阅源</h2><p>服务成功运行后，通过浏览器访问你的域名或 <code>http://ip:8080</code> 并登录管理后台。</p><p>为了让媒体库运转起来，我们需要导入直播或点播源。</p><p>这里强烈推荐使用由开源社区维护的 <strong><a href="https://github.com/hafrey1/LunaTV-config">hafrey1/LunaTV-config</a></strong> 项目，它提供了精简且高质量的配置源。</p><p>你可以选择以下两种方式之一进行导入：</p><ul><li><strong>静态导入</strong>：直接复制该项目中的 <code>jin18.json</code> 或 <code>jingjian.json</code> 纯文本json内容，粘贴到管理后台的配置文本框中。</li><li><strong>订阅链接（强烈推荐）</strong>：复制该项目说明文档中的订阅链接，填入到管理后台的订阅 URL。这种方式后续支持在后台一键更新，免去手动维护的烦恼。</li></ul><hr><h2 id="三、-进阶：利用-Cloudflare-Workers-实现流媒体跨域代理"><a href="#三、-进阶：利用-Cloudflare-Workers-实现流媒体跨域代理" class="headerlink" title="三、 进阶：利用 Cloudflare Workers 实现流媒体跨域代理"></a>三、 进阶：利用 Cloudflare Workers 实现流媒体跨域代理</h2><p>在播放部分第三方公共视频源时，浏览器通常会触发 <strong>CORS (跨域资源共享) 限制</strong> 导致无法解码。</p><p>此外，部分源站会对直接请求进行防盗链或限流。</p><p>通过部署 <strong>Cloudflare Workers</strong> 作为反向代理中间件，可以完美隐匿客户端信息并绕过跨域检测。</p><h3 id="1-创建-Worker"><a href="#1-创建-Worker" class="headerlink" title="1. 创建 Worker"></a>1. 创建 Worker</h3><p>登录 <a href="https://www.cloudflare.com/">Cloudflare 控制台</a>，在左侧菜单进入 <strong>计算 -&gt; Workers 和 Pages</strong>。</p><p>点击 <strong>创建应用 -&gt; 创建 Worker</strong>。</p><p>选择 <strong>从 Hello World！开始</strong>，点击 <strong>部署</strong>。</p><h3 id="2-编写代理脚本"><a href="#2-编写代理脚本" class="headerlink" title="2. 编写代理脚本"></a>2. 编写代理脚本</h3><p>点击 <strong>编辑代码</strong> 按钮，进入代码编辑页面。</p><p>清空 Worker 代码编辑器中的默认内容，复制 GitHub 项目中 <a href="https://github.com/hafrey1/LunaTV-config/blob/main/CORSAPI/_worker.js">_worker.js</a> 的全部开源代码。</p><h3 id="3-接入-LunaTV-后台"><a href="#3-接入-LunaTV-后台" class="headerlink" title="3. 接入 LunaTV 后台"></a>3. 接入 LunaTV 后台</h3><p>点击右上角 <strong>部署 (Deploy)</strong>。</p><p>部署完成后，直接访问你的 Worker 分配的独立域名（例如 <code>https://luna-proxy.yourname.workers.dev</code>）。</p><p>此时页面会根据你的代码，渲染出一个美观的订阅链接提取面板。</p><p>直接点击 <strong>复制中转 Base58</strong> 链接，将其粘贴到 LunaTV 管理后台的订阅设置中即可完成全量代理。</p><hr><h2 id="⚠️-避坑与使用提示"><a href="#⚠️-避坑与使用提示" class="headerlink" title="⚠️ 避坑与使用提示"></a>⚠️ 避坑与使用提示</h2><div class="note warning flat"><p><strong>1. 免费额度注意</strong><br>Cloudflare Workers 免费版账户每天拥有 <strong>10 万次</strong> 的免费请求额度。<br>对于个人高频看电视、刷剧而言完全够用，但如果配置多端或分享给多人使用，需留意额度消耗。</p><p><strong>2. 严禁滥用大文件</strong><br>该 Worker 仅作为视频流信令和跨域数据的中继代理，请勿尝试将其用于大文件、高码率原盘魔改下载，否则极易触发 Cloudflare 的 CPU 限制或被判定违规导致封号。</p></div>]]>
@@ -228,7 +250,7 @@
 <p>相比于传统的重客户端]]>
     </summary>
     <title>LunaTV 个人高颜值媒体库搭建指南：基于 Docker Compose 与 Cloudflare Workers 流媒体代理</title>
-    <updated>2026-05-30T19:02:27.743Z</updated>
+    <updated>2026-05-31T03:23:23.340Z</updated>
   </entry>
   <entry>
     <author>
@@ -249,7 +271,7 @@
 <p>其最大的核心优势在于<strong>支持全功能自建服务器</strong]]>
     </summary>
     <title>RustDesk 自建远程桌面服务器指南：基于 Docker Compose 极致流畅体验</title>
-    <updated>2026-05-30T19:02:27.744Z</updated>
+    <updated>2026-05-31T03:23:23.340Z</updated>
   </entry>
   <entry>
     <author>
@@ -272,7 +294,7 @@
 <p>本文将带你完成 Hexo Butterfly 主题的 Artalk 接入，并针对配合 Cloudflare（CDN 小黄云）时极易遇到的各种「玄学问题」提供完整的故]]>
     </summary>
     <title>Hexo Butterfly 完美接入 Artalk 评论系统与 Cloudflare 踩坑全指南</title>
-    <updated>2026-05-30T19:02:27.743Z</updated>
+    <updated>2026-05-31T03:23:23.339Z</updated>
   </entry>
   <entry>
     <author>
@@ -293,7 +315,7 @@
 <p>本文将演示如何通过 Docker Compo]]>
     </summary>
     <title>自托管评论系统 Artalk 部署与高级功能定制指南</title>
-    <updated>2026-05-30T19:02:27.744Z</updated>
+    <updated>2026-05-31T03:23:23.340Z</updated>
   </entry>
   <entry>
     <author>
@@ -315,7 +337,7 @@
 <p>通过集成 Umami，你不仅可以摆脱传统不蒜]]>
     </summary>
     <title>在 Hexo Butterfly 主题中优雅集成 Umami 隐私分析统计</title>
-    <updated>2026-05-30T19:02:27.743Z</updated>
+    <updated>2026-05-31T03:23:23.340Z</updated>
   </entry>
   <entry>
     <author>
@@ -323,8 +345,8 @@
     </author>
     <category term="创意工坊" scheme="https://lijiabao9.github.io/categories/%E5%88%9B%E6%84%8F%E5%B7%A5%E5%9D%8A/"/>
     <category term="服务搭建" scheme="https://lijiabao9.github.io/categories/%E5%88%9B%E6%84%8F%E5%B7%A5%E5%9D%8A/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/"/>
-    <category term="Umami" scheme="https://lijiabao9.github.io/tags/Umami/"/>
     <category term="Docker Compose" scheme="https://lijiabao9.github.io/tags/Docker-Compose/"/>
+    <category term="Umami" scheme="https://lijiabao9.github.io/tags/Umami/"/>
     <content>
       <![CDATA[<p><a href="https://umami.is/">Umami</a> 是一个简单、易用且注重隐私的开源网站分析替代方案。相比 Google Analytics，它更轻量，且完全由你自己掌握数据。</p><p>本文将带你通过 <strong>Docker Compose</strong> 完成全流程部署。</p><h2 id="一、Docker-服务部署"><a href="#一、Docker-服务部署" class="headerlink" title="一、Docker 服务部署"></a>一、Docker 服务部署</h2><h3 id="1-创建工作目录"><a href="#1-创建工作目录" class="headerlink" title="1. 创建工作目录"></a>1. 创建工作目录</h3><p>登录服务器，建立 Umami 的数据存储目录：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /app/umami &amp;&amp; <span class="built_in">cd</span> /app/umami</span><br></pre></td></tr></table></figure><h3 id="2-编写配置-docker-compose-yml"><a href="#2-编写配置-docker-compose-yml" class="headerlink" title="2. 编写配置 (docker-compose.yml)"></a>2. 编写配置 (docker-compose.yml)</h3><p>创建并编辑配置文件：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim docker-compose.yml</span><br></pre></td></tr></table></figure><p>写入以下内容。请注意：</p><ul><li><strong>APP_SECRET</strong>：这是加密盐值，务必修改为随机字符串（可在终端运行 <code>openssl rand -hex 32</code> 生成）。</li><li><strong>端口映射</strong>：将宿主机的 <code>8080</code> 映射到容器的 <code>3000</code>。</li></ul><figure class="highlight yaml"><figcaption><span>docker-compose.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">umami:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/umami-software/umami:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:3000&quot;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">DATABASE_URL:</span> <span class="string">postgresql://umami:umami@db:5432/umami</span></span><br><span class="line">      <span class="attr">APP_SECRET:</span> <span class="string">replace-me-with-a-random-string</span>  <span class="comment"># &lt;--- 务必修改这里</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="attr">db:</span></span><br><span class="line">        <span class="attr">condition:</span> <span class="string">service_healthy</span></span><br><span class="line">    <span class="attr">init:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">healthcheck:</span></span><br><span class="line">      <span class="attr">test:</span> [<span class="string">&quot;CMD-SHELL&quot;</span>, <span class="string">&quot;curl http://localhost:3000/api/heartbeat&quot;</span>]</span><br><span class="line">      <span class="attr">interval:</span> <span class="string">5s</span></span><br><span class="line">      <span class="attr">timeout:</span> <span class="string">5s</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">5</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:15-alpine</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">POSTGRES_DB:</span> <span class="string">umami</span></span><br><span class="line">      <span class="attr">POSTGRES_USER:</span> <span class="string">umami</span></span><br><span class="line">      <span class="attr">POSTGRES_PASSWORD:</span> <span class="string">umami</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./umami-db-data:/var/lib/postgresql/data</span> <span class="comment"># 数据持久化挂载</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">healthcheck:</span></span><br><span class="line">      <span class="attr">test:</span> [<span class="string">&quot;CMD-SHELL&quot;</span>, <span class="string">&quot;pg_isready -U $$&#123;POSTGRES_USER&#125; -d $$&#123;POSTGRES_DB&#125;&quot;</span>]</span><br><span class="line">      <span class="attr">interval:</span> <span class="string">5s</span></span><br><span class="line">      <span class="attr">timeout:</span> <span class="string">5s</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">5</span></span><br><span class="line"></span><br></pre></td></tr></table></figure><h3 id="3-启动服务"><a href="#3-启动服务" class="headerlink" title="3. 启动服务"></a>3. 启动服务</h3><p>执行以下命令在后台启动服务：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure><hr><h2 id="二、初始化配置与使用"><a href="#二、初始化配置与使用" class="headerlink" title="二、初始化配置与使用"></a>二、初始化配置与使用</h2><h3 id="1-修改默认密码"><a href="#1-修改默认密码" class="headerlink" title="1. 修改默认密码"></a>1. 修改默认密码</h3><p>现在你可以通过 <code>http://ip:8080</code> 访问管理后台。</p><ul><li><strong>默认账号</strong>：<code>admin</code></li><li><strong>默认密码</strong>：<code>umami</code></li></ul><blockquote><p>⚠️ <strong>重要</strong>：登录后，请立即点击左下角用户名 -&gt; <strong>Settings</strong> -&gt; <strong>Profile</strong> -&gt; <strong>Change password</strong> 修改你的初始密码。</p></blockquote><h3 id="2-添加网站与引入脚本"><a href="#2-添加网站与引入脚本" class="headerlink" title="2. 添加网站与引入脚本"></a>2. 添加网站与引入脚本</h3><ol><li>在 <strong>Websites</strong> 页面，点击 <strong>Add website</strong>。</li><li>填入你的 <code>网站名称</code> 和 <code>网站网址</code>。</li><li><p>保存后，点击列表中的 <strong>Edit</strong> 按钮，你会得到</p><ul><li><strong>Website ID</strong>：这是唯一标识你的网站。</li><li><strong>Tracking code</strong>：一段专属的异步统计脚本，例如：<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">defer</span> <span class="attr">src</span>=<span class="string">&quot;https://umami.yourdomain.com/script.js&quot;</span> <span class="attr">data-website-id</span>=<span class="string">&quot;你的-Website-ID&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>将该段代码复制并粘贴到你 Hexo 博客（或其他网站）的主题 HTML 模板的 <code>&lt;head&gt;</code> 标签中，即可开始静默、无感地统计网站流量。</li></ul></li></ol>]]>
     </content>
@@ -336,7 +358,7 @@
 <p>本文将带你通过 <strong>Docker Compos]]>
     </summary>
     <title>使用 Docker Compose 部署开源网站统计工具 Umami 教程</title>
-    <updated>2026-05-30T19:02:27.744Z</updated>
+    <updated>2026-05-31T03:23:23.340Z</updated>
   </entry>
   <entry>
     <author>
@@ -358,7 +380,7 @@
 <p>相比于个人版 Outlook，企业版 Exchange 允许我们绑定<st]]>
     </summary>
     <title>玩转 Microsoft 365 E3：低成本搭建高权重企业级 SMTP</title>
-    <updated>2026-05-30T19:02:27.743Z</updated>
+    <updated>2026-05-31T03:23:23.339Z</updated>
   </entry>
   <entry>
     <author>
@@ -379,7 +401,7 @@
 <p>通过合理的架构设计，Nginx 将作为统一的流量入口（反向代理），在卸载 SSL 流量、提供硬核安全防护的同时，优雅地将请求分发给后端的各个]]>
     </summary>
     <title>生产级 Nginx 反向代理与 高安全 TLS/SSL 配置最佳实践</title>
-    <updated>2026-05-30T19:02:27.742Z</updated>
+    <updated>2026-05-31T03:23:23.339Z</updated>
   </entry>
   <entry>
     <author>
@@ -400,7 +422,7 @@
 <p>本文将指导你使用业内知名的自动化证书管理工具 <strong>acme.sh</strong>，通过 Cloudflare 的 DNS-01 验证方式，申请由 <em>Let’s]]>
     </summary>
     <title>自动化运维：使用 acme.sh 配合 Cloudflare 申请免费泛域名证书</title>
-    <updated>2026-05-30T19:02:27.742Z</updated>
+    <updated>2026-05-31T03:23:23.338Z</updated>
   </entry>
   <entry>
     <author>
@@ -421,28 +443,6 @@
 <p>为了让我们的数字资产获得最顶级的加速和防御保护，通常推荐将 DNS 解析权彻底移交给全球知名网络基础设施服务商 <strong>Cloudfla]]>
     </summary>
     <title>域名完美蜕变：将域名无缝托管至 Cloudflare 全指南</title>
-    <updated>2026-05-30T19:02:27.742Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>Gabriel</name>
-    </author>
-    <category term="DevOps" scheme="https://lijiabao9.github.io/categories/DevOps/"/>
-    <category term="域名管理" scheme="https://lijiabao9.github.io/categories/DevOps/%E5%9F%9F%E5%90%8D%E7%AE%A1%E7%90%86/"/>
-    <category term="Domain" scheme="https://lijiabao9.github.io/tags/Domain/"/>
-    <category term=".xyz" scheme="https://lijiabao9.github.io/tags/xyz/"/>
-    <content>
-      <![CDATA[<p>想要搭建个人博客、测试脚本，或者纯粹想要拥有一个属于自己的个性化网络标识，却又不想承担昂贵的域名续费成本？</p><p>今天教大家一个业内公认的“低成本薅羊毛”神技：利用特定的数字规律，低价直接买断 10 年期的 <code>.xyz</code> 域名。</p><p>推荐使用 <a href="https://www.spaceship.com/">SpaceShip</a> 平台，它是知名域名服务商 Namecheap 旗下的新一代平台，不仅界面更加现代、解析生效速度极快，而且价格非常透明，没有隐藏的套路。</p><hr><h2 id="选购与配置技巧"><a href="#选购与配置技巧" class="headerlink" title="选购与配置技巧"></a>选购与配置技巧</h2><h3 id="1-核心搜索策略"><a href="#1-核心搜索策略" class="headerlink" title="1. 核心搜索策略"></a>1. 核心搜索策略</h3><p><code>.xyz</code> 域名之所以便宜，是因为注册局针对 <strong>“6位到9位纯数字”</strong> 的域名（业内简称为 6D/7D/8D/9D XYZ）提供了极其低廉的专属溢价政策。</p><ul><li><strong>搜索方法</strong>：在 SpaceShip 首页的搜索框中，直接输入一组 <strong>6位到9位的纯数字</strong>（例如 <code>131495.xyz</code>）。</li><li><strong>避坑指南</strong>：字母组合或短数字（如 3位/4位数字）属于珍贵资源，价格会非常高。务必确保你搜索的是 6 位以上的纯数字。</li></ul><h3 id="2-价格防踩坑校验"><a href="#2-价格防踩坑校验" class="headerlink" title="2. 价格防踩坑校验"></a>2. 价格防踩坑校验</h3><p>在将域名加入购物车前，请仔细核对账单细节：</p><ul><li><strong>首年价格</strong>：确保首年注册价格显示在 <strong>$0.67</strong> 左右（不同时期可能因汇率或微调有几美分的浮动）。</li><li><strong>支持的支付方式</strong>：SpaceShip 对国内用户非常友好，不仅支持常见的 Visa / MasterCard 信用卡，还原生支持 <strong>支付宝 (Alipay)</strong> 结账。</li></ul><hr><h2 id="购买后续管理"><a href="#购买后续管理" class="headerlink" title="购买后续管理"></a>购买后续管理</h2><p>支付成功后，域名的管理非常简单：</p><ol><li>点击网页右上角的 <strong>Launchpad</strong>（控制台仪表盘）。</li><li>在工具列表中点击 <strong>Domain Manager</strong>（域名管理器）。</li><li>在这里你就可以看到刚刚躺进账户的域名，接下来不管是修改 DNS 接入 Cloudflare，还是直接配置解析，都由你说了算！</li></ol><div class="note warning flat"><p><strong>续期 10 年</strong>：<br>点击域名，选择 <strong>Renew subscription</strong>，将年限直接<strong>勾选为 9 年</strong>（加上首年共计 10 年）。</p><p>这样只需花费不到 7 美元（约合人民币 50 元不到），就能一次性直接<strong>买断 10 年</strong>的域名所有权，完美规避未来注册局涨价或政策变动的烦恼。</p></div>]]>
-    </content>
-    <id>https://lijiabao9.github.io/posts/80dc3caa.html</id>
-    <link href="https://lijiabao9.github.io/posts/80dc3caa.html"/>
-    <published>2026-05-24T05:41:31.000Z</published>
-    <summary>
-      <![CDATA[<p>想要搭建个人博客、测试脚本，或者纯粹想要拥有一个属于自己的个性化网络标识，却又不想承担昂贵的域名续费成本？</p>
-<p>今天教大家一个业内公认的“低成本薅羊毛”神技：利用特定的数字规律，低价直接买断 10 年期的 <code>.xyz</code> 域名。</p>
-<p>]]>
-    </summary>
-    <title>低成本薅羊毛：10年期超便宜 .xyz 域名选购指南</title>
-    <updated>2026-05-30T19:02:27.742Z</updated>
+    <updated>2026-05-31T03:23:23.338Z</updated>
   </entry>
 </feed>
