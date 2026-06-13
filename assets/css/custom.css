@@ -1,0 +1,13 @@
+/* 定义彩色图标的大小与对齐 */
+svg.icon {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+/* 控制时间轴的年份和图标的距离 */
+.article-sort-item.year span {
+    margin-right: 12px;  /* 调整数值控制间距大小 */
+}
