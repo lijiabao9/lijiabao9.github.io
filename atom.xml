@@ -10,7 +10,7 @@
   <rights>All rights reserved 2026, Gabriel</rights>
   <subtitle>在代码与文字之间</subtitle>
   <title>Gabriel的博客</title>
-  <updated>2026-06-13T17:18:19.111Z</updated>
+  <updated>2026-06-14T02:45:15.524Z</updated>
   <entry>
     <author>
       <name>Gabriel</name>
@@ -27,7 +27,7 @@
     <published>2026-06-09T16:00:46.000Z</published>
     <summary>基于 Cloudflare Workers 部署开源 CloudFlare-ImgBed 图床方案，涵盖 Workers API 令牌、D1 数据库、R2 存储配置及 GitHub Actions 自动化部署。</summary>
     <title>Cloudflare Workers 部署 CloudFlare-ImgBed 自建图床教程</title>
-    <updated>2026-06-13T17:18:19.111Z</updated>
+    <updated>2026-06-14T02:45:15.524Z</updated>
   </entry>
   <entry>
     <author>
@@ -45,7 +45,7 @@
     <published>2026-06-09T13:27:04.000Z</published>
     <summary>基于 Cloudflare R2 对象存储搭建免费图床，涵盖存储桶创建、自定义域名绑定、CDN 缓存规则配置、API 令牌生成及 PicGo S3 插件对接。</summary>
     <title>Cloudflare R2 搭建免费图床与 PicGo 配置指南</title>
-    <updated>2026-06-13T17:18:19.111Z</updated>
+    <updated>2026-06-14T02:45:15.524Z</updated>
   </entry>
   <entry>
     <author>
@@ -63,16 +63,16 @@
     <published>2026-06-07T15:17:30.000Z</published>
     <summary>Docker Compose 部署 Uptime Kuma 自建监控系统，涵盖容器部署、Docker 宿主机监控配置、容器间通信。</summary>
     <title>Uptime Kuma 自建监控系统部署指南</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
       <name>Gabriel</name>
     </author>
     <category term="服务部署" scheme="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2/"/>
-    <category term="Docker Compose" scheme="https://lijiabao9.github.io/tags/Docker-Compose/"/>
     <category term="Glances" scheme="https://lijiabao9.github.io/tags/Glances/"/>
     <category term="系统监控" scheme="https://lijiabao9.github.io/tags/%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7/"/>
+    <category term="Docker Compose" scheme="https://lijiabao9.github.io/tags/Docker-Compose/"/>
     <content>
       <![CDATA[<p>Glances 是轻量级系统监控工具，支持 Web 端实时查看 CPU、内存、磁盘、网络等资源使用情况。</p><p>本文通过 Docker Compose 部署并启用 Web 密码认证。</p><blockquote><p><a href="http://nicolargo.github.io/glances/">官方网站</a> | <a href="https://github.com/nicolargo/glances">GitHub 仓库</a></p></blockquote><hr><h2 id="1-创建项目目录"><a href="#1-创建项目目录" class="headerlink" title="1. 创建项目目录"></a>1. 创建项目目录</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /app/glances &amp;&amp; <span class="built_in">cd</span> /app/glances</span><br></pre></td></tr></table></figure><hr><h2 id="2-临时容器生成密码"><a href="#2-临时容器生成密码" class="headerlink" title="2. 临时容器生成密码"></a>2. 临时容器生成密码</h2><p>创建 <code>docker-compose.yml</code>：</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">glances:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nicolargo/glances:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">glances</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;61208:61208&quot;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;GLANCES_OPT=-w&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br></pre></td></tr></table></figure><p>启动临时容器：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure><h3 id="进入容器生成密码"><a href="#进入容器生成密码" class="headerlink" title="进入容器生成密码"></a>进入容器生成密码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it glances sh</span><br><span class="line">glances -s --password</span><br></pre></td></tr></table></figure><p>连续输入两次密码，提示保存时输入 <code>Yes</code>，出现服务运行提示后按 <code>Ctrl + C</code> 结束，输入 <code>exit</code> 退出。</p><h3 id="导出密码文件"><a href="#导出密码文件" class="headerlink" title="导出密码文件"></a>导出密码文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ./secrets</span><br><span class="line">docker <span class="built_in">cp</span> glances:/root/.config/glances/glances.pwd ./secrets/glances_password</span><br></pre></td></tr></table></figure><hr><h2 id="3-配置持久化容器"><a href="#3-配置持久化容器" class="headerlink" title="3. 配置持久化容器"></a>3. 配置持久化容器</h2><p>修改 <code>docker-compose.yml</code>：</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">glances:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nicolargo/glances:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">glances</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;61208:61208&quot;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;GLANCES_OPT=-w --password&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line">    <span class="attr">secrets:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source:</span> <span class="string">glances_password</span></span><br><span class="line">        <span class="attr">target:</span> <span class="string">/root/.config/glances/glances.pwd</span></span><br><span class="line"></span><br><span class="line"><span class="attr">secrets:</span></span><br><span class="line">  <span class="attr">glances_password:</span></span><br><span class="line">    <span class="attr">file:</span> <span class="string">./secrets/glances_password</span></span><br></pre></td></tr></table></figure><p>使用新的配置文件，重启容器：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose down &amp;&amp; docker compose up -d</span><br></pre></td></tr></table></figure><hr><h2 id="4-验证"><a href="#4-验证" class="headerlink" title="4. 验证"></a>4. 验证</h2><p>访问 <code>http://IP:61208</code>，弹出认证窗口：</p><ul><li><strong>用户名</strong>：<code>glances</code></li><li><strong>密码</strong>：步骤 2 设置的密码</li></ul>]]>
     </content>
@@ -81,16 +81,16 @@
     <published>2026-06-07T11:15:36.000Z</published>
     <summary>Docker Compose 部署 Glances 轻量级监控工具，通过容器内生成密码文件并挂载的方式，安全开启 Web 端密码认证。</summary>
     <title>Glances 监控系统部署与 Web 认证配置</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
       <name>Gabriel</name>
     </author>
     <category term="服务部署" scheme="https://lijiabao9.github.io/categories/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2/"/>
+    <category term="Docker Compose" scheme="https://lijiabao9.github.io/tags/Docker-Compose/"/>
     <category term="Dashy" scheme="https://lijiabao9.github.io/tags/Dashy/"/>
     <category term="导航页" scheme="https://lijiabao9.github.io/tags/%E5%AF%BC%E8%88%AA%E9%A1%B5/"/>
-    <category term="Docker Compose" scheme="https://lijiabao9.github.io/tags/Docker-Compose/"/>
     <content>
       <![CDATA[<p>Dashy 是功能强大、高度可定制的开源个人导航页工具，支持内置组件、动态状态检查、多主题切换及权限控制。</p><blockquote><p><a href="https://dashy.to/">官方网站</a> | <a href="https://github.com/lissy93/dashy">GitHub 仓库</a></p></blockquote><hr><h2 id="1-创建项目目录"><a href="#1-创建项目目录" class="headerlink" title="1. 创建项目目录"></a>1. 创建项目目录</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建并进入工作目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p /app/dashy &amp;&amp; <span class="built_in">cd</span> /app/dashy</span><br></pre></td></tr></table></figure><hr><h2 id="2-配置文件"><a href="#2-配置文件" class="headerlink" title="2. 配置文件"></a>2. 配置文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建用户数据目录</span></span><br><span class="line"><span class="built_in">mkdir</span> ./user-data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载官方默认配置文件 conf.yml</span></span><br><span class="line">wget -P ./user-data https://raw.githubusercontent.com/lissy93/dashy/master/user-data/conf.yml</span><br></pre></td></tr></table></figure><hr><h2 id="3-开启管理员认证"><a href="#3-开启管理员认证" class="headerlink" title="3. 开启管理员认证"></a>3. 开启管理员认证</h2><h3 id="生成密码哈希"><a href="#生成密码哈希" class="headerlink" title="生成密码哈希"></a>生成密码哈希</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> -n <span class="string">&quot;你的超级密码&quot;</span> | <span class="built_in">sha256sum</span> | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f1 | <span class="built_in">tr</span> -d <span class="string">&#x27;\n&#x27;</span> &amp;&amp; <span class="built_in">echo</span></span><br></pre></td></tr></table></figure><h3 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h3><p>编辑 <code>./user-data/conf.yml</code>，在 <code>appConfig</code> 节点下添加：</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">appConfig:</span></span><br><span class="line">  <span class="attr">auth:</span></span><br><span class="line">    <span class="attr">enableGuestAccess:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">users:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">user:</span> <span class="string">admin</span></span><br><span class="line">        <span class="attr">hash:</span> <span class="string">生成的64位哈希值</span></span><br><span class="line">        <span class="attr">type:</span> <span class="string">admin</span></span><br></pre></td></tr></table></figure><hr><h2 id="4-Docker-Compose-部署"><a href="#4-Docker-Compose-部署" class="headerlink" title="4. Docker Compose 部署"></a>4. Docker Compose 部署</h2><p>创建 <code>docker-compose.yml</code>：</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">dashy:</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">Dashy</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">lissy93/dashy:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">4000</span><span class="string">:8080</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./user-data:/app/user-data</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">NODE_ENV=production</span></span><br><span class="line">    <span class="attr">user:</span> <span class="string">&quot;0:0&quot;</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">healthcheck:</span></span><br><span class="line">      <span class="attr">test:</span> [<span class="string">&#x27;CMD&#x27;</span>, <span class="string">&#x27;node&#x27;</span>, <span class="string">&#x27;/app/services/healthcheck.js&#x27;</span>]</span><br><span class="line">      <span class="attr">interval:</span> <span class="string">1m30s</span></span><br><span class="line">      <span class="attr">timeout:</span> <span class="string">10s</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">3</span></span><br><span class="line">      <span class="attr">start_period:</span> <span class="string">30s</span></span><br></pre></td></tr></table></figure><h3 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure><hr><h2 id="5-使用指南"><a href="#5-使用指南" class="headerlink" title="5. 使用指南"></a>5. 使用指南</h2><p>访问 <code>http://IP:4000</code>：</p><div class="table-container"><table><thead><tr><th style="text-align:left">操作</th><th style="text-align:left">说明</th></tr></thead><tbody><tr><td style="text-align:left">登录</td><td style="text-align:left">点击右上角齿轮图标，输入管理员账号密码</td></tr><tr><td style="text-align:left">可视化编辑</td><td style="text-align:left">拖拽、新增组件、调整布局和尺寸</td></tr><tr><td style="text-align:left">暂存本地</td><td style="text-align:left">配置仅保存在浏览器 LocalStorage，用于预览</td></tr><tr><td style="text-align:left">保存到磁盘</td><td style="text-align:left">将更改回写至服务器的 <code>conf.yml</code>，全局生效</td></tr></tbody></table></div><blockquote><p>更多配置参考 <a href="https://dashy.to/docs/">Dashy 官方文档</a></p></blockquote>]]>
     </content>
@@ -99,7 +99,7 @@
     <published>2026-06-07T07:09:23.000Z</published>
     <summary>Docker Compose 部署 Dashy 高颜值自托管导航页，涵盖密码认证配置、可视化编辑与配置保存。</summary>
     <title>Dashy 高颜值自托管导航页部署指南</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -117,7 +117,7 @@
     <published>2026-06-05T04:12:34.000Z</published>
     <summary>WSL2 Ubuntu 终端效率工具链完整配置指南，涵盖 Fish Shell、Zoxide、Fzf、Atuin 等现代化替代工具，以及 tldr、bat、lsd、fd、ripgrep、jq 的高效使用。</summary>
     <title>WSL2 Ubuntu 现代终端效率工具链配置指南</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.524Z</updated>
   </entry>
   <entry>
     <author>
@@ -135,7 +135,7 @@
     <published>2026-06-02T17:30:44.000Z</published>
     <summary>通过 Cloudflare Workers 部署 OpenList API Page 精简版，实现轻量与数据自主权。</summary>
     <title>Cloudflare Workers 部署 OpenList API Page 教程</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -153,7 +153,7 @@
     <published>2026-06-02T17:13:44.000Z</published>
     <summary>Docker Compose 部署 OpenList 网盘列表管理工具，联动集成 Aria2、qBittorrent、Transmission 三大下载器，打造全能私有云下载中心。</summary>
     <title>OpenList 网盘列表与下载器部署指南</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -171,7 +171,7 @@
     <published>2026-06-01T17:31:06.000Z</published>
     <summary>Docker Compose 部署 Gotify 自托管消息推送服务，涵盖服务端安装、Nginx HTTPS 反代配置、WebSocket 支持以及 Android 客户端接入。</summary>
     <title>Gotify 自托管消息推送服务部署指南</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -189,7 +189,7 @@
     <published>2026-05-31T03:15:47.000Z</published>
     <summary>Android 免 Root 或 Root 环境下使用 Shizuku + Nrfr 修改 SIM 卡运营商国家码突破 TikTok 区域限制，支持重启不失效。</summary>
     <title>Android 免 Root 与 Root 环境下修改 SIM 国家码解锁 TikTok</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.524Z</updated>
   </entry>
   <entry>
     <author>
@@ -207,7 +207,7 @@
     <published>2026-05-30T05:39:21.000Z</published>
     <summary>Android 设备 Root 完整指南，涵盖 Magisk 修补 boot.img 刷入方式、Zygisk 开启以及 Shamiko 模块防检测深度配置。</summary>
     <title>Android Root 进阶 Magisk 刷入与 Shamiko 防检测配置</title>
-    <updated>2026-06-13T17:18:19.111Z</updated>
+    <updated>2026-06-14T02:45:15.524Z</updated>
   </entry>
   <entry>
     <author>
@@ -225,7 +225,7 @@
     <published>2026-05-29T12:30:40.000Z</published>
     <summary>小米8（dipper）解锁 Bootloader 并刷入 LineageOS 完整教程，涵盖解锁等待期避坑、ADB 环境配置、Recovery 刷入、系统侧载安装以及原生网络检测服务器替换优化。</summary>
     <title>小米8解锁与刷入 LineageOS 完整教程</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.524Z</updated>
   </entry>
   <entry>
     <author>
@@ -243,7 +243,7 @@
     <published>2026-05-28T15:15:27.000Z</published>
     <summary>Sing-box-yg 一键脚本部署指南，支持 Vless-reality-vision、Vmess-ws、Hysteria-2、Tuic-v5、Anytls 五大协议，无需域名证书，支持纯 IPV6 与双栈 VPS。</summary>
     <title>Sing-box-yg 一键五协议共存脚本部署指南</title>
-    <updated>2026-06-13T17:18:19.113Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -261,7 +261,7 @@
     <published>2026-05-28T15:03:27.000Z</published>
     <summary>3X-UI 代理面板进阶搭建指南，涵盖 Nginx 反代面板加固、VLESS + WS + TLS CDN 模式以及 VLESS + Reality 直连性能模式的完整配置、订阅地址配置。</summary>
     <title>3X-UI 进阶搭建高隐蔽性代理系统指南</title>
-    <updated>2026-06-13T17:18:19.113Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -279,7 +279,7 @@
     <published>2026-05-28T14:26:59.000Z</published>
     <summary>Xray VLESS 三大主流架构完整部署指南，涵盖 Vision 直连、Nginx + WebSocket 反代以及 Reality 免域名方案，包含配置示例与客户端参数对照。</summary>
     <title>Xray VLESS 三大主流隐蔽架构部署指南</title>
-    <updated>2026-06-13T17:18:19.113Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -297,7 +297,7 @@
     <published>2026-05-28T13:45:53.000Z</published>
     <summary>VMess + WebSocket + TLS + Nginx 终极隐蔽架构部署指南，涵盖 V2Fly 官方脚本安装、三阶段架构演进及生产级反向代理配置。</summary>
     <title>VMess WebSocket TLS Nginx 生产环境部署指南</title>
-    <updated>2026-06-13T17:18:19.113Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -315,7 +315,7 @@
     <published>2026-05-27T16:47:06.000Z</published>
     <summary>Trojan-Go 高性能代理服务器完整部署指南，涵盖二进制安装、服务端配置、Nginx 伪装回落以及 Systemd 服务化管理。</summary>
     <title>Trojan-Go 高性能代理服务器部署与 Nginx 回落指南</title>
-    <updated>2026-06-13T17:18:19.113Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -333,7 +333,7 @@
     <published>2026-05-27T14:23:52.000Z</published>
     <summary>Shadowsocks 从零部署到流量伪装的完整指南，涵盖基础安装、v2ray-plugin 插件伪装以及 Nginx + WebSocket + TLS 终极隐匿方案。</summary>
     <title>Shadowsocks 部署与流量伪装终极指南</title>
-    <updated>2026-06-13T17:18:19.113Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -351,7 +351,7 @@
     <published>2026-05-27T12:30:36.000Z</published>
     <summary>Docker Compose 部署 MIND 统一通知管理服务，集成 Apprise 库，支持 Telegram、企业微信、QQ邮箱、Microsoft 365 等多渠道消息推送。</summary>
     <title>轻量级到期事件通知服务 MIND 部署指南</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
   <entry>
     <author>
@@ -369,6 +369,6 @@
     <published>2026-05-25T16:21:24.000Z</published>
     <summary>Docker Compose 部署 LunaTV 高颜值个人媒体库，支持 IPTV 直播源管理与影视点播，结合 Cloudflare Workers 实现流媒体跨域代理。</summary>
     <title>LunaTV 高颜值媒体库部署指南</title>
-    <updated>2026-06-13T17:18:19.112Z</updated>
+    <updated>2026-06-14T02:45:15.525Z</updated>
   </entry>
 </feed>
