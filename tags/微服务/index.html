@@ -9,51 +9,96 @@
 <meta property="article:author" content="Gabriel">
 <meta property="article:tag" content="编程, 分享, 生活">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img.aaxu.de/sites/avatar.webp"><script type="application/ld+json"></script><link rel="shortcut icon" href="https://img.aaxu.de/sites/favicon.webp"><link rel="canonical" href="https://lijiabao9.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+<meta name="twitter:image" content="https://img.aaxu.de/sites/avatar.webp"><script type="application/ld+json"></script><link rel="shortcut icon" href="https://img.aaxu.de/sites/favicon.webp"><link rel="canonical" href="https://lijiabao9.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=5.7.1.260810"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
     (() => {
       
     const saveToLocal = {
       set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+        try {
+          const data = { value }
+
+          if (ttl != null) {
+            data.expiry = Date.now() + ttl * 86400000
+          }
+
+          localStorage.setItem(key, JSON.stringify(data))
+        } catch (e) {
+          console.error(e)
+        }
       },
       get: key => {
         const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
           localStorage.removeItem(key)
-          return undefined
         }
-        return value
       }
     }
 
+    const scriptCache = new Map()
+    const cssCache = new Map()
     window.btf = {
       saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
         }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
         }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
       addGlobalFn: (key, fn, name = false, parent = window) => {
         if (!true && key.startsWith('pjax')) return
         const globalFn = parent.globalFn || {}
@@ -64,16 +109,17 @@
     }
   
       
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
       const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
         }
       }
       const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
         }
       }
 
@@ -143,20 +189,12 @@
   isToc: false,
   pageType: 'tag'
 }</script><link rel="stylesheet" href="/assets/css/custom.css"><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@latest/css/all.min.css""><script src="/assets/js/ali/iconfont.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Gabriel的博客" type="application/atom+xml">
-</head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://img.aaxu.de/sites/site-background.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://img.aaxu.de/sites/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">64</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">111</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-link"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Gabriel的博客</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-link"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">微服务</h1></header><main class="layout" id="content-inner"><div id="tag"><div class="article-sort-title">标签 - 微服务</div><div class="article-sort"><div class="article-sort-item year"><span>2026</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-horse"></use></svg></div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2026-06-30T15:30:00.000Z" title="发表于 2026-06-30 23:30:00">2026-06-30</time></div><a class="article-sort-item-title" href="/posts/3f539086.html" title="SpringCloud Gateway 微服务网关与登录鉴权实战">SpringCloud Gateway 微服务网关与登录鉴权实战</a></div></div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2026-06-28T15:00:00.000Z" title="发表于 2026-06-28 23:00:00">2026-06-28</time></div><a class="article-sort-item-title" href="/posts/5c06c4f7.html" title="SpringCloud 微服务注册中心与 OpenFeign 远程调用指南">SpringCloud 微服务注册中心与 OpenFeign 远程调用指南</a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://img.aaxu.de/sites/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Gabriel</div><div class="author-info-description">这是我的个人博客，欢迎来到我的小破站。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">64</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">111</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lijiabao9"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:ljiabao9@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Gmail"><i class="fas fa-envelope" style="color: #ea4335;"></i></a><a class="social-icon" href="https://dashy.aaxu.de" rel="external nofollow noreferrer" target="_blank" title="个人导航"><i class="fas fa-globe" style="color: #1ab194;"></i></a><a class="social-icon" href="https://imgbed.aaxu.de" rel="external nofollow noreferrer" target="_blank" title="免费图床"><i class="fas fa-cloud-upload-alt" style="color: #3b82f6;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">新手上路 | 这里记录着从 Hello World 到 Hello Universe 的每一步探索 🌌</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/3f539086.html" title="SpringCloud Gateway 微服务网关与登录鉴权实战">SpringCloud Gateway 微服务网关与登录鉴权实战</a><time datetime="2026-06-30T15:30:00.000Z" title="发表于 2026-06-30 23:30:00">2026-06-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/5c06c4f7.html" title="SpringCloud 微服务注册中心与 OpenFeign 远程调用指南">SpringCloud 微服务注册中心与 OpenFeign 远程调用指南</a><time datetime="2026-06-28T15:00:00.000Z" title="发表于 2026-06-28 23:00:00">2026-06-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/9e819816.html" title="Hyper-V 虚拟机安装与网络配置指南">Hyper-V 虚拟机安装与网络配置指南</a><time datetime="2026-06-27T07:30:00.000Z" title="发表于 2026-06-27 15:30:00">2026-06-27</time></div></div></div></div><div class="card-widget" id="card-newest-comments"><div class="item-headline"><i class="fas fa-comment-dots"></i><span>最新评论</span></div><div class="aside-list"><span>加载中...</span></div></div><div class="card-widget card-categories"><div class="item-headline">
-            <i class="fas fa-folder-open"></i>
-            <span>分类</span>
-            <a class="card-more-btn" href="/categories/" title="查看更多">
-      <i class="fas fa-angle-right"></i></a>
-          </div>
+</head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://img.aaxu.de/sites/site-background.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://img.aaxu.de/sites/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">64</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">111</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-link"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Gabriel的博客</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-home"></use></svg><span> 首页</span></a></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-article"></use></svg><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-timeline"></use></svg><span> 时间轴</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-tag"></use></svg><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-category"></use></svg><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group faa-parent animated-hover"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-favorite"></use></svg><span> 收藏</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/gallery/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-photo"></use></svg><span> 照片</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-link"></use></svg><span> 推荐</span></a></li></ul></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-email"></use></svg><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/shuoshuo/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-comment"></use></svg><span> 碎语</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-about"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">微服务</h1></header><main class="layout" id="content-inner"><div id="tag"><div class="article-sort-title">标签 - 微服务</div><div class="article-sort"><div class="article-sort-item year"><span>2026</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-horse"></use></svg></div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2026-06-30T15:30:00.000Z" title="发表于 2026-06-30 23:30:00">2026-06-30</time></div><a class="article-sort-item-title" href="/posts/3f539086.html" title="SpringCloud Gateway 微服务网关与登录鉴权实战">SpringCloud Gateway 微服务网关与登录鉴权实战</a></div></div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2026-06-28T15:00:00.000Z" title="发表于 2026-06-28 23:00:00">2026-06-28</time></div><a class="article-sort-item-title" href="/posts/5c06c4f7.html" title="SpringCloud 微服务注册中心与 OpenFeign 远程调用指南">SpringCloud 微服务注册中心与 OpenFeign 远程调用指南</a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://img.aaxu.de/sites/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Gabriel</div><div class="author-info-description">这是我的个人博客，欢迎来到我的小破站。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">64</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">111</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/lijiabao9"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:ljiabao9@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Gmail"><i class="fas fa-envelope" style="color: #ea4335;"></i></a><a class="social-icon" href="https://dashy.aaxu.de" rel="external nofollow noreferrer" target="_blank" title="个人导航"><i class="fas fa-globe" style="color: #1ab194;"></i></a><a class="social-icon" href="https://imgbed.aaxu.de" rel="external nofollow noreferrer" target="_blank" title="免费图床"><i class="fas fa-cloud-upload-alt" style="color: #3b82f6;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">新手上路 | 这里记录着从 Hello World 到 Hello Universe 的每一步探索 🌌</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/3f539086.html" title="SpringCloud Gateway 微服务网关与登录鉴权实战">SpringCloud Gateway 微服务网关与登录鉴权实战</a><time datetime="2026-06-30T15:30:00.000Z" title="发表于 2026-06-30 23:30:00">2026-06-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/5c06c4f7.html" title="SpringCloud 微服务注册中心与 OpenFeign 远程调用指南">SpringCloud 微服务注册中心与 OpenFeign 远程调用指南</a><time datetime="2026-06-28T15:00:00.000Z" title="发表于 2026-06-28 23:00:00">2026-06-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/9e819816.html" title="Hyper-V 虚拟机安装与网络配置指南">Hyper-V 虚拟机安装与网络配置指南</a><time datetime="2026-06-27T07:30:00.000Z" title="发表于 2026-06-27 15:30:00">2026-06-27</time></div></div></div></div><div class="card-widget" id="card-newest-comments"><div class="item-headline"><i class="fas fa-comment-dots"></i><span>最新评论</span></div><div class="aside-list"><span>加载中...</span></div></div><div class="card-widget card-categories"><div class="item-headline"><i class="fas fa-folder-open"></i><span>分类</span><a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a></div>
           <ul class="card-category-list" id="aside-cat-list">
             <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AI%E5%A4%A7%E6%A8%A1%E5%9E%8B/"><span class="card-category-list-name">AI大模型</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Microsoft-365/"><span class="card-category-list-name">Microsoft 365</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/"><span class="card-category-list-name">云服务器</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/"><span class="card-category-list-name">使用教程</span><span class="card-category-list-count">1</span></a></li>
-          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Qwen/" style="font-size: 1.15em; color: rgb(50, 175, 159);">Qwen</a><a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 1.3em; color: rgb(50, 50, 50);">大模型</a><a href="/tags/Llama-cpp/" style="font-size: 1.15em; color: rgb(50, 160, 50);">Llama.cpp</a><a href="/tags/SillyTavern/" style="font-size: 1.15em; color: rgb(152, 129, 55);">SillyTavern</a><a href="/tags/DeepSeek/" style="font-size: 1.15em; color: rgb(113, 153, 66);">DeepSeek</a><a href="/tags/Microsoft-365/" style="font-size: 1.3em; color: rgb(72, 193, 107);">Microsoft 365</a><a href="/tags/OneDrive/" style="font-size: 1.15em; color: rgb(138, 115, 106);">OneDrive</a><a href="/tags/%E7%99%BD%E5%AB%96/" style="font-size: 1.3em; color: rgb(54, 55, 131);">白嫖</a><a href="/tags/SMTP/" style="font-size: 1.15em; color: rgb(179, 110, 104);">SMTP</a><a href="/tags/%E9%82%AE%E4%BB%B6/" style="font-size: 1.3em; color: rgb(137, 149, 50);">邮件</a><a href="/tags/Google-Cloud/" style="font-size: 1.3em; color: rgb(179, 102, 107);">Google Cloud</a><a href="/tags/VPS/" style="font-size: 1.45em; color: rgb(81, 62, 55);">VPS</a></div></div><div class="card-widget card-archives">
-    <div class="item-headline">
-      <i class="fas fa-archive"></i>
-      <span>归档</span>
-      
-    </div>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/%E7%99%BD%E5%AB%96/" style="font-size: 1.3em; color: rgb(110, 195, 50);">白嫖</a><a href="/tags/%E9%82%AE%E4%BB%B6/" style="font-size: 1.3em; color: rgb(133, 158, 181);">邮件</a><a href="/tags/SillyTavern/" style="font-size: 1.15em; color: rgb(99, 50, 114);">SillyTavern</a><a href="/tags/OneDrive/" style="font-size: 1.15em; color: rgb(66, 50, 50);">OneDrive</a><a href="/tags/VPS/" style="font-size: 1.45em; color: rgb(178, 93, 60);">VPS</a><a href="/tags/Microsoft-365/" style="font-size: 1.3em; color: rgb(143, 102, 106);">Microsoft 365</a><a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 1.3em; color: rgb(90, 50, 122);">大模型</a><a href="/tags/SMTP/" style="font-size: 1.15em; color: rgb(190, 50, 88);">SMTP</a><a href="/tags/Llama-cpp/" style="font-size: 1.15em; color: rgb(158, 63, 50);">Llama.cpp</a><a href="/tags/Qwen/" style="font-size: 1.15em; color: rgb(50, 50, 81);">Qwen</a><a href="/tags/Google-Cloud/" style="font-size: 1.3em; color: rgb(173, 50, 154);">Google Cloud</a><a href="/tags/DeepSeek/" style="font-size: 1.15em; color: rgb(98, 191, 136);">DeepSeek</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div>
   
     <ul class="card-archive-list">
       
@@ -179,7 +217,7 @@
         </li>
       
     </ul>
-  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">64</div></div><div class="webinfo-item"><div class="item-name">运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2026-05-20T00:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">51.5k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="umami-site-uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="umami-site-pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-06-30T13:47:58.943Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2026 By Gabriel</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">🚧 施工中 | 这是一个程序员用代码和咖啡构建的思维城堡 💻☕ | Bug和灵感同样欢迎！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">64</div></div><div class="webinfo-item"><div class="item-name">运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2026-05-20T00:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">47413</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="umami-site-uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="umami-site-pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-08-30T15:41:27.714Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2026 By Gabriel</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.1.260810</a></span></div><div class="footer_custom_text">🚧 施工中 | 这是一个程序员用代码和咖啡构建的思维城堡 💻☕ | Bug和灵感同样欢迎！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.7.1.260810"></script><script src="/js/main.js?v=5.7.1.260810"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
@@ -231,7 +269,7 @@
       clone.setAttribute('viewBox', initViewBox.join(' '))
     }
     if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
-    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+    if (!clone.getAttribute('xmlns:xlink') && clone.innerHTML.includes('xlink:')) {
       clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
     }
     // inject background to match current theme
@@ -250,7 +288,8 @@
     const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     window.open(url, '_blank', 'noopener')
-    setTimeout(() => URL.revokeObjectURL(url), 30000)
+
+    setTimeout(() => URL.revokeObjectURL(url), 5000)
   }
 
   const attachMermaidViewerButton = wrap => {
@@ -271,10 +310,6 @@
         const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
         if (!svg) return
         const initViewBox = wrap.__mermaidInitViewBox
-        if (typeof svg === 'string') {
-          openSvgInNewTab({ source: svg, initViewBox })
-          return
-        }
         openSvgInNewTab({ source: svg, initViewBox })
       })
       btn.__mermaidViewerBound = true
@@ -291,6 +326,13 @@
   }
 
   const initMermaidGestures = wrap => {
+    // Clean up previous event listeners and pending frames
+    if (wrap.__mermaidAbortController) {
+      wrap.__mermaidAbortController.abort()
+      if (wrap.__mermaidRafId) cancelAnimationFrame(wrap.__mermaidRafId)
+    }
+    const ac = new AbortController()
+    wrap.__mermaidAbortController = ac
     const svg = wrap.querySelector('svg')
     if (!svg) return
 
@@ -299,158 +341,179 @@
     wrap.__mermaidInitViewBox = initVb
     wrap.__mermaidCurViewBox = initVb.slice()
     setSvgViewBox(svg, initVb)
+    // Disable default gestures to prevent scroll chaining and pinch-zoom penetration in Chrome
+    svg.style.touchAction = 'none'
 
-    // Avoid binding multiple times on themeChange/pjax
-    if (wrap.__mermaidGestureBound) return
-    wrap.__mermaidGestureBound = true
+    // Cache BoundingClientRect, throttled on scroll to reduce reflow
+    let cachedRect = svg.getBoundingClientRect()
+    let rectDirty = false
+    const markRectDirty = () => { rectDirty = true }
+    window.addEventListener('resize', markRectDirty, { signal: ac.signal })
+    window.addEventListener('scroll', markRectDirty, { signal: ac.signal, capture: true })
+    const getRect = () => {
+      if (rectDirty) {
+        cachedRect = svg.getBoundingClientRect()
+        rectDirty = false
+      }
+      return cachedRect
+    }
 
-    // Helper: map client (viewport) coordinate -> viewBox coordinate
-    const clientToViewBox = (clientX, clientY) => {
-      const rect = svg.getBoundingClientRect()
-      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
-      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
-      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
-      return { x, y, rect, vb }
+    // Precompute clamp bounds from initial viewBox
+    const minW = initVb[2] * 0.1
+    const maxW = initVb[2] * 10
+    const minH = initVb[3] * 0.1
+    const maxH = initVb[3] * 10
+    const clampVb = vb => {
+      const out = vb.slice()
+      out[2] = clamp(out[2], minW, maxW)
+      out[3] = clamp(out[3], minH, maxH)
+      return out
+    }
+
+    // Throttle DOM updates using requestAnimationFrame
+    let pendingVb = null
+    let rafId = null
+    const applyVb = () => {
+      if (pendingVb) {
+        wrap.__mermaidCurViewBox = pendingVb
+        setSvgViewBox(svg, pendingVb)
+        pendingVb = null
+      }
+      rafId = null
+      wrap.__mermaidRafId = null
+    }
+    const setCurVb = vb => {
+      pendingVb = clampVb(vb)
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyVb)
+        wrap.__mermaidRafId = rafId
+      }
     }
 
     const state = {
       pointers: new Map(),
       startVb: null,
       startDist: 0,
-      startCenter: null
-    }
-
-    const clampVb = vb => {
-      const init = wrap.__mermaidInitViewBox || vb
-      const minW = init[2] * 0.1
-      const maxW = init[2] * 10
-      const minH = init[3] * 0.1
-      const maxH = init[3] * 10
-      vb[2] = clamp(vb[2], minW, maxW)
-      vb[3] = clamp(vb[3], minH, maxH)
-      return vb
-    }
-
-    const setCurVb = vb => {
-      vb = clampVb(vb)
-      wrap.__mermaidCurViewBox = vb
-      setSvgViewBox(svg, vb)
+      lastPointerX: 0,
+      lastPointerY: 0
     }
 
     const onPointerDown = e => {
-      // Allow only primary button for mouse
       if (e.pointerType === 'mouse' && e.button !== 0) return
       svg.setPointerCapture(e.pointerId)
+      const curVb = wrap.__mermaidCurViewBox
       state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
-
       if (state.pointers.size === 1) {
-        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startVb = curVb.slice()
+        state.lastPointerX = e.clientX
+        state.lastPointerY = e.clientY
       } else if (state.pointers.size === 2) {
         const pts = [...state.pointers.values()]
         const dx = pts[0].x - pts[1].x
         const dy = pts[0].y - pts[1].y
         state.startDist = Math.hypot(dx, dy)
-        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
-        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+        state.startVb = curVb.slice()
       }
     }
 
     const onPointerMove = e => {
       if (!state.pointers.has(e.pointerId)) return
       state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
-
-      // Pan with 1 pointer
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
       if (state.pointers.size === 1 && state.startVb) {
-        const p = [...state.pointers.values()][0]
-        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
-        // movementX/Y unreliable on touch, compute from stored last position
-        const last = wrap.__mermaidLastSinglePointer || p
-        const dxClient = p.x - last.x
-        const dyClient = p.y - last.y
-        wrap.__mermaidLastSinglePointer = p
-
-        const { rect } = clientToViewBox(p.x, p.y)
-        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
-        const dx = dxClient * (vb[2] / rect.width)
-        const dy = dyClient * (vb[3] / rect.height)
-        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        const p = state.pointers.values().next().value
+        const dxClient = p.x - state.lastPointerX
+        const dyClient = p.y - state.lastPointerY
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+        const dx = dxClient * (curVb[2] / rect.width)
+        const dy = dyClient * (curVb[3] / rect.height)
+        setCurVb([curVb[0] - dx, curVb[1] - dy, curVb[2], curVb[3]])
         return
       }
-
-      // Pinch zoom with 2 pointers
       if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
         const pts = [...state.pointers.values()]
         const dx = pts[0].x - pts[1].x
         const dy = pts[0].y - pts[1].y
         const dist = Math.hypot(dx, dy)
         if (!dist) return
-        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
-
+        const factor = state.startDist / dist
         const cx = (pts[0].x + pts[1].x) / 2
         const cy = (pts[0].y + pts[1].y) / 2
-        const centerClient = { x: cx, y: cy }
-
-        const pxy = clientToViewBox(centerClient.x, centerClient.y)
-        const cpx = pxy.x
-        const cpy = pxy.y
-
-        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
-        setCurVb(vb)
+        const px = curVb[0] + (cx - rect.left) * (curVb[2] / rect.width)
+        const py = curVb[1] + (cy - rect.top) * (curVb[3] / rect.height)
+        setCurVb(zoomAtPoint(state.startVb, factor, px, py))
       }
     }
 
     const onPointerUpOrCancel = e => {
+      // Release PointerCapture to avoid event capture anomalies
+      if (svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) {
+        svg.releasePointerCapture(e.pointerId)
+      }
       state.pointers.delete(e.pointerId)
       if (state.pointers.size === 0) {
         state.startVb = null
         state.startDist = 0
-        state.startCenter = null
-        wrap.__mermaidLastSinglePointer = null
       } else if (state.pointers.size === 1) {
-        // reset single pointer baseline to avoid jump
-        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+        const p = state.pointers.values().next().value
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
       }
     }
 
-    // Wheel zoom (mouse/trackpad)
     const onWheel = e => {
-      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      // Prevent event bubbling from triggering external scroll
       e.preventDefault()
-      const delta = e.deltaY
-      const zoomFactor = delta > 0 ? 1.1 : 0.9
-      const { x, y } = clientToViewBox(e.clientX, e.clientY)
-      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
-      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+      e.stopPropagation()
+      // Normalize deltaY across deltaMode (Chrome uses pixels, Safari uses lines)
+      let delta = e.deltaY
+      if (e.deltaMode === 1) delta *= 16
+      else if (e.deltaMode === 2) delta *= 400
+
+      // Continuous zoom factor: smoother than fixed 1.1/0.9 steps
+      const zoomFactor = Math.pow(1.001, delta)
+
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      const px = curVb[0] + (e.clientX - rect.left) * (curVb[2] / rect.width)
+      const py = curVb[1] + (e.clientY - rect.top) * (curVb[3] / rect.height)
+      setCurVb(zoomAtPoint(curVb, zoomFactor, px, py))
     }
 
     const onDblClick = () => {
       const init = wrap.__mermaidInitViewBox
-      if (!init) return
-      wrap.__mermaidCurViewBox = init.slice()
-      setSvgViewBox(svg, init)
+      if (init) setCurVb(init)
     }
 
-    svg.addEventListener('pointerdown', onPointerDown)
-    svg.addEventListener('pointermove', onPointerMove)
-    svg.addEventListener('pointerup', onPointerUpOrCancel)
-    svg.addEventListener('pointercancel', onPointerUpOrCancel)
-    svg.addEventListener('wheel', onWheel, { passive: false })
-    svg.addEventListener('dblclick', onDblClick)
+    svg.addEventListener('pointerdown', onPointerDown, { signal: ac.signal })
+    svg.addEventListener('pointermove', onPointerMove, { signal: ac.signal })
+    svg.addEventListener('pointerup', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('pointercancel', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('wheel', onWheel, { passive: false, signal: ac.signal })
+    svg.addEventListener('dblclick', onDblClick, { signal: ac.signal })
   }
 
   const runMermaid = ele => {
     window.loadMermaid = true
     const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
-
     ele.forEach((item, index) => {
       const mermaidSrc = item.firstElementChild
-
-      // Clear old render (themeChange/pjax will rerun)
+      // Clean up event listeners and stale content before re-rendering
+      if (item.__mermaidAbortController) {
+        item.__mermaidAbortController.abort()
+      }
       const oldSvg = item.querySelector('svg')
       if (oldSvg) oldSvg.remove()
-      item.__mermaidGestureBound = false
-
-      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      const oldError = item.querySelector('.mermaid-error')
+      if (oldError) oldError.remove()
+      let config = {}
+      try {
+        config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      } catch (e) {
+        console.warn('[mermaid] failed to parse dataset.config:', e)
+      }
       if (!config.theme) {
         config.theme = theme
       }
@@ -458,7 +521,6 @@
       const mermaidID = `mermaid-${index}`
       const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
 
-      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
       const renderMermaid = svg => {
         mermaidSrc.insertAdjacentHTML('afterend', svg)
         if (true) initMermaidGestures(item)
@@ -466,14 +528,30 @@
         if (true) attachMermaidViewerButton(item)
       }
 
+      const handleError = err => {
+        console.error(`[mermaid] render failed for block #${index}:`, err)
+        const errorEl = document.createElement('div')
+        errorEl.className = 'mermaid-error'
+        errorEl.textContent = `Mermaid render error: ${err.message || err}`
+        mermaidSrc.insertAdjacentElement('afterend', errorEl)
+      }
 
-      // mermaid v9 and v10 compatibility
-      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+      try {
+        const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+        // mermaid v9 and v10 compatibility
+        if (typeof renderFn === 'string') {
+          renderMermaid(renderFn)
+        } else {
+          renderFn.then(({ svg }) => renderMermaid(svg)).catch(handleError)
+        }
+      } catch (err) {
+        handleError(err)
+      }
     })
   }
 
-  const codeToMermaid = () => {
-    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+  const codeToMermaid = $article => {
+    const codeMermaidEle = $article.querySelectorAll('pre > code.mermaid')
     if (codeMermaidEle.length === 0) return
 
     codeMermaidEle.forEach(ele => {
@@ -489,13 +567,16 @@
   }
 
   const loadMermaid = () => {
-    if (false) codeToMermaid()
-    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    const $article = document.getElementById('article-container')
+    if (!$article) return
+
+    if (false) codeToMermaid($article)
+    const $mermaid = $article.querySelectorAll('.mermaid-wrap')
     if ($mermaid.length === 0) return
 
     const runMermaidFn = () => runMermaid($mermaid)
     btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
-    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js').then(runMermaidFn)
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.min.js').then(runMermaidFn)
   }
 
   btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
@@ -521,7 +602,7 @@
       const value = obj[key]
       // If the property is an object and has theme-specific options, apply them
       if (typeof value === 'object' && value !== null) {
-        if (value[theme]) {
+        if (theme in value) {
           obj[key] = value[theme] // Apply the value for the current theme
         } else {
           // Recursively process child objects
@@ -529,6 +610,11 @@
         }
       }
     })
+  }
+
+  const destroyChart = canvas => {
+    const chart = canvas && window.Chart && Chart.getChart(canvas)
+    if (chart) chart.destroy()
   }
 
   const runChartJS = ele => {
@@ -540,9 +626,10 @@
       const width = item.getAttribute('data-width')
       const existingCanvas = document.getElementById(chartID)
 
-      // If a canvas already exists, remove it to avoid rendering duplicates
+      // If a canvas already exists, destroy its chart and remove it to avoid rendering duplicates
       if (existingCanvas) {
-          existingCanvas.parentNode.remove()
+        destroyChart(existingCanvas)
+        existingCanvas.parentNode.remove()
       }
 
       const chartDefinition = chartSrc.textContent
@@ -582,45 +669,71 @@
     window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
   }
 
+  // Destroy all charts before navigating away to avoid leaks
+  btf.addGlobalFn('pjaxSendOnce', () => {
+    document.querySelectorAll('.chartjs-wrap canvas').forEach(destroyChart)
+  }, 'chartjs')
+
   // Listen for theme change events
   btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
   btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
 
   window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
 })()</script></div><script>window.newestComments = {
-  changeContent: content => {
-    if (content === '') return content
+  ready: fn => {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn, { once: true })
+    } else {
+      fn()
+    }
+  },
 
-    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
-    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
-    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
-    content = content.replace(/<code>.*?<\/code>/gi, '[代码]') // replace code
-    content = content.replace(/<[^>]+>/g, "") // remove html tag
+  escapeHtml: str => {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+  },
+
+  changeContent: content => {
+    if (!content) return ''
+
+    content = content.replace(/<img[^>]*>/gis, '[图片]') // replace image link
+    content = content.replace(/<pre><code>[\s\S]*?<\/pre>/gi, '[代码]') // replace code block
+    content = content.replace(/<a[^>]+?>[\s\S]*?<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<code[^>]*?>[\s\S]*?<\/code>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g, '') // remove html tag
 
     if (content.length > 150) {
-      content = content.substring(0, 150) + '...'
+      content = Array.from(content).slice(0, 150).join('') + '...'
     }
+
     return content
   },
 
   generateHtml: (array, ele) => {
+    const { escapeHtml } = window.newestComments
     let result = ''
 
     if (array.length) {
-      for (let i = 0; i < array.length; i++) {
-        result += '<div class="aside-list-item">'
+      result = array.map(item => {
+        let html = '<div class="aside-list-item">'
 
-        if (true && array[i].avatar) {
+        if (true && item.avatar) {
           const imgAttr = 'src'
           const lazyloadNative = ''
-          result += `<a href="${array[i].url}" class="thumbnail"><img ${imgAttr}="${array[i].avatar}" alt="${array[i].nick}" ${lazyloadNative}></a>`
+          html += `<a href="${escapeHtml(item.url)}" class="thumbnail"><img ${imgAttr}="${escapeHtml(item.avatar)}" alt="${escapeHtml(item.nick)}" ${lazyloadNative}></a>`
         }
 
-        result += `<div class="content">
-        <a class="comment" href="${array[i].url}" title="${array[i].content}">${array[i].content}</a>
-        <div class="name"><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        html += `<div class="content">
+        <a class="comment" href="${escapeHtml(item.url)}" title="${escapeHtml(item.content)}">${escapeHtml(item.content)}</a>
+        <div class="name"><span>${escapeHtml(item.nick)} / </span><time datetime="${escapeHtml(item.date)}">${btf.diffDate(item.date, true)}</time></div>
         </div></div>`
-      }
+
+        return html
+      }).join('')
     } else {
       result += '暂无评论'
     }
@@ -630,6 +743,21 @@
     window.pjax && window.pjax.refresh(ele)
   },
 
+  fetchAndRender: (keyName, ele, getComment) => {
+    Promise.resolve(getComment(ele)).then(array => {
+      btf.saveToLocal.set(keyName, JSON.stringify(array), 10/(60*24))
+      newestComments.generateHtml(array, ele)
+    }).catch(e => {
+      console.error(e)
+      const data = btf.saveToLocal.get(keyName)
+      if (data) {
+        newestComments.generateHtml(JSON.parse(data), ele)
+      } else {
+        ele.textContent = '无法获取评论，请确认相关配置是否正确'
+      }
+    })
+  },
+
   newestCommentInit: (name, getComment) => {
     const $dom = document.querySelector('#card-newest-comments .aside-list')
     if ($dom) {
@@ -637,7 +765,7 @@
       if (data) {
         newestComments.generateHtml(JSON.parse(data), $dom)
       } else {
-        getComment($dom)
+        newestComments.fetchAndRender(name, $dom, getComment)
       }
     }
   },
@@ -646,9 +774,9 @@
     newestComments.newestCommentInit(name, getComment)
     btf.addGlobalFn('pjaxComplete', () => newestComments.newestCommentInit(name, getComment), name)
   }
-}</script><script>window.addEventListener('load', () => {
+}</script><script>window.newestComments.ready(() => {
   const keyName = 'artalk-newest-comments'
-  const { changeContent, generateHtml, run } = window.newestComments
+  const { changeContent, run } = window.newestComments
 
   const getAvatarValue = async () => {
     const predefinedAvatarCdn = ''
@@ -665,8 +793,8 @@
       const result = await res.json()
       const { mirror, params, default: defaults } = result.frontend_conf.gravatar
       const avatarCdn = predefinedAvatarCdn || mirror
-      let avatarDefault = avatarDefaultFormat(predefinedAvatarDefault || params || defaults)
-      return { avatarCdn, avatarDefault}
+      const avatarDefault = avatarDefaultFormat(predefinedAvatarDefault || params || defaults)
+      return { avatarCdn, avatarDefault }
     } catch (e) {
       console.error(e)
       return { avatarCdn: predefinedAvatarCdn, avatarDefault: avatarDefaultFormat(predefinedAvatarDefault) }
@@ -678,34 +806,27 @@
     'limit': '6', // Fetch more comments to filter pending comments
   })
 
-  const getComment = async (ele) => {
-    try {
-      const res = await fetch(`https://artalk.aaxu.de/api/v2/stats/latest_comments?${searchParams}`)
-      const result = await res.json()
-      const { avatarCdn, avatarDefault } = await getAvatarValue()
-      const artalk = result.data
-        .filter(e => !e.is_pending) // Filter pending comments
-        .slice(0, 3) // Limit the number of comments
-        .map(e => {
-          const avatar = avatarCdn && e.email_encrypted ? `${avatarCdn}${e.email_encrypted}?${avatarDefault}` : ''
-          return {
-            'avatar': avatar,
-            'content': changeContent(e.content_marked),
-            'nick': e.nick,
-            'url': e.page_url,
-            'date': e.date,
-          }
-        })
-      btf.saveToLocal.set(keyName, JSON.stringify(artalk), 10/(60*24))
-      generateHtml(artalk, ele)
-    } catch (e) {
-      console.log(e)
-      ele.textContent= "无法获取评论，请确认相关配置是否正确"
-    }
+  const getComment = async () => {
+    const res = await fetch(`https://artalk.aaxu.de/api/v2/stats/latest_comments?${searchParams}`)
+    const result = await res.json()
+    const { avatarCdn, avatarDefault } = await getAvatarValue()
+    return result.data
+      .filter(e => !e.is_pending) // Filter pending comments
+      .slice(0, 3) // Limit the number of comments
+      .map(e => {
+        const avatar = avatarCdn && e.email_encrypted ? `${avatarCdn}${e.email_encrypted}?${avatarDefault}` : ''
+        return {
+          'avatar': avatar,
+          'content': changeContent(e.content_marked),
+          'nick': e.nick,
+          'url': e.page_url,
+          'date': e.date,
+        }
+      })
   }
 
   run(keyName, getComment)
-})</script><div class="aplayer no-destroy" data-id="2761236917" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+})</script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
 POWERMODE.shake = false;
 POWERMODE.mobile = false;
 document.body.addEventListener('input', POWERMODE);
@@ -713,7 +834,7 @@ document.body.addEventListener('input', POWERMODE);
   const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
 
   window.pjax = new Pjax({
-    elements: 'a:not([target="_blank"])',
+    elements: 'a:not([target="_blank"]):not([data-fancybox])',
     selectors: pjaxSelectors,
     cacheBust: false,
     analytics: false,
@@ -746,8 +867,9 @@ document.body.addEventListener('input', POWERMODE);
   document.addEventListener('pjax:complete', () => {
     btf.removeGlobalFnEvent('pjaxCompleteOnce')
     document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
       const newScript = document.createElement('script')
-      const content = item.text || item.textContent || item.innerHTML || ""
+      const content = item.text || item.textContent || ''
       Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
       newScript.appendChild(document.createTextNode(content))
       item.parentNode.replaceChild(newScript, item)
@@ -757,10 +879,13 @@ document.body.addEventListener('input', POWERMODE);
   })
 
   document.addEventListener('pjax:error', e => {
-    if (e.request.status === 404) {
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
       true
         ? pjax.loadUrl('/404.html')
-        : window.location.href = e.request.responseURL
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
     }
   })
 })</script><script>(() => {
@@ -787,69 +912,70 @@ document.body.addEventListener('input', POWERMODE);
     })
   }
 
-  const getData = async (isPost) => {
-    try {
-      const now = Date.now()
-      const keyUrl = isPost ? `&url=${window.location.pathname}&path=${window.location.pathname}` : ''
-      const headerList = { 'Accept': 'application/json' }
+  const extractValue = stat => (stat && typeof stat.value !== 'undefined') ? stat.value : stat
 
-      if (true) {
-        headerList['Authorization'] = `Bearer ${config.token}`
-      } else {
-        headerList['x-umami-api-key'] = config.token
-      }
-
-      const res = await fetch(`https://umami.aaxu.de/api/websites/f37b3965-9705-4046-acb0-71575fa79f52/stats?startAt=0000000000&endAt=${now}${keyUrl}`, {
-        method: "GET",
-        headers: headerList
-      })
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`)
-      }
-
-      return await res.json()
-    } catch (error) {
-      console.error('Umami Analytics: Failed to fetch data', error)
-      throw error
+  const getData = async (isPost, path = window.location.pathname) => {
+    const now = Date.now()
+    const pathQuery = isPost ? `&url=${path}&path=${path}` : ''
+    const headers = {
+      'Accept': 'application/json',
+      [true ? 'Authorization' : 'x-umami-api-key']: true ? `Bearer ${config.token}` : config.token
     }
+
+    const res = await fetch(`https://umami.aaxu.de/api/websites/f37b3965-9705-4046-acb0-71575fa79f52/stats?startAt=0000000000&endAt=${now}${pathQuery}`, {
+      method: 'GET',
+      headers,
+      cache: 'no-store'
+    })
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`)
+    }
+
+    return await res.json()
   }
 
   const insertData = async () => {
     try {
+      const tasks = []
+
       if (GLOBAL_CONFIG_SITE.pageType === 'post' && config.page_pv) {
-        const pagePV = document.getElementById('umamiPV')
-        if (pagePV) {
-          const data = await getData(true)
-          if (data && data.pageviews) {
-            pagePV.textContent = typeof data.pageviews.value !== 'undefined' ? data.pageviews.value : data.pageviews
-          } else {
-            console.warn('Umami Analytics: Invalid page view data received')
+        tasks.push((async () => {
+          const pagePV = document.getElementById('umamiPV')
+          if (pagePV) {
+            const path = pagePV.dataset.path || window.location.pathname
+            const data = await getData(true, path)
+            if (data && data.pageviews) {
+              pagePV.textContent = extractValue(data.pageviews)
+            } else {
+              console.warn('Umami Analytics: Invalid page view data received')
+            }
           }
-        }
+        })())
       }
 
-      if (config.site_uv || config.site_pv) {
-        const data = await getData(false)
+      const siteUV = config.site_uv ? document.getElementById('umami-site-uv') : null
+      const sitePV = config.site_pv ? document.getElementById('umami-site-pv') : null
 
-        if (config.site_uv) {
-          const siteUV = document.getElementById('umami-site-uv')
+      if (siteUV || sitePV) {
+        tasks.push((async () => {
+          const data = await getData(false)
+
           if (siteUV && data && data.visitors) {
-            siteUV.textContent = typeof data.visitors.value !== 'undefined' ? data.visitors.value : data.visitors
+            siteUV.textContent = extractValue(data.visitors)
           } else if (siteUV) {
             console.warn('Umami Analytics: Invalid site UV data received')
           }
-        }
 
-        if (config.site_pv) {
-          const sitePV = document.getElementById('umami-site-pv')
           if (sitePV && data && data.pageviews) {
-            sitePV.textContent = typeof data.pageviews.value !== 'undefined' ? data.pageviews.value : data.pageviews
+            sitePV.textContent = extractValue(data.pageviews)
           } else if (sitePV) {
             console.warn('Umami Analytics: Invalid site PV data received')
           }
-        }
+        })())
       }
+
+      await Promise.all(tasks)
     } catch (error) {
       console.error('Umami Analytics: Failed to insert data', error)
     }
@@ -858,7 +984,6 @@ document.body.addEventListener('input', POWERMODE);
   btf.addGlobalFn('pjaxComplete', runTrack, 'umami_analytics_run_track')
   btf.addGlobalFn('pjaxComplete', insertData, 'umami_analytics_insert')
 
-
   loadUmamiJS()
 
   if (document.readyState === 'loading') {
@@ -866,4 +991,4 @@ document.body.addEventListener('input', POWERMODE);
   } else {
     setTimeout(insertData, 100)
   }
-})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="且听风吟" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="且听风吟" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.7.1.260810"></script></div></div></body></html>

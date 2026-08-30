@@ -1768,6 +1768,9 @@ body {
 *::-webkit-scrollbar-track {
   background-color: transparent;
 }
+html.with-fancybox {
+  --scrollbar-color: transparent;
+}
 input::placeholder {
   color: var(--font-color);
 }
@@ -6033,6 +6036,237 @@ figure.highlight pre .javascript .function {
 #waline-wrap .wl-comment-actions > button:not(last-child) {
   padding-right: 4px;
 }
+.artalk-vote {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -o-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -o-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  margin: 4px 0 20px;
+  gap: 10px;
+}
+.artalk-vote .artalk-page-vote-up,
+.artalk-vote .artalk-page-vote-down {
+  position: relative;
+  display: -webkit-inline-box;
+  display: -moz-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-box;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -o-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 5px 16px;
+  border: 1px solid rgba(73,177,245,0.15);
+  gap: 6px;
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--font-color);
+  font-weight: 500;
+  font-size: 0.95em;
+  cursor: pointer;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.artalk-vote .artalk-page-vote-up i,
+.artalk-vote .artalk-page-vote-down i,
+.artalk-vote .artalk-page-vote-up .artalk-page-vote-up-count,
+.artalk-vote .artalk-page-vote-down .artalk-page-vote-up-count,
+.artalk-vote .artalk-page-vote-up .artalk-page-vote-down-count,
+.artalk-vote .artalk-page-vote-down .artalk-page-vote-down-count {
+  position: relative;
+  z-index: 1;
+}
+.artalk-vote .artalk-page-vote-up i,
+.artalk-vote .artalk-page-vote-down i {
+  font-size: 1em;
+  line-height: 1;
+}
+.artalk-vote .artalk-page-vote-up .artalk-page-vote-up-count,
+.artalk-vote .artalk-page-vote-down .artalk-page-vote-up-count,
+.artalk-vote .artalk-page-vote-up .artalk-page-vote-down-count,
+.artalk-vote .artalk-page-vote-down .artalk-page-vote-down-count {
+  min-width: 1em;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+}
+.artalk-vote .artalk-page-vote-up::after,
+.artalk-vote .artalk-page-vote-down::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  content: '';
+  opacity: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+  pointer-events: none;
+}
+.artalk-vote .artalk-page-vote-up:hover,
+.artalk-vote .artalk-page-vote-down:hover {
+  border-color: #49b1f5;
+}
+.artalk-vote .artalk-page-vote-up:active,
+.artalk-vote .artalk-page-vote-down:active {
+  -webkit-transform: scale(0.95);
+  -moz-transform: scale(0.95);
+  -o-transform: scale(0.95);
+  -ms-transform: scale(0.95);
+  transform: scale(0.95);
+}
+.artalk-vote .artalk-page-vote-up:active::after,
+.artalk-vote .artalk-page-vote-down:active::after {
+  -webkit-animation: artalkVoteRipple 0.6s ease-out forwards;
+  -moz-animation: artalkVoteRipple 0.6s ease-out forwards;
+  -o-animation: artalkVoteRipple 0.6s ease-out forwards;
+  -ms-animation: artalkVoteRipple 0.6s ease-out forwards;
+  animation: artalkVoteRipple 0.6s ease-out forwards;
+}
+.artalk-vote .artalk-page-vote-up:hover,
+.artalk-vote .artalk-page-vote-up.active {
+  border-color: #49b1f5;
+  background: rgba(73,177,245,0.1);
+  color: #49b1f5;
+}
+.artalk-vote .artalk-page-vote-up::after {
+  background: rgba(73,177,245,0.5);
+}
+.artalk-vote .artalk-page-vote-down:hover,
+.artalk-vote .artalk-page-vote-down.active {
+  border-color: #f47466;
+  background: rgba(244,116,102,0.1);
+  color: #f47466;
+}
+.artalk-vote .artalk-page-vote-down::after {
+  background: rgba(244,116,102,0.5);
+}
+@media screen and (max-width: 600px) {
+  .artalk-vote {
+    gap: 8px;
+  }
+  .artalk-vote .artalk-page-vote-up,
+  .artalk-vote .artalk-page-vote-down {
+    padding: 4px 12px;
+  }
+}
+@-moz-keyframes artalkVoteRipple {
+  0% {
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    -webkit-transform: translate(-50%, -50%) scale(0);
+    -moz-transform: translate(-50%, -50%) scale(0);
+    -o-transform: translate(-50%, -50%) scale(0);
+    -ms-transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+    -webkit-transform: translate(-50%, -50%) scale(20);
+    -moz-transform: translate(-50%, -50%) scale(20);
+    -o-transform: translate(-50%, -50%) scale(20);
+    -ms-transform: translate(-50%, -50%) scale(20);
+    transform: translate(-50%, -50%) scale(20);
+  }
+}
+@-webkit-keyframes artalkVoteRipple {
+  0% {
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    -webkit-transform: translate(-50%, -50%) scale(0);
+    -moz-transform: translate(-50%, -50%) scale(0);
+    -o-transform: translate(-50%, -50%) scale(0);
+    -ms-transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+    -webkit-transform: translate(-50%, -50%) scale(20);
+    -moz-transform: translate(-50%, -50%) scale(20);
+    -o-transform: translate(-50%, -50%) scale(20);
+    -ms-transform: translate(-50%, -50%) scale(20);
+    transform: translate(-50%, -50%) scale(20);
+  }
+}
+@-o-keyframes artalkVoteRipple {
+  0% {
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    -webkit-transform: translate(-50%, -50%) scale(0);
+    -moz-transform: translate(-50%, -50%) scale(0);
+    -o-transform: translate(-50%, -50%) scale(0);
+    -ms-transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+    -webkit-transform: translate(-50%, -50%) scale(20);
+    -moz-transform: translate(-50%, -50%) scale(20);
+    -o-transform: translate(-50%, -50%) scale(20);
+    -ms-transform: translate(-50%, -50%) scale(20);
+    transform: translate(-50%, -50%) scale(20);
+  }
+}
+@keyframes artalkVoteRipple {
+  0% {
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    -webkit-transform: translate(-50%, -50%) scale(0);
+    -moz-transform: translate(-50%, -50%) scale(0);
+    -o-transform: translate(-50%, -50%) scale(0);
+    -ms-transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+    -webkit-transform: translate(-50%, -50%) scale(20);
+    -moz-transform: translate(-50%, -50%) scale(20);
+    -o-transform: translate(-50%, -50%) scale(20);
+    -ms-transform: translate(-50%, -50%) scale(20);
+    transform: translate(-50%, -50%) scale(20);
+  }
+}
 .twikoo .tk-content p {
   margin: 3px 0;
 }
@@ -6219,12 +6453,6 @@ mjx-container:not([display]) {
 mjx-assistive-mml {
   right: 0;
   bottom: 0;
-}
-.aplayer {
-  color: #4c4948;
-}
-.container .aplayer {
-  margin: 0 0 20px;
 }
 .snackbar-container.snackbar-css {
   border-radius: 5px;
@@ -7730,9 +7958,6 @@ blockquote.pullquote.right {
 }
 [data-theme='dark'] .container .note code {
   background: rgba(27,31,35,0.05);
-}
-[data-theme='dark'] .container .aplayer {
-  filter: brightness(0.8);
 }
 [data-theme='dark'] .container kbd {
   border-color: #696969;
