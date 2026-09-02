@@ -10,7 +10,7 @@
   <rights>All rights reserved 2026, Gabriel</rights>
   <subtitle>在代码与文字之间</subtitle>
   <title>Gabriel的博客</title>
-  <updated>2026-08-31T16:33:03.426Z</updated>
+  <updated>2026-09-02T14:07:37.170Z</updated>
   <entry>
     <author>
       <name>Gabriel</name>
@@ -28,7 +28,7 @@
     <published>2026-06-30T15:30:00.000Z</published>
     <summary>Spring Cloud Gateway 微服务网关完整实战，涵盖路由配置、全局过滤器与网关过滤器开发、登录校验统一鉴权，以及用户信息在微服务间的透传方案。</summary>
     <title>SpringCloud Gateway 微服务网关与登录鉴权实战</title>
-    <updated>2026-08-31T16:33:03.426Z</updated>
+    <updated>2026-09-02T14:07:37.170Z</updated>
   </entry>
   <entry>
     <author>
@@ -47,7 +47,7 @@
     <published>2026-06-28T15:00:00.000Z</published>
     <summary>从零搭建 SpringCloud 微服务架构，涵盖 Nacos 注册中心部署、服务注册与发现原理，以及 OpenFeign 声明式远程调用实践，包含连接池优化与日志配置。</summary>
     <title>SpringCloud 微服务注册中心与 OpenFeign 远程调用指南</title>
-    <updated>2026-08-31T16:33:03.426Z</updated>
+    <updated>2026-09-02T14:07:37.170Z</updated>
   </entry>
   <entry>
     <author>
@@ -66,7 +66,7 @@
     <published>2026-06-27T07:30:00.000Z</published>
     <summary>Windows Hyper-V 虚拟机完整安装教程，涵盖虚拟交换机配置（外部/内部/专用）、CentOS 7 虚拟机创建、网络静态 IP 设置及常见问题（安全启动/网络不通）解决方案。</summary>
     <title>Hyper-V 虚拟机安装与网络配置指南</title>
-    <updated>2026-08-31T16:33:03.425Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -84,15 +84,15 @@
     <published>2026-06-18T14:00:00.000Z</published>
     <summary>Oracle Cloud 免费对象存储（20GB 容量 + 5 万次 API 请求/月）的创建与配置流程，以及通过 S3 兼容方式挂载至 OpenList 的完整步骤，附常见报错解决方案。</summary>
     <title>Oracle Cloud 免费对象存储配置与 OpenList 挂载指南</title>
-    <updated>2026-08-31T16:33:03.424Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
       <name>Gabriel</name>
     </author>
     <category term="运维实施" scheme="https://lijiabao9.github.io/categories/%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%96%BD/"/>
-    <category term="GitHub" scheme="https://lijiabao9.github.io/tags/GitHub/"/>
     <category term="SSH" scheme="https://lijiabao9.github.io/tags/SSH/"/>
+    <category term="GitHub" scheme="https://lijiabao9.github.io/tags/GitHub/"/>
     <category term="Git" scheme="https://lijiabao9.github.io/tags/Git/"/>
     <content>
       <![CDATA[<p>通过 SSH 方式连接 GitHub，不仅比 HTTPS 更安全，还能通过配置签名密钥让每次提交显示 <strong>Verified</strong> 绿色标识，提升代码可信度。</p><p>本文使用更安全的 <code>ed25519</code> 算法，完整涵盖密钥生成、公钥添加、连接验证及本地签名配置。</p><hr><h2 id="1-生成-SSH-密钥对"><a href="#1-生成-SSH-密钥对" class="headerlink" title="1. 生成 SSH 密钥对"></a>1. 生成 SSH 密钥对</h2><p>推荐使用 <code>ed25519</code> 算法，性能与安全性均优于 RSA。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;你的邮箱&quot;</span></span><br></pre></td></tr></table></figure><blockquote><p>📌 <strong>邮箱建议</strong>：</p><ul><li>推荐使用与 GitHub 账户一致的邮箱，提交会自动关联</li><li>若不想暴露真实邮箱，可在 GitHub <strong>Settings → Emails</strong> 中开启 <code>Keep my email addresses private</code>，系统会分配匿名邮箱，格式为：<code>你的ID+用户名@users.noreply.github.com</code></li></ul></blockquote><p>执行后系统会询问：</p><div class="table-container"><table><thead><tr><th style="text-align:left">提示</th><th style="text-align:left">建议操作</th></tr></thead><tbody><tr><td style="text-align:left">保存密钥位置</td><td style="text-align:left">直接按 Enter，接受默认路径 <code>~/.ssh/id_ed25519</code></td></tr><tr><td style="text-align:left">密码短语（Passphrase）</td><td style="text-align:left">可选。设置后每次使用需输入，增强安全性；跳过则更方便</td></tr></tbody></table></div><hr><h2 id="2-添加公钥到-GitHub"><a href="#2-添加公钥到-GitHub" class="headerlink" title="2. 添加公钥到 GitHub"></a>2. 添加公钥到 GitHub</h2><h3 id="复制公钥内容"><a href="#复制公钥内容" class="headerlink" title="复制公钥内容"></a>复制公钥内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub</span><br></pre></td></tr></table></figure><h3 id="添加认证密钥（Authentication-Key）"><a href="#添加认证密钥（Authentication-Key）" class="headerlink" title="添加认证密钥（Authentication Key）"></a>添加认证密钥（Authentication Key）</h3><ol><li>GitHub 右上角头像 → <strong>Settings</strong></li><li>左侧菜单 → <strong>SSH and GPG keys</strong></li><li>点击 <strong>New SSH key</strong></li><li>填写信息：</li></ol><div class="table-container"><table><thead><tr><th style="text-align:left">字段</th><th style="text-align:left">说明</th></tr></thead><tbody><tr><td style="text-align:left">Title</td><td style="text-align:left">自定义标识，如 <strong>My-PC</strong></td></tr><tr><td style="text-align:left">Key type</td><td style="text-align:left">选择 <code>Authentication Key</code></td></tr><tr><td style="text-align:left">Key</td><td style="text-align:left">粘贴公钥内容</td></tr></tbody></table></div><ol><li>点击 <strong>Add SSH key</strong></li></ol><blockquote><p>此密钥用于 <code>git clone</code>、<code>git push</code>、<code>git pull</code> 等仓库操作的身份认证。</p></blockquote><h3 id="添加签名密钥（Signing-Key）"><a href="#添加签名密钥（Signing-Key）" class="headerlink" title="添加签名密钥（Signing Key）"></a>添加签名密钥（Signing Key）</h3><p>重复以上步骤，但 <strong>Key type</strong> 选择 <code>Signing Key</code>。</p><blockquote><p>此密钥用于验证本地提交签名，使其在 GitHub 上显示 <strong>Verified</strong> 绿色标识。</p></blockquote><hr><h2 id="3-验证连接"><a href="#3-验证连接" class="headerlink" title="3. 验证连接"></a>3. 验证连接</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure><p>成功时返回：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hi your_username! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure><h3 id="常见问题：22-端口被屏蔽"><a href="#常见问题：22-端口被屏蔽" class="headerlink" title="常见问题：22 端口被屏蔽"></a>常见问题：22 端口被屏蔽</h3><p>若连接失败，可能因网络屏蔽 22 端口。编辑 <code>~/.ssh/config</code> 文件，添加以下配置，使 SSH 通过 443 端口连接：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">  HostName ssh.github.com</span><br><span class="line">  User git</span><br><span class="line">  Port 443</span><br></pre></td></tr></table></figure><p>保存后重新执行 <code>ssh -T git@github.com</code> 验证。</p><hr><h2 id="4-配置本地提交信息"><a href="#4-配置本地提交信息" class="headerlink" title="4. 配置本地提交信息"></a>4. 配置本地提交信息</h2><h3 id="设置用户信息"><a href="#设置用户信息" class="headerlink" title="设置用户信息"></a>设置用户信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;你的用户名&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;你的ID+用户名@users.noreply.github.com&quot;</span></span><br></pre></td></tr></table></figure><blockquote><p>邮箱建议使用 GitHub 分配的匿名邮箱，避免暴露真实地址。</p></blockquote><h3 id="配置-SSH-签名"><a href="#配置-SSH-签名" class="headerlink" title="配置 SSH 签名"></a>配置 SSH 签名</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global gpg.format ssh</span><br><span class="line">git config --global user.signingkey ~/.ssh/id_ed25519.pub</span><br><span class="line">git config --global commit.gpgsign <span class="literal">true</span></span><br></pre></td></tr></table></figure><h3 id="配置说明"><a href="#配置说明" class="headerlink" title="配置说明"></a>配置说明</h3><div class="table-container"><table><thead><tr><th style="text-align:left">配置项</th><th style="text-align:left">作用</th></tr></thead><tbody><tr><td style="text-align:left"><code>gpg.format ssh</code></td><td style="text-align:left">设置签名格式为 SSH（而非 GPG）</td></tr><tr><td style="text-align:left"><code>user.signingkey</code></td><td style="text-align:left">指定用于签名的公钥路径</td></tr><tr><td style="text-align:left"><code>commit.gpgsign true</code></td><td style="text-align:left">每次 <code>git commit</code> 自动签名，无需手动加 <code>-S</code></td></tr></tbody></table></div><hr><h2 id="5-验证签名效果"><a href="#5-验证签名效果" class="headerlink" title="5. 验证签名效果"></a>5. 验证签名效果</h2><p>完成配置后，正常执行 <code>git commit</code> 即可自动签名。</p><p>推送至 GitHub 后，提交记录旁会显示 <strong>Verified</strong> 绿色标识 ✅ Verified。</p><hr><h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>Q：Authentication Key 和 Signing Key 可以共用同一把密钥吗？</strong><br>A：可以。同一把 <code>ed25519</code> 密钥对既可用于认证，也可用于签名，按上述步骤分别添加即可。</p><p><strong>Q：已有 RSA 密钥，需要重新生成吗？</strong><br>A：非必须。但 <code>ed25519</code> 安全性更高且性能更好，建议迁移。</p><p><strong>Q：自动签名后如何临时跳过？</strong><br>A：执行 <code>git commit --no-gpg-sign</code> 可跳过本次签名。</p><p><strong>Q：如何查看当前签名配置？</strong><br>A：执行 <code>git config --list | grep -E &quot;(sign|gpg)&quot;</code> 查看相关配置。</p><hr><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="https://docs.github.com/zh/authentication/connecting-to-github-with-ssh">GitHub SSH 文档</a></li><li><a href="https://docs.github.com/zh/authentication/managing-commit-signature-verification">GitHub 签名验证文档</a></li></ul>]]>
@@ -102,7 +102,7 @@
     <published>2026-06-18T02:30:00.000Z</published>
     <summary>配置 SSH ed25519 密钥连接 GitHub，同时配置签名密钥，让每次提交显示 Verified 绿色标识。涵盖密钥生成、公钥添加、连接验证及本地签名配置完整指南。</summary>
     <title>GitHub SSH 连接配置与签名验证</title>
-    <updated>2026-08-31T16:33:03.427Z</updated>
+    <updated>2026-09-02T14:07:37.170Z</updated>
   </entry>
   <entry>
     <author>
@@ -120,7 +120,7 @@
     <published>2026-06-14T17:45:22.000Z</published>
     <summary>netcup 世界杯域名活动期间注册 .de 域名，首年 3€，续费永久锁定 1.32€/年。涵盖注册流程、KYC 验证、Cloudflare 托管及取消订阅完整指南。</summary>
     <title>netcup .de 域名世界杯活动，仅需 1.32€ 永久续费</title>
-    <updated>2026-08-31T16:33:03.425Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -138,7 +138,7 @@
     <published>2026-06-14T17:36:08.000Z</published>
     <summary>通过 Google Workspace 土耳其区以首年 3 元、续费 12 元的超低价注册 .com 域名，涵盖注册流程、风控应对及订阅取消完整指南。</summary>
     <title>Google Workspace 土耳其区超低价注册 .com 域名</title>
-    <updated>2026-08-31T16:33:03.425Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -146,8 +146,8 @@
     </author>
     <category term="图床搭建" scheme="https://lijiabao9.github.io/categories/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/"/>
     <category term="Cloudflare" scheme="https://lijiabao9.github.io/tags/Cloudflare/"/>
-    <category term="Workers" scheme="https://lijiabao9.github.io/tags/Workers/"/>
     <category term="图床" scheme="https://lijiabao9.github.io/tags/%E5%9B%BE%E5%BA%8A/"/>
+    <category term="Workers" scheme="https://lijiabao9.github.io/tags/Workers/"/>
     <content>
       <![CDATA[<p>CloudFlare-ImgBed 是基于 Cloudflare 生态的开源文件托管与图床方案，支持 Telegram、R2 等多渠道存储。</p><p>本文介绍通过 GitHub Actions 自动化部署至 Cloudflare Workers。</p><ul><li>官方仓库：<a href="https://github.com/MarSeventh/CloudFlare-ImgBed">MarSeventh/CloudFlare-ImgBed</a></li><li>官方网站：<a href="https://cfbed.sanyue.de">https://cfbed.sanyue.de</a></li></ul><hr><h2 id="1-Cloudflare-端准备"><a href="#1-Cloudflare-端准备" class="headerlink" title="1. Cloudflare 端准备"></a>1. Cloudflare 端准备</h2><p>登录 <a href="https://dash.cloudflare.com/">Cloudflare 控制台</a>。</p><h3 id="获取-Account-ID"><a href="#获取-Account-ID" class="headerlink" title="获取 Account ID"></a>获取 Account ID</h3><p>账号主页 → 账号右侧三个点 → 复制 <strong>账户 ID</strong>。</p><h3 id="创建-API-令牌"><a href="#创建-API-令牌" class="headerlink" title="创建 API 令牌"></a>创建 API 令牌</h3><ol><li><strong>管理账户 → 账户 API 令牌 → 创建令牌</strong></li><li>令牌名称随意，如 <code>cloudflare-imgbed-deploy</code></li><li>权限策略选择 <strong>Edit Cloudflare Workers</strong> 模板</li><li>创建并保存 API 令牌</li></ol><h3 id="创建-D1-数据库"><a href="#创建-D1-数据库" class="headerlink" title="创建 D1 数据库"></a>创建 D1 数据库</h3><ol><li><strong>存储和数据库 → D1 SQLite 数据库 → 创建数据库</strong></li><li>名称如 <code>cloud-img</code>，记录<strong>数据库 ID</strong></li><li>初始化：下载 <a href="https://github.com/MarSeventh/CloudFlare-ImgBed/blob/main/database/init.sql">init.sql</a></li><li>进入 D1 数据库详情页 → <strong>探索数据 → Query</strong> → 粘贴 SQL → <strong>Run all in transaction</strong></li><li>下方 Summary 显示 <code>Executed 21/21</code> 且生成 5 个数据表即成功</li></ol><h3 id="创建-R2-存储桶（可选）"><a href="#创建-R2-存储桶（可选）" class="headerlink" title="创建 R2 存储桶（可选）"></a>创建 R2 存储桶（可选）</h3><p><strong>存储和数据库 → R2 对象存储 → 概述 → 创建存储桶</strong>，记录<strong>存储桶名称</strong>。</p><hr><h2 id="2-GitHub-Actions-自动化部署"><a href="#2-GitHub-Actions-自动化部署" class="headerlink" title="2. GitHub Actions 自动化部署"></a>2. GitHub Actions 自动化部署</h2><h3 id="Fork-仓库"><a href="#Fork-仓库" class="headerlink" title="Fork 仓库"></a>Fork 仓库</h3><p>访问 <a href="https://github.com/MarSeventh/CloudFlare-ImgBed">CloudFlare-ImgBed</a>，点击 <strong>Fork</strong>。</p><h3 id="配置-Secrets"><a href="#配置-Secrets" class="headerlink" title="配置 Secrets"></a>配置 Secrets</h3><p>进入 Fork 仓库 → <strong>Settings → Secrets and variables → Actions → Repository secrets</strong>，添加：</p><div class="table-container"><table><thead><tr><th style="text-align:left">Secret 名称</th><th style="text-align:left">说明</th></tr></thead><tbody><tr><td style="text-align:left"><code>CLOUDFLARE_API_TOKEN</code></td><td style="text-align:left">Cloudflare API 令牌</td></tr><tr><td style="text-align:left"><code>CLOUDFLARE_ACCOUNT_ID</code></td><td style="text-align:left">账户 ID</td></tr><tr><td style="text-align:left"><code>D1_DATABASE_ID</code></td><td style="text-align:left">D1 数据库 ID</td></tr><tr><td style="text-align:left"><code>R2_BUCKET_NAME</code></td><td style="text-align:left">R2 存储桶名称（选填）</td></tr><tr><td style="text-align:left"><code>WORKER_NAME</code></td><td style="text-align:left">Worker 名称（选填，默认 <code>cloudflare-imgbed</code>）</td></tr></tbody></table></div><h3 id="触发部署"><a href="#触发部署" class="headerlink" title="触发部署"></a>触发部署</h3><ol><li>仓库 <strong>Actions</strong> 选项卡</li><li>左侧选择 <strong>Deploy to Cloudflare Workers</strong></li><li>点击 <strong>Run workflow</strong> → 选择分支 <code>main</code> → <strong>Run workflow</strong></li><li>部署成功后访问 <code>https://&lt;worker-name&gt;.&lt;account-subdomain&gt;.workers.dev</code></li></ol><blockquote><p>建议绑定自定义域名（如 <code>cloud-img.example.com</code>）以获得更好 CDN 加速效果。</p></blockquote><hr><h2 id="3-配置缓存规则"><a href="#3-配置缓存规则" class="headerlink" title="3. 配置缓存规则"></a>3. 配置缓存规则</h2><p>为自定义域名配置 Cache Rules，减少 Workers 计费请求。</p><ol><li>进入自定义域名的管理面板 → <strong>缓存 → Cache Rules</strong> → <strong>创建规则</strong></li><li>配置：<ul><li><strong>规则名称</strong>：<code>img图床缓存</code></li><li><strong>匹配条件</strong>：<code>主机名</code> <code>等于</code> <code>cloud-img.example.com</code></li><li><strong>缓存资格</strong>：<code>符合缓存条件</code></li><li><strong>边缘 TTL</strong>：<code>忽略缓存控制标头，使用此 TTL</code> → <code>1年</code></li><li><strong>浏览器 TTL</strong>：<code>替代源服务器，使用此 TTL</code> → <code>1个月</code></li></ul></li><li>点击 <strong>部署</strong></li></ol><hr><h2 id="4-系统初始化与渠道配置"><a href="#4-系统初始化与渠道配置" class="headerlink" title="4. 系统初始化与渠道配置"></a>4. 系统初始化与渠道配置</h2><h3 id="管理后台"><a href="#管理后台" class="headerlink" title="管理后台"></a>管理后台</h3><p>访问 <code>https://cloud-img.example.com/dashboard</code>，首次登录后，在 <strong>系统设置</strong> 中设置 <strong>管理员用户名和密码</strong>。</p><h3 id="配置-Telegram-存储渠道（免费无限存储）"><a href="#配置-Telegram-存储渠道（免费无限存储）" class="headerlink" title="配置 Telegram 存储渠道（免费无限存储）"></a>配置 Telegram 存储渠道（免费无限存储）</h3><ol><li><strong>系统设置 → 上传设置 → 添加渠道</strong></li><li><strong>渠道类型</strong>：<code>Telegram</code></li><li><strong>渠道名称</strong>：如 <code>Telegram-Default</code></li><li><strong>Bot Token</strong>：通过 <a href="https://t.me/BotFather">@BotFather</a> 创建机器人获取</li><li><strong>Chat ID</strong>：通过 <a href="https://t.me/userinfobot">@userinfobot</a> 获取</li><li><strong>代理 URL</strong>：留空</li><li>保存后在列表中将状态切换为<strong>开启</strong></li></ol><h3 id="清理缓存配置（可选）"><a href="#清理缓存配置（可选）" class="headerlink" title="清理缓存配置（可选）"></a>清理缓存配置（可选）</h3><p>若需后台删除/拉黑操作即时生效，在 Cloudflare 获取以下信息：</p><ul><li><strong>CF_ZONE_ID</strong>：域名详情页右侧复制</li><li><strong>CF_EMAIL</strong>：Cloudflare 登录邮箱</li><li><strong>CF_API_KEY</strong>：右上角头像 → <strong>配置文件 → API 令牌 → Global API Key</strong></li></ul><p>进入图床 <strong>系统设置 → 其他设置</strong>，填入 CloudFlare API Token 相关参数保存。</p>]]>
     </content>
@@ -156,7 +156,7 @@
     <published>2026-06-09T16:00:46.000Z</published>
     <summary>基于 Cloudflare Workers 部署开源 CloudFlare-ImgBed 图床方案，涵盖 Workers API 令牌、D1 数据库、R2 存储配置及 GitHub Actions 自动化部署。</summary>
     <title>Cloudflare Workers 部署 CloudFlare-ImgBed 自建图床教程</title>
-    <updated>2026-08-31T16:33:03.424Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -164,8 +164,8 @@
     </author>
     <category term="图床搭建" scheme="https://lijiabao9.github.io/categories/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/"/>
     <category term="Cloudflare" scheme="https://lijiabao9.github.io/tags/Cloudflare/"/>
-    <category term="图床" scheme="https://lijiabao9.github.io/tags/%E5%9B%BE%E5%BA%8A/"/>
     <category term="PicGo" scheme="https://lijiabao9.github.io/tags/PicGo/"/>
+    <category term="图床" scheme="https://lijiabao9.github.io/tags/%E5%9B%BE%E5%BA%8A/"/>
     <content>
       <![CDATA[<p>GitHub + jsDelivr 作为图床虽常见，但频繁 commit 会污染版本历史。</p><p>Cloudflare R2 提供每月 10 GB 免费存储、100 万次 A 类操作（写）和 1000 万次 B 类操作（读）额度，配合无限免费流量 CDN，是更专业的图床方案。</p><blockquote><p>开通 R2 需绑定信用卡验证身份，免费额度内使用不扣费。</p></blockquote><hr><h2 id="1-创建-R2-存储桶"><a href="#1-创建-R2-存储桶" class="headerlink" title="1. 创建 R2 存储桶"></a>1. 创建 R2 存储桶</h2><ol><li>登录 <a href="https://dash.cloudflare.com/">Cloudflare 控制台</a></li><li>导航至 <strong>存储和数据库 → R2 对象存储 → 概述</strong></li><li>点击 <strong>创建存储桶</strong>：<ul><li><strong>存储桶名称</strong>：<code>img</code>（或自定义）</li><li><strong>位置</strong>：<code>自动</code></li><li><strong>默认存储类</strong>：<code>标准</code></li></ul></li></ol><hr><h2 id="2-绑定自定义域名与-CDN-缓存"><a href="#2-绑定自定义域名与-CDN-缓存" class="headerlink" title="2. 绑定自定义域名与 CDN 缓存"></a>2. 绑定自定义域名与 CDN 缓存</h2><h3 id="绑定自定义域"><a href="#绑定自定义域" class="headerlink" title="绑定自定义域"></a>绑定自定义域</h3><ol><li>进入存储桶 → <strong>设置</strong> 标签页</li><li>找到 <strong>自定义域</strong> → <strong>连接域</strong></li><li>输入子域名（如 <code>img.example.com</code>），确认</li></ol><h3 id="配置-Cache-Rules"><a href="#配置-Cache-Rules" class="headerlink" title="配置 Cache Rules"></a>配置 Cache Rules</h3><p>防止恶意刷流量消耗 R2 额度，确保图片长期缓存。</p><ol><li>进入域名（<code>example.com</code>）管理面板 → <strong>缓存 → Cache Rules</strong> → <strong>创建规则</strong></li><li>配置：<ul><li><strong>规则名称</strong>：<code>img域名图床缓存</code></li><li><strong>匹配条件</strong>：<code>主机名</code> <code>等于</code> <code>img.example.com</code></li><li><strong>缓存资格</strong>：<code>符合缓存条件</code></li><li><strong>边缘 TTL</strong>：<code>忽略缓存控制标头，使用此 TTL</code> → <code>1年</code></li><li><strong>浏览器 TTL</strong>：<code>替代源服务器，使用此 TTL</code> → <code>1个月</code></li></ul></li><li>点击 <strong>部署</strong></li></ol><blockquote><p>配置后图片首次请求由 R2 穿透至 CDN 缓存，后续请求直接由边缘节点或浏览器响应，几乎不再触发 R2 读操作。</p></blockquote><hr><h2 id="3-创建-R2-API-令牌"><a href="#3-创建-R2-API-令牌" class="headerlink" title="3. 创建 R2 API 令牌"></a>3. 创建 R2 API 令牌</h2><ol><li>返回 <strong>R2 概述</strong> 页面</li><li>右侧 <strong>账户详情</strong> 中复制 <strong>S3 API 地址</strong>（格式 <code>https://&lt;account_id&gt;.r2.cloudflarestorage.com</code>）</li><li>点击 <strong>管理 API 令牌</strong> → <strong>创建 API 令牌</strong>：<ul><li><strong>令牌名称</strong>：<code>PicGo-Uploader</code></li><li><strong>权限</strong>：<code>对象读和写</code></li><li><strong>指定存储桶</strong>：选择 <code>img</code> 或全部存储桶</li><li><strong>TTL</strong>：<code>永久</code></li></ul></li><li>点击创建，<strong>妥善保存</strong> <code>Access Key ID</code> 和 <code>Secret Access Key</code></li></ol><hr><h2 id="4-PicGo-对接-R2"><a href="#4-PicGo-对接-R2" class="headerlink" title="4. PicGo 对接 R2"></a>4. PicGo 对接 R2</h2><p>PicGo 原生不支持 R2，通过 S3 插件实现（需 Node.js 环境）。</p><h3 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h3><ol><li>PicGo → <strong>插件设置</strong></li><li>搜索 <code>s3</code> → 安装 <code>picgo-plugin-amazon-s3-uploader</code></li><li>重启 PicGo，图床设置中出现 <strong>Amazon S3</strong></li></ol><h3 id="配置参数"><a href="#配置参数" class="headerlink" title="配置参数"></a>配置参数</h3><div class="table-container"><table><thead><tr><th style="text-align:left">配置项</th><th style="text-align:left">填写内容</th></tr></thead><tbody><tr><td style="text-align:left">图床配置名</td><td style="text-align:left">任意填写，如 <code>Cloudflare-R2</code></td></tr><tr><td style="text-align:left">应用密钥 ID</td><td style="text-align:left">R2 令牌的 <code>Access Key ID</code></td></tr><tr><td style="text-align:left">应用密钥</td><td style="text-align:left">R2 令牌的 <code>Secret Access Key</code></td></tr><tr><td style="text-align:left">桶名</td><td style="text-align:left">要访问的存储桶，如 <code>img</code></td></tr><tr><td style="text-align:left">上传文件路径</td><td style="text-align:left"><code>{year}/{month}/{md5}.{extName}</code>（不以 <code>/</code> 开头）</td></tr><tr><td style="text-align:left">自定义节点</td><td style="text-align:left">S3 API 地址，<code>https://&lt;account_id&gt;.r2.cloudflarestorage.com</code></td></tr><tr><td style="text-align:left">自定义输出 URL 模板</td><td style="text-align:left"><code>https://img.example.com/{path}</code>（必须包含 <code>/{path}</code>）</td></tr></tbody></table></div><p>其余选项保持默认，点击 <strong>确定</strong> 并设为 <strong>默认图床</strong>。</p>]]>
     </content>
@@ -174,7 +174,7 @@
     <published>2026-06-09T13:27:04.000Z</published>
     <summary>基于 Cloudflare R2 对象存储搭建免费图床，涵盖存储桶创建、自定义域名绑定、CDN 缓存规则配置、API 令牌生成及 PicGo S3 插件对接。</summary>
     <title>Cloudflare R2 搭建免费图床与 PicGo 配置指南</title>
-    <updated>2026-08-31T16:33:03.424Z</updated>
+    <updated>2026-09-02T14:07:37.168Z</updated>
   </entry>
   <entry>
     <author>
@@ -192,7 +192,7 @@
     <published>2026-06-07T15:17:30.000Z</published>
     <summary>Docker Compose 部署 Uptime Kuma 自建监控系统，涵盖容器部署、Docker 宿主机监控配置、容器间通信。</summary>
     <title>Uptime Kuma 自建监控系统部署指南</title>
-    <updated>2026-08-31T16:33:03.426Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -210,7 +210,7 @@
     <published>2026-06-07T11:15:36.000Z</published>
     <summary>Docker Compose 部署 Glances 轻量级监控工具，通过容器内生成密码文件并挂载的方式，安全开启 Web 端密码认证。</summary>
     <title>Glances 监控系统部署与 Web 认证配置</title>
-    <updated>2026-08-31T16:33:03.426Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -228,7 +228,7 @@
     <published>2026-06-07T07:09:23.000Z</published>
     <summary>Docker Compose 部署 Dashy 高颜值自托管导航页，涵盖密码认证配置、可视化编辑与配置保存。</summary>
     <title>Dashy 高颜值自托管导航页部署指南</title>
-    <updated>2026-08-31T16:33:03.426Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -246,7 +246,7 @@
     <published>2026-06-06T10:22:14.000Z</published>
     <summary>Docker Compose 部署 SillyTavern 本地角色扮演前端，配置基础认证以及 Nngixn 反向代理，对接 DeepSeek API 实现智能对话。</summary>
     <title>SillyTavern 本地角色扮演前端部署指南</title>
-    <updated>2026-08-31T16:33:03.423Z</updated>
+    <updated>2026-09-02T14:07:37.168Z</updated>
   </entry>
   <entry>
     <author>
@@ -264,7 +264,7 @@
     <published>2026-06-05T04:12:34.000Z</published>
     <summary>WSL2 Ubuntu 终端效率工具链完整配置指南，涵盖 Fish Shell、Zoxide、Fzf、Atuin 等现代化替代工具，以及 tldr、bat、lsd、fd、ripgrep、jq 的高效使用。</summary>
     <title>WSL2 Ubuntu 现代终端效率工具链配置指南</title>
-    <updated>2026-08-31T16:33:03.425Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -282,7 +282,7 @@
     <published>2026-06-04T12:26:43.000Z</published>
     <summary>OpenList 挂载腾讯微云、蓝奏云、夸克网盘、百度网盘、GitHub 仓库、Cloudflare R2、谷歌云盘、OneDrive 的详细配置步骤与参数获取方法。</summary>
     <title>OpenList 常用存储挂载配置指南</title>
-    <updated>2026-08-31T16:33:03.424Z</updated>
+    <updated>2026-09-02T14:07:37.168Z</updated>
   </entry>
   <entry>
     <author>
@@ -293,14 +293,14 @@
     <category term="大模型" scheme="https://lijiabao9.github.io/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/"/>
     <category term="Llama.cpp" scheme="https://lijiabao9.github.io/tags/Llama-cpp/"/>
     <content>
-      <![CDATA[<p>官方原版模型（如 Qwen、Llama）通常伴随严格的安全红线，在小说创作、角色扮演或逆向安全研究时频繁遭遇拒答或过滤。</p><p>越狱模型（Uncensored Model）通过社区技术手段移除安全限制，实现敏感内容不拒答、输出不被截断、系统提示词 100% 顺从。</p><hr><h2 id="1-硬件配置"><a href="#1-硬件配置" class="headerlink" title="1. 硬件配置"></a>1. 硬件配置</h2><div class="table-container"><table><thead><tr><th style="text-align:left">组件</th><th style="text-align:left">型号</th></tr></thead><tbody><tr><td style="text-align:left">GPU</td><td style="text-align:left">NVIDIA RTX 3060（12GB 显存）</td></tr><tr><td style="text-align:left">CPU</td><td style="text-align:left">i5-11400F（6核12线程）</td></tr><tr><td style="text-align:left">内存</td><td style="text-align:left">64GB DDR4</td></tr></tbody></table></div><p>35B 模型 FP16 大小超 70GB，Q4_K_M 量化需约 20GB+。12GB 显存需使用 <strong>IQ2_M</strong> 极量化版本，并将部分层 offload 至 CPU 和内存。</p><hr><h2 id="2-模型下载"><a href="#2-模型下载" class="headerlink" title="2. 模型下载"></a>2. 模型下载</h2><p>社区大佬 <code>HauhauCS</code> 处理的无审查版：<a href="https://huggingface.co/HauhauCS/Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive">Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive</a></p><ul><li><strong>核心模型</strong>：<code>Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-IQ2_M.gguf</code></li><li><strong>多模态插件（可选）</strong>：<code>mmproj-Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-f16.gguf</code></li></ul><hr><h2 id="3-构建-Llama-cpp-环境"><a href="#3-构建-Llama-cpp-环境" class="headerlink" title="3. 构建 Llama.cpp 环境"></a>3. 构建 Llama.cpp 环境</h2><p>访问 <a href="https://github.com/ggml-org/llama.cpp/releases">Llama.cpp Releases</a>，下载两个压缩包：</p><ul><li><code>llama-b9481-bin-win-cuda-12.4-x64.zip</code>（核心二进制）</li><li><code>cudart-llama-bin-win-cuda-12.4-x64.zip</code>（CUDA 运行时）</li></ul><p>解压后，将 <code>cudart-xxx</code> 内的 3 个 <code>.dll</code> 文件复制到 <code>llama-xxx</code> 主目录。</p><hr><h2 id="4-一键启动脚本"><a href="#4-一键启动脚本" class="headerlink" title="4. 一键启动脚本"></a>4. 一键启动脚本</h2><p>在 <code>llama.cpp</code> 目录下创建 <code>startup.bat</code>：</p><figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">chcp</span> <span class="number">65001</span> &gt;<span class="built_in">nul</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /d E:\Llama.cpp\llama-b9442-bin-win-cuda-<span class="number">12</span>.<span class="number">4</span>-x64</span><br><span class="line"></span><br><span class="line">llama-server.exe ^</span><br><span class="line"> -m E:\Llama.cpp\models\Qwen3.<span class="number">6</span>-<span class="number">35</span>B-A3B-Uncensored-HauhauCS-Aggressive-IQ2_M.gguf ^</span><br><span class="line"> --no-mmap ^</span><br><span class="line"> -c <span class="number">102400</span> ^</span><br><span class="line"> --host <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span> ^</span><br><span class="line"> --port <span class="number">8080</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br></pre></td></tr></table></figure><h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><div class="table-container"><table><thead><tr><th style="text-align:left">参数</th><th style="text-align:left">说明</th></tr></thead><tbody><tr><td style="text-align:left"><code>-m</code></td><td style="text-align:left">GGUF 模型文件绝对路径</td></tr><tr><td style="text-align:left"><code>--no-mmap</code></td><td style="text-align:left">禁用内存映射，避免极限情况崩溃</td></tr><tr><td style="text-align:left"><code>-c 102400</code></td><td style="text-align:left">上下文窗口大小，内存不足可调低至 4096/8192</td></tr><tr><td style="text-align:left"><code>--host</code> / <code>--port</code></td><td style="text-align:left">API 服务绑定地址</td></tr></tbody></table></div><h3 id="多模态扩展（可选）"><a href="#多模态扩展（可选）" class="headerlink" title="多模态扩展（可选）"></a>多模态扩展（可选）</h3><p>如需识图功能，在 <code>llama-server.exe</code> 后追加：</p><figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--mmproj E:\Llama.cpp\models\mmproj-Qwen3.<span class="number">6</span>-<span class="number">35</span>B-A3B-Uncensored-HauhauCS-Aggressive-f16.gguf ^</span><br></pre></td></tr></table></figure><hr><h2 id="5-运行与接入"><a href="#5-运行与接入" class="headerlink" title="5. 运行与接入"></a>5. 运行与接入</h2><ol><li>双击 <code>startup.bat</code>，等待模型加载至 GPU 显存和系统内存</li><li>看到 <code>HTTP server listening</code> 即启动成功</li><li>前端工具（NextChat、Open WebUI、SillyTavern、LobeChat）配置 API 地址：<code>http://127.0.0.1:8080/v1</code></li></ol>]]>
+      <![CDATA[<p>官方原版模型（如 Qwen、Llama）通常伴随严格的安全红线，在小说创作、角色扮演或逆向安全研究时频繁遭遇拒答或过滤。</p><p>越狱模型（Uncensored Model）通过社区技术手段移除安全限制，实现敏感内容不拒答、输出不被截断、系统提示词 100% 顺从。</p><hr><h2 id="1-硬件配置"><a href="#1-硬件配置" class="headerlink" title="1. 硬件配置"></a>1. 硬件配置</h2><div class="table-container"><table><thead><tr><th style="text-align:left">组件</th><th style="text-align:left">型号</th></tr></thead><tbody><tr><td style="text-align:left">GPU</td><td style="text-align:left">NVIDIA RTX 3060（12GB 显存）</td></tr><tr><td style="text-align:left">CPU</td><td style="text-align:left">i5-11400F（6核12线程）</td></tr><tr><td style="text-align:left">内存</td><td style="text-align:left">64GB DDR4</td></tr></tbody></table></div><p>35B 模型 FP16 大小超 70GB，Q4_K_M 量化需约 20GB+。12GB 显存需使用 <strong>IQ2_M</strong> 极量化版本，并将部分层 offload 至 CPU 和内存。</p><hr><h2 id="2-模型下载"><a href="#2-模型下载" class="headerlink" title="2. 模型下载"></a>2. 模型下载</h2><p>社区大佬 <code>HauhauCS</code> 处理的无审查版：<a href="https://huggingface.co/HauhauCS/Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive">Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive</a></p><ul><li><strong>核心模型</strong>：<code>Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-IQ2_M.gguf</code></li><li><strong>多模态插件（可选）</strong>：<code>mmproj-Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-f16.gguf</code></li></ul><hr><h2 id="3-构建-Llama-cpp-环境"><a href="#3-构建-Llama-cpp-环境" class="headerlink" title="3. 构建 Llama.cpp 环境"></a>3. 构建 Llama.cpp 环境</h2><p>访问 <a href="https://github.com/ggml-org/llama.cpp/releases">Llama.cpp Releases</a>，下载两个压缩包：</p><ul><li><code>llama-b10691-bin-win-cuda-12.4-x64.zip</code>（核心二进制）</li><li><code>cudart-llama-bin-win-cuda-12.4-x64.zip</code>（CUDA 运行时）</li></ul><p>解压后，将 <code>cudart-xxx</code> 内的 3 个 <code>.dll</code> 文件复制到 <code>llama-xxx</code> 主目录。</p><hr><h2 id="4-一键启动脚本"><a href="#4-一键启动脚本" class="headerlink" title="4. 一键启动脚本"></a>4. 一键启动脚本</h2><p>在 <code>llama.cpp</code> 目录下创建 <code>startup.bat</code>：</p><figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">chcp</span> <span class="number">65001</span> &gt;<span class="built_in">nul</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /d E:\Llama.cpp\llama-b10691-bin-win-cuda-<span class="number">12</span>.<span class="number">4</span>-x64</span><br><span class="line"></span><br><span class="line">llama-server.exe ^</span><br><span class="line"> -m E:\Llama.cpp\models\Qwen3.<span class="number">6</span>-<span class="number">35</span>B-A3B-Uncensored-HauhauCS-Aggressive-IQ2_M.gguf ^</span><br><span class="line"> --load-<span class="built_in">mode</span> none ^</span><br><span class="line"> -c <span class="number">4096</span> ^</span><br><span class="line"> --host <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span> ^</span><br><span class="line"> --port <span class="number">9931</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br></pre></td></tr></table></figure><h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><div class="table-container"><table><thead><tr><th style="text-align:left">参数</th><th style="text-align:left">说明</th></tr></thead><tbody><tr><td style="text-align:left"><code>-m</code></td><td style="text-align:left">GGUF 模型文件绝对路径</td></tr><tr><td style="text-align:left"><code>--load-mode</code></td><td style="text-align:left">加载模式</td></tr><tr><td style="text-align:left"><code>-c 102400</code></td><td style="text-align:left">上下文窗口大小，内存不足可调低</td></tr><tr><td style="text-align:left"><code>--host</code> / <code>--port</code></td><td style="text-align:left">API 服务绑定地址</td></tr></tbody></table></div><h3 id="多模态扩展（可选）"><a href="#多模态扩展（可选）" class="headerlink" title="多模态扩展（可选）"></a>多模态扩展（可选）</h3><p>如需识图功能，在 <code>llama-server.exe</code> 后追加：</p><figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--mmproj E:\Llama.cpp\models\mmproj-Qwen3.<span class="number">6</span>-<span class="number">35</span>B-A3B-Uncensored-HauhauCS-Aggressive-f16.gguf ^</span><br></pre></td></tr></table></figure><hr><h2 id="5-运行与接入"><a href="#5-运行与接入" class="headerlink" title="5. 运行与接入"></a>5. 运行与接入</h2><ol><li>双击 <code>startup.bat</code>，等待模型加载至 GPU 显存和系统内存</li><li>看到 <code>HTTP server listening</code> 即启动成功</li><li>前端工具（NextChat、Open WebUI、SillyTavern、LobeChat）配置 API 地址：<code>http://127.0.0.1:9931/v1</code></li></ol>]]>
     </content>
     <id>https://lijiabao9.github.io/posts/e1fb7ef6.html</id>
     <link href="https://lijiabao9.github.io/posts/e1fb7ef6.html"/>
     <published>2026-06-02T17:33:37.000Z</published>
     <summary>12GB 显存部署 Qwen 3.6 35B 越狱模型，涵盖 IQ2_M 量化版本下载、Llama.cpp CUDA 环境配置及一键启动脚本编写。</summary>
     <title>Qwen 3.6 35B 越狱模型本地部署指南</title>
-    <updated>2026-08-31T16:33:03.423Z</updated>
+    <updated>2026-09-02T14:07:37.168Z</updated>
   </entry>
   <entry>
     <author>
@@ -318,7 +318,7 @@
     <published>2026-06-02T17:30:44.000Z</published>
     <summary>通过 Cloudflare Workers 部署 OpenList API Page 精简版，实现轻量与数据自主权。</summary>
     <title>Cloudflare Workers 部署 OpenList API Page 教程</title>
-    <updated>2026-08-31T16:33:03.426Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -336,7 +336,7 @@
     <published>2026-06-02T17:13:44.000Z</published>
     <summary>Docker Compose 部署 OpenList 网盘列表管理工具，联动集成 Aria2、qBittorrent、Transmission 三大下载器，打造全能私有云下载中心。</summary>
     <title>OpenList 网盘列表与下载器部署指南</title>
-    <updated>2026-08-31T16:33:03.426Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -354,7 +354,7 @@
     <published>2026-06-01T17:31:06.000Z</published>
     <summary>Docker Compose 部署 Gotify 自托管消息推送服务，涵盖服务端安装、Nginx HTTPS 反代配置、WebSocket 支持以及 Android 客户端接入。</summary>
     <title>Gotify 自托管消息推送服务部署指南</title>
-    <updated>2026-08-31T16:33:03.426Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
   <entry>
     <author>
@@ -372,6 +372,6 @@
     <published>2026-05-31T03:15:47.000Z</published>
     <summary>Android 免 Root 或 Root 环境下使用 Shizuku + Nrfr 修改 SIM 卡运营商国家码突破 TikTok 区域限制，支持重启不失效。</summary>
     <title>Android 免 Root 与 Root 环境下修改 SIM 国家码解锁 TikTok</title>
-    <updated>2026-08-31T16:33:03.425Z</updated>
+    <updated>2026-09-02T14:07:37.169Z</updated>
   </entry>
 </feed>
